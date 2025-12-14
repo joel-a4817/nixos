@@ -129,9 +129,6 @@
  #   };
  # };
 
-#location
-services.geoclue2.enable = true;
-
   # Fprintd
   services.fprintd.enable = true;
   security.pam.services = {
