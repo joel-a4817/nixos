@@ -66,7 +66,7 @@
             --session-wrapper dbus-run-session \
             --cmd ${pkgs.sway}/bin/sway
         '';
-        user = "greeter";
+        user = "joel";
       };
     };
   };
