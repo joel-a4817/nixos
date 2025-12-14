@@ -89,15 +89,21 @@
   };
   users.extraGroups.vboxusers.members = [ "joel" ];
 
-  #solaar, copy pixy rules to sys
-  services.udev.packages = [ 
-    pkgs.solaar
-   #(pkgs.runCommand "pixy-udev" {} ''
-      #mkdir -p $out/lib/udev/rules.d
-      #cp ${~/pixy2/src/host/linux/pixy.rules} $out/lib/udev/rules.d/99-pixy.rules
-    #'') 
-  ];
-  hardware.logitech.wireless.enable = true;
+#  services.udev.packages = [ 
+#    (pkgs.runCommand "pixy-udev" {} ''
+#      mkdir -p $out/lib/udev/rules.d
+#      cp ${~/pixy2/src/host/linux/pixy.rules} $out/lib/udev/rules.d/99-pixy.rules
+#    '') 
+#  ];
+
+#solaar https://github.com/Svenum/Solaar-Flake
+  services.solaar = {
+    enable = true; # Enable the service
+    package = pkgs.solaar; # The package to use
+    window = "hide"; # Show the window on startup (show, *hide*, only [window only])
+    batteryIcons = "regular"; # Which battery icons to use (*regular*, symbolic, solaar)
+    extraArgs = ""; # Extra arguments to pass to solaar on startup
+  };
 
     programs.firefox.enable = true;
   # Packages
