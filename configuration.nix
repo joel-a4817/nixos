@@ -48,7 +48,7 @@
     wireplumber.enable = true;
   };
     
-  # Seatd for wlroots compositors; polkit for permissions
+  # Seatd for wlroots compositors (sway); polkit for permissions
   security.polkit.enable = true;
   services.dbus.enable = true;
   services.seatd.enable = true;
@@ -69,17 +69,6 @@
         user = "joel";
       };
     };
-  };
-
-  environment.sessionVariables = {
-    XDG_SESSION_TYPE = "wayland";
-    XDG_CURRENT_DESKTOP = "sway";
-    MOZ_ENABLE_WAYLAND = "1";
-    QT_QPA_PLATFORM = "wayland";
-    QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-    SDL_VIDEODRIVER = "wayland";
-    CLUTTER_BACKEND = "wayland";
-    GDK_BACKEND = "wayland";
   };
 
 #virtualbox https://wiki.nixos.org/wiki/VirtualBox
@@ -147,7 +136,7 @@
     greetd.fprintAuth = true;
   };
 
-  # OpenGL - wlroots needs
+  # OpenGL - wlroots like sway needs
   hardware.graphics.enable = true;
 
   # xdg portal enabling
@@ -169,8 +158,14 @@ xdg.portal = {
     };
   };
 };
-  
-  # Allow unfree if you need proprietary packages - you don't need it but keep anyways
+
+  environment.sessionVariables = {
+    XDG_SESSION_TYPE = "wayland";
+    XDG_CURRENT_DESKTOP = "sway";
+    MOZ_ENABLE_WAYLAND = "1";
+  };
+
+  # Allow unfree if you need proprietary packages (you need)
   nixpkgs.config.allowUnfree = true;
 
   system.stateVersion = "25.11";
