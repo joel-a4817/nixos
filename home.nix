@@ -11,13 +11,12 @@
   # Packages for your setup
   home.packages = with pkgs; [
     prismlauncher #https://wiki.nixos.org/wiki/Prism_Launcher
-    signal-desktop #only other is snap-store
+    signal-desktop #no official 
     vscode #https://wiki.nixos.org/wiki/Visual_Studio_Code 
-    gitkraken #only other is snap-store
-    kicad #only other is flathub
-    prusa-slicer #need appimage 
-    bambu-studio #need flathub
-    curl gsettings-desktop-schemas #for timezones
+    gitkraken #snap-store official: https://snapcraft.io/gitkraken
+    kicad #flatpak official: https://www.kicad.org/download/linux/
+    prusa-slicer #appimage official: https://prusaslicer.net/#download 
+    bambu-studio #flatpak official: https://flathub.org/en/apps/com.bambulab.BambuStudio
   ];
 
   # Foot terminal config
