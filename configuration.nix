@@ -82,7 +82,7 @@
     GDK_BACKEND = "wayland";
   };
 
-#virtualbox
+#virtualbox https://wiki.nixos.org/wiki/VirtualBox
   virtualisation.virtualbox.host = {
     enable = true;
     enableExtensionPack = true;
