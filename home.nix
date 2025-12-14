@@ -12,7 +12,7 @@
   home.packages = with pkgs; [
     prismlauncher
     signal-desktop
-    vscode opencv gitkraken
+    vscode gitkraken
     kicad
     prusa-slicer bambu-studio
     curl gsettings-desktop-schemas #for timezones
