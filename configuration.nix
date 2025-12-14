@@ -9,7 +9,7 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   networking.hostName = "rt4817";
-  #time.timeZone = "Australia/Melbourne";
+  #time.timeZone = "Australia/Melbourne"; #not needed since to set timezone sets /etc/localtime
 
   security.sudo.extraRules = [
     {
@@ -106,7 +106,7 @@
   };
 
     programs.firefox.enable = true;
-  # Packages
+# Packages
   environment.systemPackages = with pkgs; [
     wget git
     sway foot wmenu swaybg
