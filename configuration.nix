@@ -114,6 +114,7 @@
     solaar
     cloudflare-warp
     speedtest-cli
+    curl gsettings-desktop-schemas #for timezones
   ];
 
   #warp  
