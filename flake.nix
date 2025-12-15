@@ -28,7 +28,7 @@
     nixosConfigurations.rt4817 = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [ 
-       ({ config, pkgs, ... }: {
+       ({ config, pkgs, pixy2, ... }: {
        # Copy Pixy udev rule into /etc/udev/rules.d/
           environment.etc."udev/rules.d/pixy.rules".source = builtins.toPath (pixy2 + "/src/host/linux/pixy.rules")
             environment.systemPackages [
