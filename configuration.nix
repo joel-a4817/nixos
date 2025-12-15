@@ -78,14 +78,6 @@
   };
   users.extraGroups.vboxusers.members = [ "joel" ];
 
-services.udev.packages = [
-    (pkgs.writeTextFile {
-      name = "pixy-udev";
-           destination = "/lib/udev/rules.d/99-pixy.rules";
-      text = builtins.readFile /home/joel/pixy2/src/host/linux/pixy.rules;
-    })
-  ];
-
 #solaar https://github.com/Svenum/Solaar-Flake
   services.solaar = {
     enable = true; # Enable the service
