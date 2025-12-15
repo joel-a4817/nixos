@@ -30,8 +30,8 @@
       modules = [ 
        ({ config, pkgs, pixy2, ... }: {
        # Copy Pixy udev rule into /etc/udev/rules.d/
-          environment.etc."udev/rules.d/pixy.rules".source = builtins.toPath (pixy2 + "/src/host/linux/pixy.rules")
-            environment.systemPackages [
+          environment.etc."udev/rules.d/pixy.rules".source = builtins.toPath (pixy2 + "/src/host/linux/pixy.rules");
+            environment.systemPackages = with pkgs; [
               # If your yazi derivation supports `_7zz`, this works.
               # Otherwise switch to overrideAttrs or install _7zz-rar alongside (see notes below).
               (yazi.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
@@ -39,17 +39,17 @@
               })
 
               # Preview / thumbnails / metadata / search helpers for Yazi
-              pkgs.ueberzugpp
-              pkgs.ffmpegthumbnailer
-              pkgs.poppler
-              pkgs.imagemagick
-              pkgs.exiftool
-              pkgs.fd
-              pkgs.ripgrep
-              pkgs.jq
-             pkgs.chafa
-              pkgs.bat
-              pkgs.fzf
+              ueberzugpp
+              ffmpegthumbnailer
+              poppler
+              imagemagick
+              exiftool
+              fd
+              ripgrep
+              jq
+              chafa
+              bat
+              fzf
             ];
           }
         )
