@@ -26,10 +26,8 @@
       modules = [ 
        ({ config, pkgs, ... }: {
        # Copy Pixy udev rule into /etc/udev/rules.d/
-          environment.etc."udev/rules.d/pixy.rules".source =
-            ./pixy2/src/host/linux/pixy.rules;  # Adjust path relative to flake.nix
-
-
+          environment.etc."udev/rules.d/pixy.rules".source = "$(pixy2)/src/host/linux/pixy.rules";  # Adjust path relative to flake.nix
+          
             environment.systemPackages = with pkgs; [
               # If your yazi derivation supports `_7zz`, this works.
               # Otherwise switch to overrideAttrs or install _7zz-rar alongside (see notes below).
