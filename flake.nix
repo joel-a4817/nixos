@@ -16,6 +16,8 @@
 
     # Yazi flake (for yazi.packages.${system}.default)
     yazi.url = "github:sxyazi/yazi";
+    
+    pixy2.url = "path:/home/joel/pixy2";
   };
 
   outputs = { self, nixpkgs, home-manager, solaar, yazi, ... }: {
