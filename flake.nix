@@ -17,10 +17,14 @@
     # Yazi flake (for yazi.packages.${system}.default)
     yazi.url = "github:sxyazi/yazi";
     
-    pixy2.url = "path:/home/joel/pixy2";
+    pixy2 = {
+      url = "path:/home/joel/pixy2";  # use absolute path; ~ is NOT expanded in Nix
+      flake = false;                  # <-- critical: this prevents Nix from expecting flake.nix
+    };
+
   };
 
-  outputs = { self, nixpkgs, home-manager, solaar, yazi, ... }: {
+  outputs = { self, nixpkgs, home-manager, solaar, yazi, pixy2, ... }: {
     nixosConfigurations.rt4817 = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [ 
