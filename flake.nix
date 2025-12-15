@@ -25,29 +25,30 @@
     nixosConfigurations.rt4817 = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        { ... }: {
+      {
         environment.etc."udev/rules.d/99-pixy.rules".source = ./files/udev/99-pixy.rules;
-        }
         environment.systemPackages = [
-        (yazi.packages.${pkgs.system}.default.override {
-          _7zz = pkgs._7zz-rar;
-        })
+          (yazi.packages.${pkgs.system}.default.override {
+            _7zz = pkgs._7zz-rar;
+          })
 
-      # Preview / thumbnails / metadata / search helpers for Yazi
-        pkgs.ueberzugpp        # inline image previews via Kitty graphics (works in Foot)            
-        pkgs.ffmpegthumbnailer # video thumbnails
-        pkgs.poppler           # PDF tools (pdftoppm, pdftotext)
-        pkgs.imagemagick       # image conversions/resizing
-        pkgs.exiftool          # media metadata
-        pkgs.fd                # fast find
-        pkgs.ripgrep           # fast grep inside files
-        pkgs.jq                # JSON parsing for plugins
-        pkgs.chafa             # ANSI image fallback (nice to have)
-        pkgs.bat               # syntax-highlighted previews
-        pkgs.fzf               # fuzzy finder (also handy with Yazi)
-      ];
+        # Preview / thumbnails / metadata / search helpers for Yazi
+          pkgs.ueberzugpp        # inline image previews via Kitty graphics (works in Foot)            
+          pkgs.ffmpegthumbnailer # video thumbnails
+          pkgs.poppler           # PDF tools (pdftoppm, pdftotext)
+          pkgs.imagemagick       # image conversions/resizing
+          pkgs.exiftool          # media metadata
+          pkgs.fd                # fast find
+          pkgs.ripgrep           # fast grep inside files
+          pkgs.jq                # JSON parsing for plugins
+          pkgs.chafa             # ANSI image fallback (nice to have)
+          pkgs.bat               # syntax-highlighted previews
+          pkgs.fzf               # fuzzy finder (also handy with Yazi)
+        ];
+      }
         solaar.nixosModules.default
         ./configuration.nix
+        ./hardware-configuration.nix
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
