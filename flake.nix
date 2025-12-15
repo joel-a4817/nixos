@@ -11,9 +11,6 @@
     # Solaar via FlakeHub (aligned to nixpkgs)
     solaar = {
       url = "https://flakehub.com/f/Svenum/Solaar-Flake/*.tar.gz";
-      # Alternative pins if needed:
-      # url = "https://flakehub.com/f/Svenum/Solaar-Flake/0.1.6.tar.gz";
-      # url = "github:Svenum/Solaar-Flake/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -24,38 +21,47 @@
   outputs = { self, nixpkgs, home-manager, solaar, yazi, ... }: {
     nixosConfigurations.rt4817 = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      modules = [
-        ({config, pkgs, ...}:
-      {
-        environment.etc."udev/rules.d/99-pixy.rules".source = ./files/udev/99-pixy.rules;
-        environment.systemPackages = with pkgs; [
-          (yazi.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
-            _7zz = pkgs._7zz-rar;
-          })
+      modules = [ 
+       ({ config, pkgs, ... }: {
+       # Copy Pixy udev rule into /etc/udev/rules.d/
+          environment.etc."udev/rules.d/pixy.rules".source =
+            ./pixy2/src/host/linux/pixy.rules;  # Adjust path relative to flake.nix
 
-        # Preview / thumbnails / metadata / search helpers for Yazi
-          ueberzugpp        # inline image previews via Kitty graphics (works in Foot)            
-          ffmpegthumbnailer # video thumbnails
-          poppler           # PDF tools (pdftoppm, pdftotext)
-          imagemagick       # image conversions/resizing
-          exiftool          # media metadata
-          fd                # fast find
-          ripgrep           # fast grep inside files
-          jq                # JSON parsing for plugins
-          chafa             # ANSI image fallback (nice to have)
-          bat               # syntax-highlighted previews
-          fzf               # fuzzy finder (also handy with Yazi)
-        ];
-      }
+
+            environment.systemPackages = with pkgs; [
+              # If your yazi derivation supports `_7zz`, this works.
+              # Otherwise switch to overrideAttrs or install _7zz-rar alongside (see notes below).
+              (yazi.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
+                _7zz = _7zz-rar;
+              })
+
+              # Preview / thumbnails / metadata / search helpers for Yazi
+              ueberzugpp
+              ffmpegthumbnailer
+              poppler
+              imagemagick
+              exiftool
+              fd
+              ripgrep
+              jq
+              chafa
+              bat
+              fzf
+            ];
+          }
         )
+        # Other modules in the list are fine as paths or module values
         solaar.nixosModules.default
         ./configuration.nix
+
         home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.joel = import ./home.nix;
-        }
+        ({ pkgs, ... }:
+          {
+                       home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.joel = import ./home.nix;
+          }
+        )
       ];
     };
   };
