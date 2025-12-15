@@ -27,6 +27,7 @@
   outputs = { self, nixpkgs, home-manager, solaar, yazi, pixy2, ... }: {
     nixosConfigurations.rt4817 = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
+specialArgs = { inherit pixy2; };
       modules = [ 
        ({ config, pkgs, pixy2, ... }: {
        # Copy Pixy udev rule into /etc/udev/rules.d/
