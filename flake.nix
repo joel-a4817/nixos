@@ -37,7 +37,7 @@
       modules = [
         # Inline NixOS module function
         ({ config, pkgs, pixy2, ... }: {
-          # ✅ Write Pixy udev rule via udev module (avoids /etc symlink permission errors)
+          # ✅ Write Pixy udev rule via udev (avoids /etc symlink permission errors)
           services.udev.extraRules =
             builtins.readFile (builtins.toPath (pixy2 + "/src/host/linux/pixy.rules"));
 
@@ -53,7 +53,7 @@
             poppler
             imagemagick
             exiftool
-                       fd
+            fd
             ripgrep
             jq
             chafa
