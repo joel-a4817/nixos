@@ -66,11 +66,11 @@
             jq
             poppler
             fd
-            rg
+            ripgrep
             fzf
             zoxide
             resvg
-            ImageMagick
+            imagemagick
           ];
         })
         
