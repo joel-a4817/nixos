@@ -4,7 +4,7 @@
 {
   home.username = "joel";
   home.homeDirectory = "/home/joel";
-  home.stateVersion = "25.11";
+  home.stateVersion = "unstable";
 
   programs.home-manager.enable = true;
 

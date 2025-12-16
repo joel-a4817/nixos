@@ -161,5 +161,5 @@ xdg.portal = {
   # Allow unfree if you need proprietary packages (you need)
   nixpkgs.config.allowUnfree = true;
 
-  system.stateVersion = "25.11";
+  system.stateVersion = "unstable";
 }
