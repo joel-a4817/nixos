@@ -1,16 +1,10 @@
 
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # Solaar via FlakeHub (aligned to nixpkgs)
-    solaar = {
-      url = "https://flakehub.com/f/Svenum/Solaar-Flake/*.tar.gz";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -19,7 +13,7 @@
 
     # Your local Pixy2 directory (NOT a flake)
     pixy2 = {
-      url = "path:/home/joel/pixy2";  # absolute path; no ~
+      url = "path:/home/joel/pixy2";
       flake = false;
     };
   };
@@ -62,7 +56,6 @@
           ];
         })
 
-        solaar.nixosModules.default
         ./configuration.nix
 
         home-manager.nixosModules.home-manager
