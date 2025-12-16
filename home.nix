@@ -20,10 +20,4 @@
     opencv #git official: https://docs.opencv.org/4.12.0/d7/d9f/tutorial_linux_install.html
     qt5.qtwayland
   ];
-
-  # Foot terminal config
-  xdg.configFile."foot/foot.ini".text = ''
-    [main]
-    font=monospace:size=16
-  ''; 
 }

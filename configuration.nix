@@ -19,7 +19,8 @@
       ];
     }
   ];
-     
+
+
   # Boot (UEFI)
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -91,7 +92,7 @@
 # Packages
   environment.systemPackages = with pkgs; [
     wget git
-    sway foot wmenu swaybg
+    sway wmenu swaybg
     grim slurp wf-recorder wl-clipboard pulseaudio brightnessctl fastfetch imv mpv copyq unzip zip
     solaar
     cloudflare-warp

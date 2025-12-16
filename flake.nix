@@ -38,9 +38,21 @@
       modules = [
         # Inline NixOS module function
         ({ config, pkgs, pixy2, ... }: {
-          # ✅ Write Pixy udev rule via udev (avoids /etc symlink permission errors)
+          #Write Pixy udev rule via udev (avoids /etc symlink permission errors)
           services.udev.extraRules =
             builtins.readFile (builtins.toPath (pixy2 + "/src/host/linux/pixy.rules"));
+
+          fonts = {
+            enableDefaultFonts = true;
+            fonts = with pkgs; [ jetbrains-mono ];
+            fontconfig.enable = true;
+            fontconfig.defaultFonts.monospace = [ "JetBrains Mono" ];
+          };
+
+          programs.foot = {
+            enable = true;
+            settings.main.font = "monospace:size=16";
+          };
 
           # Packages (your Yazi override + helpers)
           environment.systemPackages = with pkgs; [
@@ -49,17 +61,16 @@
             })
 
             # Preview / thumbnails / metadata / search helpers for Yazi
-            ueberzugpp
-            ffmpegthumbnailer
-            poppler
-            imagemagick
-            exiftool
-            fd
-            ripgrep
+            ffmpeg
+            7-Zip
             jq
-            chafa
-            bat
+            poppler
+            fd
+            rg
             fzf
+            zoxide
+            resvg
+            ImageMagick
           ];
         })
         
