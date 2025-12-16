@@ -62,7 +62,7 @@
 
             # Preview / thumbnails / metadata / search helpers for Yazi
             ffmpeg
-            7-Zip
+            p7zip
             jq
             poppler
             fd
