@@ -88,6 +88,7 @@
     extraArgs = "--headless"; # Extra arguments to pass to solaar on startup
   };
 
+    services.flatpak.enable = true;
     programs.firefox.enable = true;
 # Packages
   environment.systemPackages = with pkgs; [
