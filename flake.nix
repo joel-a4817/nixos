@@ -18,7 +18,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, solaar, yazi, pixy2, ... }:
+  outputs = { self, nixpkgs, home-manager, yazi, pixy2, ... }:
   let
     system = "x86_64-linux";
   in {
