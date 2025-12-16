@@ -18,6 +18,7 @@
     prusa-slicer #appimage official: https://prusaslicer.net/#download 
     bambu-studio #flatpak official: https://flathub.org/en/apps/com.bambulab.BambuStudio
     opencv #git official: https://docs.opencv.org/4.12.0/d7/d9f/tutorial_linux_install.html
+    affine #appimage official: https://affine.pro/download
     qt5.qtwayland
   ];
 }
