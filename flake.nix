@@ -16,9 +16,17 @@
       url = "path:/home/joel/pixy2";
       flake = false;
     };
+    
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    solaar = {
+      url = "https://flakehub.com/f/Svenum/Solaar-Flake/*.tar.gz"; # For latest stable version
+      #url = "https://flakehub.com/f/Svenum/Solaar-Flake/0.1.6.tar.gz"; # uncomment line for solaar version 1.1.18
+      #url = "github:Svenum/Solaar-Flake/main"; # Uncomment line for latest unstable version
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, yazi, pixy2, ... }:
+  outputs = { self, nixpkgs, home-manager, yazi, pixy2, solaar, ... }:
   let
     system = "x86_64-linux";
   in {
@@ -55,7 +63,8 @@
             fzf
           ];
         })
-
+        
+        solaar.nixosModules.default
         ./configuration.nix
 
         home-manager.nixosModules.home-manager
