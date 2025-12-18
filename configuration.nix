@@ -55,19 +55,19 @@
   services.seatd.enable = true;
   programs.xwayland.enable = true;
   
+#https://github.com/apognu/tuigreet
   services.greetd = {
     enable = true;
     settings = {
       default_session = {
         # dbus-run-session is recommended for Wayland compositors
         command = ''
-          ${pkgs.tuigreet}/bin/tuigreet \
+          ${pkgs.greetd.tuigreet}/bin/ \
             --remember \
             --time \
-            --session-wrapper dbus-run-session \
-            --cmd ${pkgs.sway}/bin/sway
+            --cmd sway
         '';
-        user = "joel";
+        user = "greeter";
       };
     };
   };
