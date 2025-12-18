@@ -55,8 +55,6 @@
   services.seatd.enable = true;
   programs.xwayland.enable = true;
 
-  security.pam.services.swaylock = {};
-
 #https://github.com/apognu/tuigreet
   services.greetd = {
     enable = true;
@@ -141,6 +139,11 @@
     sudo.fprintAuth = true;
     greetd.fprintAuth = true;
   };
+
+security.pam.services.swaylock = {
+  enable = true;        # ensure the PAM service exists
+  fprintAuth = true;    # attach pam_fprintd.so to swaylock's auth chain
+};
 
   # OpenGL - wlroots like sway needs
   hardware.graphics.enable = true;
