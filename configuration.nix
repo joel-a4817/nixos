@@ -102,7 +102,8 @@
   environment.systemPackages = with pkgs; [
     wget git
     sway wmenu swaybg swaylock
-    grim slurp wf-recorder wl-clipboard pulseaudio brightnessctl fastfetch imv mpv copyq unzip zip
+    grim slurp wf-recorder wl-clipboard pulseaudio brightnessctl fastfetch imv mpv unzip zip
+    clipse
     solaar
     cloudflare-warp
     speedtest-cli
