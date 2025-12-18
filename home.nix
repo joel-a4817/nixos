@@ -7,6 +7,7 @@
   home.stateVersion = "25.11";
 
   programs.home-manager.enable = true;
+  programs.swaylock.enable = true;
 
   # Packages for your setup
   home.packages = with pkgs; [

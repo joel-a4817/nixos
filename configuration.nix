@@ -55,16 +55,8 @@
   services.seatd.enable = true;
   programs.xwayland.enable = true;
 
-#no polkit on sleep
-security.polkit.extraRules = ''
-  polkit.addRule(function(action, subject) {
-    if (action.id == "org.freedesktop.login1.suspend" &&
-        subject.isInGroup("wheel")) {
-        return polkit.Result.YES;
-    }
-  });
-'';
-  
+  security.pam.services.swaylock = {};
+
 #https://github.com/apognu/tuigreet
   services.greetd = {
     enable = true;
@@ -111,7 +103,7 @@ security.polkit.extraRules = ''
 # Packages
   environment.systemPackages = with pkgs; [
     wget git
-    sway wmenu swaybg swaylock
+    sway wmenu swaybg
     grim slurp wf-recorder wl-clipboard pulseaudio brightnessctl fastfetch imv mpv unzip zip
     clipse
     solaar
