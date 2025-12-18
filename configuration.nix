@@ -62,7 +62,7 @@
       default_session = {
         # dbus-run-session is recommended for Wayland compositors
         command = ''
-          ${pkgs.greetd.tuigreet}/bin/ \
+          ${pkgs.greetd.tuigreet}/bin/tuigreet \
             --remember \
             --time \
             --cmd sway
