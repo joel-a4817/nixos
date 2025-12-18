@@ -54,6 +54,16 @@
   services.dbus.enable = true;
   services.seatd.enable = true;
   programs.xwayland.enable = true;
+
+#no polkit on sleep
+security.polkit.extraRules = ''
+  polkit.addRule(function(action, subject) {
+    if (action.id == "org.freedesktop.login1.suspend" &&
+        subject.isInGroup("wheel")) {
+        return polkit.Result.YES;
+    }
+  });
+'';
   
 #https://github.com/apognu/tuigreet
   services.greetd = {
