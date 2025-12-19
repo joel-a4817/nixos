@@ -68,7 +68,7 @@
             --time \
             --sessions \
             --cmd sway \
-            --cmd qtile
+            --cmd qtile start \
         '';
         user = "greeter";
       };
