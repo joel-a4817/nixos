@@ -67,8 +67,8 @@
             --remember \
             --time \
             --sessions \
-            --cmd sway \
-            --cmd qtile start \
+            --cmd "$(pkgs.sway)/bin/sway" \
+            --cmd "$(pkgs.qtile)/bin/qtile start -b wayland"
         '';
         user = "greeter";
       };
