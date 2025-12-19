@@ -56,7 +56,6 @@
   programs.xwayland.enable = true;
 
   services.xserver.windowManager.qtile.enable = true;
-  };
 
   programs.sway = {
     enable = true;
