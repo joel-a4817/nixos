@@ -55,11 +55,7 @@
   services.seatd.enable = true;
   programs.xwayland.enable = true;
 
-  services.xserver = {
-    enable = true;
-    autoRepeatDelay = 200;
-    autoRepeatInterval = 35;
-    windowManager.qtile.enable = true;
+  services.xserver.windowManager.qtile.enable = true;
   };
 
   programs.sway = {
