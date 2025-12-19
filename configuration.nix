@@ -62,7 +62,7 @@
     windowManager.qtile.enable = true;
   };
 
-    programs.sway = {
+  programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
   };
