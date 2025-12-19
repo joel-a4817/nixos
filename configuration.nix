@@ -55,17 +55,20 @@
   services.seatd.enable = true;
   programs.xwayland.enable = true;
 
+  services.xserver.windowManager.qtile.enable = true;
+
 #https://github.com/apognu/tuigreet
   services.greetd = {
     enable = true;
     settings = {
       default_session = {
-        # dbus-run-session is recommended for Wayland compositors
         command = ''
           ${pkgs.greetd.tuigreet}/bin/tuigreet \
             --remember \
             --time \
-            --cmd sway
+            --sessions \
+            --cmd sway \
+            --cmd qtile
         '';
         user = "greeter";
       };
