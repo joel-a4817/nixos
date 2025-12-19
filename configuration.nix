@@ -57,14 +57,6 @@
 
   services.xserver.windowManager.qtile.enable = true;
 
-  "/home/joel/.config/qtile/qtile-start.sh" = {
-    text = ''
-      #!/bin/sh
-      exec qtile start -b wayland
-    '';
-    mode = "0755";
-  };
-
 #https://github.com/apognu/tuigreet
   services.greetd = {
     enable = true;
@@ -74,9 +66,7 @@
           ${pkgs.greetd.tuigreet}/bin/tuigreet \
             --remember \
             --time \
-            --sessions \
-            --cmd sway \
-            --cmd /home/joel/.config/qtile/qtile-start.sh
+            --sessions
         '';
         user = "greeter";
       };
