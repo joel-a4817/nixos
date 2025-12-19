@@ -57,6 +57,11 @@
 
   services.xserver.windowManager.qtile.enable = true;
 
+  environment.etc."greetd/qtile-wayland.sh".text=''
+  #!bin/sh
+  exec qtile start -b wayland
+  ;''
+
 #https://github.com/apognu/tuigreet
   services.greetd = {
     enable = true;
@@ -67,8 +72,8 @@
             --remember \
             --time \
             --sessions \
-            --cmd "$(pkgs.sway)/bin/sway" \
-            --cmd "$(pkgs.qtile)/bin/qtile start -b wayland"
+            --cmd sway \
+            --cmd /etc/greetd/qtile-wayland.sh
         '';
         user = "greeter";
       };
