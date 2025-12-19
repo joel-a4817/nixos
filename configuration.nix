@@ -1,12 +1,17 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, pkgs, ... }:
 {
-
-  fileSystems."/" = {
-    device = "/dev/disk/by-label/nixos";
-    fsType = "ext4";
-  };
-
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  imports = 
+    [ # Include the results of the hardware scan..nix
+      ./hardware-configuration.nix
+      # For wayland support see the following config
+      ./qtile.nix
+    ];
+
+  # Boot (UEFI)
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "rt4817";
   #time.timeZone = "Australia/Melbourne"; #not needed since to set timezone sets /etc/localtime
@@ -19,11 +24,6 @@
       ];
     }
   ];
-
-
-  # Boot (UEFI)
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
 
   # Users
   users.users.joel = {
@@ -55,13 +55,13 @@
   services.seatd.enable = true;
   programs.xwayland.enable = true;
 
-  imports = [ # Include the results of the hardware scan..nix
-  #    ./hardware-configuration.nix
-      # For wayland support see the following config
-      ./qtile.nix
-    ];
-  services.xserver.windowManager.qtile.enable = true;
-  
+  services.xserver = {
+    enable = true;
+    autoRepeatDelay = 200;
+    autoRepeatInterval = 35;
+    windowManager.qtile.enable = true;
+  };
+
     programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
@@ -72,7 +72,7 @@
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --remember --time";
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --remember --time --cmd 'qtile start -b wayland'";
         user = "greeter";
       };
     };
