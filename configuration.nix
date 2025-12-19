@@ -56,18 +56,17 @@
   programs.xwayland.enable = true;
 
   services.xserver.windowManager.qtile.enable = true;
+    programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
+  };
 
 #https://github.com/apognu/tuigreet
   services.greetd = {
     enable = true;
     settings = {
       default_session = {
-        command = ''
-          ${pkgs.greetd.tuigreet}/bin/tuigreet \
-            --remember \
-            --time \
-            --sessions
-        '';
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --remember --time";
         user = "greeter";
       };
     };
@@ -102,7 +101,7 @@
 # Packages
   environment.systemPackages = with pkgs; [
     wget git
-    sway wmenu swaybg
+    wmenu swaybg
     grim slurp wf-recorder wl-clipboard pulseaudio brightnessctl fastfetch imv mpv unzip zip
     clipse
     solaar
