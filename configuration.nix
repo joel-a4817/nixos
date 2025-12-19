@@ -108,7 +108,7 @@
     cloudflare-warp
     speedtest-cli
     curl gsettings-desktop-schemas #for timezones
-    browsh
+    lynx
   ];
 
   #warp  
