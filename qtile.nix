@@ -22,5 +22,5 @@
   })
 ];
 
-services.xserver.displayManager.sessionPackages = [ pkgs.qtile-unwrapped ];
+services.xserver.displayManager.sessionPackages = [ pkgs.python3.pkgs.qtile ];
 }
