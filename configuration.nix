@@ -55,7 +55,13 @@
   services.seatd.enable = true;
   programs.xwayland.enable = true;
 
+  imports = [ # Include the results of the hardware scan..nix
+      ./hardware-configuration.nix
+      # For wayland support see the following config
+      ./qtile.nix
+    ];
   services.xserver.windowManager.qtile.enable = true;
+  
     programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
