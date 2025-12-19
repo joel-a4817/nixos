@@ -18,10 +18,10 @@
       fsType = "ext4";
     };
 
-  fileSystems."/boot" =
-    { device = "systemd-1";
-      fsType = "autofs";
-    };
+#  fileSystems."/boot" =
+#    { device = "systemd-1";
+#      fsType = "autofs";
+#    };
 
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/AD03-6FD5";
