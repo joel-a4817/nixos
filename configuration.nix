@@ -67,16 +67,7 @@
     wrapperFeatures.gtk = true;
   };
 
-#https://github.com/apognu/tuigreet
-  services.greetd = {
-    enable = true;
-    settings = {
-      default_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --remember --time --cmd 'qtile start -b wayland'";
-        user = "greeter";
-      };
-    };
-  };
+  services.displayManager.ly.enable = true;
 
 #virtualbox https://wiki.nixos.org/wiki/VirtualBox
   virtualisation.virtualbox.host = {
