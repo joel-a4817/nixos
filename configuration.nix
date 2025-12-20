@@ -62,16 +62,21 @@
     wrapperFeatures.gtk = true;
   };
 
-#https://github.com/apognu/tuigreet
-  services.greetd = {
-    enable = true;
-    settings = {
-      default_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --remember --remember-session --time";
-        user = "greeter";
-      };
+# https://github.com/apognu/tuigreet
+services.greetd = {
+  enable = true;
+  settings = {
+    default_session = {
+      # Keep your command exactly the same, just prefix with env
+      command = ''
+        env XCURSOR_THEME=Bibata-Modern-Classic \
+            XCURSOR_SIZE=64 \
+        ${pkgs.greetd.tuigreet}/bin/tuigreet --remember --remember-session --time
+      '';
+      user = "greeter";
     };
   };
+};
 
 #virtualbox https://wiki.nixos.org/wiki/VirtualBox
   virtualisation.virtualbox.host = {
@@ -167,10 +172,6 @@ xdg.portal = {
       "org.freedesktop.impl.portal.ScreenCast" = [ "wlr" ];
     };
   };
-};
-
-  environment.sessionVariables = {
-  MOZ_ENABLE_WAYLAND = "1";
 };
 
   # Allow unfree if you need proprietary packages (you need)

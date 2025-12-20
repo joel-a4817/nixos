@@ -20,14 +20,15 @@
     bambu-studio #flatpak official: https://flathub.org/en/apps/com.bambulab.BambuStudio
     opencv #git official: https://docs.opencv.org/4.12.0/d7/d9f/tutorial_linux_install.html
     qt5.qtwayland
+    bibata-cursors
   ];
 
 home.pointerCursor = {
-  gtk.enable = true;
-  x11.enable = true;
+  name = "Bibata-Modern-Classic";  # verify name as above
   package = pkgs.bibata-cursors;
-  name = "Bibata-Modern-Classic";
   size = 64;
+  gtk.enable = true;   # writes GTK settings for apps that rely on them
+  x11.enable = true;   # helps XWayland/X11 apps keep in sync
 };
 
 }
