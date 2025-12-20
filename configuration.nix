@@ -38,6 +38,21 @@
   networking.networkmanager.enable = true;
   hardware.enableAllFirmware = true;
 
+services.xserver.xkb.layout = "eu";
+
+services.xserver.libinput = {
+  enable = true;
+  touchpad = {
+    tapping = true;
+    naturalScrolling = true;
+    disableWhileTyping = true;
+    middleEmulation = true;
+  };
+  mouse = {
+    accelProfile = "flat";
+  };
+};
+
   # Audio (PipeWire + WirePlumber)
   security.rtkit.enable = true;
   services.pipewire = {
