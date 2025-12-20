@@ -67,12 +67,7 @@ services.greetd = {
   enable = true;
   settings = {
     default_session = {
-      # Keep your command exactly the same, just prefix with env
-      command = ''
-        env XCURSOR_THEME=Bibata-Modern-Classic \
-            XCURSOR_SIZE=64 \
-        ${pkgs.greetd.tuigreet}/bin/tuigreet --remember --remember-session --time
-      '';
+      command = "${pkgs.greetd.tuigreet}/bin/tuigreet --remember --remember-session --time";
       user = "greeter";
     };
   };
