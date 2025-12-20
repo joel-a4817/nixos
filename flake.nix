@@ -16,11 +16,11 @@
       url = "path:/home/joel/pixy2";
       flake = false;
     };
-    
+
     solaar = {
-      #url = "https://flakehub.com/f/Svenum/Solaar-Flake/*.tar.gz"; # For latest stable version
-      #url = "https://flakehub.com/f/Svenum/Solaar-Flake/0.1.6.tar.gz"; # uncomment line for solaar version 1.1.18
-      url = "github:Svenum/Solaar-Flake/main"; # Uncomment line for latest unstable version
+      #url = "https://flakehub.com/f/Svenum/Solaar-Flake/*.tar.gz"; # latest stable
+      #url = "https://flakehub.com/f/Svenum/Solaar-Flake/0.1.6.tar.gz"; # pin solaar 1.1.18
+      url = "github:Svenum/Solaar-Flake/main"; # latest unstable
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -28,6 +28,7 @@
   outputs = { self, nixpkgs, home-manager, yazi, pixy2, solaar, ... }:
   let
     system = "x86_64-linux";
+    pkgs = import nixpkgs { inherit system; };
   in {
     nixosConfigurations.rt4817 = nixpkgs.lib.nixosSystem {
       inherit system;
@@ -38,7 +39,7 @@
       modules = [
         # Inline NixOS module function
         ({ config, pkgs, pixy2, ... }: {
-          #Write Pixy udev rule via udev (avoids /etc symlink permission errors)
+          # Write Pixy udev rule via udev (avoids /etc symlink permission errors)
           services.udev.extraRules =
             builtins.readFile (builtins.toPath (pixy2 + "/src/host/linux/pixy.rules"));
 
@@ -47,11 +48,6 @@
             fonts = with pkgs; [ jetbrains-mono ];
             fontconfig.enable = true;
             fontconfig.defaultFonts.monospace = [ "JetBrains Mono" ];
-          };
-
-          programs.foot = {
-            enable = true;
-            settings.main.font = "monospace:size=16";
           };
 
           # Packages (your Yazi override + helpers)
@@ -73,15 +69,42 @@
             imagemagick
           ];
         })
-        
+
         solaar.nixosModules.default
         ./configuration.nix
 
+        # Home Manager as a NixOS module
         home-manager.nixosModules.home-manager
-        ({ pkgs, ... }: {
+
+        # Inline Home Manager user config (sets foot background + transparency)
+        ({ ... }: {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.users.joel = import ./home.nix;
+          home-manager.users.joel = { pkgs, ... }: {
+            # Set HM stateVersion (match your HM channel; 24.11 is fine on 25.11/unstable)
+            home.stateVersion = "24.11";
+
+            programs.foot = {
+              enable = true;
+
+              # This produces ~/.config/foot/foot.ini with the following sections:
+              # [main] and [colors], including alpha for transparency.
+              settings = {
+                main = {
+                  font = "JetBrainsMono:size=16";
+                  # You can add more main opts here, e.g.: term = "xterm-256color";
+                };
+                colors = {
+                  # Hex colors (no leading '#')
+                  foreground = "ffffff";
+                  background = "101010";
+
+                  # Transparency: 0.0 fully transparent, 1.0 fully opaque
+                  alpha = 0.88;
+                };
+              };
+            };
+          };
         })
       ];
     };
