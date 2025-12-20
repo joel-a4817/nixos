@@ -6,7 +6,7 @@
     [ # Include the results of the hardware scan..nix
       ./hardware-configuration.nix
       # For wayland support see the following config
-      # ./qtile.nix
+      ./qtile.nix
     ];
 
   # Boot (UEFI)
@@ -62,7 +62,16 @@
     wrapperFeatures.gtk = true;
   };
 
-  services.displayManager.ly.enable = true;
+#https://github.com/apognu/tuigreet
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --remember --remember-session --time";
+        user = "greeter";
+      };
+    };
+  };
 
 #virtualbox https://wiki.nixos.org/wiki/VirtualBox
   virtualisation.virtualbox.host = {
@@ -129,7 +138,7 @@
     system-auth.fprintAuth = true;
     login.fprintAuth = true;
     sudo.fprintAuth = true;
-    ly.fprintAuth = true;
+    greetd.fprintAuth = true;
   };
 
 security.pam.services.swaylock = {
