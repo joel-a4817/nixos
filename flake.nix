@@ -76,31 +76,30 @@
         # Home Manager as a NixOS module
         home-manager.nixosModules.home-manager
 
-        # Inline Home Manager user config (sets foot background + transparency)
+        # Home Manager user config: import `home.nix` and overlay foot settings
         ({ ... }: {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+
           home-manager.users.joel = { pkgs, ... }: {
-            # Set HM stateVersion (match your HM channel; 24.11 is fine on 25.11/unstable)
+            # Keep your existing Home Manager setup
+            imports = [ ./home.nix ];
+
+            # State version (keep or set if not already in home.nix)
+            # If home.nix already sets home.stateVersion, you can remove this line.
             home.stateVersion = "24.11";
 
+            # Overlay foot settings (these will merge with whatever `home.nix` defines)
             programs.foot = {
-              enable = true;
-
-              # This produces ~/.config/foot/foot.ini with the following sections:
-              # [main] and [colors], including alpha for transparency.
+              enable = true;  # safe if already enabled in home.nix
               settings = {
                 main = {
                   font = "JetBrainsMono:size=16";
-                  # You can add more main opts here, e.g.: term = "xterm-256color";
                 };
                 colors = {
-                  # Hex colors (no leading '#')
                   foreground = "ffffff";
                   background = "101010";
-
-                  # Transparency: 0.0 fully transparent, 1.0 fully opaque
-                  alpha = 0.88;
+                  alpha = 0.88;  # transparency
                 };
               };
             };
