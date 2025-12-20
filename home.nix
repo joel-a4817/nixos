@@ -21,4 +21,12 @@
     opencv #git official: https://docs.opencv.org/4.12.0/d7/d9f/tutorial_linux_install.html
     qt5.qtwayland
   ];
+
+home.pointerCursor = {
+  gtk.enable = true;
+  package = pkgs.bibata-cursors;
+  name = "Bibata-Modern-Classic";
+  size = 32;
+};
+
 }
