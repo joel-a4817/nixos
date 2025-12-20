@@ -129,7 +129,7 @@
     system-auth.fprintAuth = true;
     login.fprintAuth = true;
     sudo.fprintAuth = true;
-    greetd.fprintAuth = true;
+    ly.fprintAuth = true;
   };
 
 security.pam.services.swaylock = {
