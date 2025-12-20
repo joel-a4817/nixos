@@ -38,21 +38,6 @@
   networking.networkmanager.enable = true;
   hardware.enableAllFirmware = true;
 
-services.xserver.xkb.layout = "eu";
-
-services.xserver.libinput = {
-  enable = true;
-  touchpad = {
-    tapping = true;
-    naturalScrolling = true;
-    disableWhileTyping = true;
-    middleEmulation = true;
-  };
-  mouse = {
-    accelProfile = "flat";
-  };
-};
-
   # Audio (PipeWire + WirePlumber)
   security.rtkit.enable = true;
   services.pipewire = {
@@ -185,10 +170,8 @@ xdg.portal = {
 };
 
   environment.sessionVariables = {
-    XDG_SESSION_TYPE = "wayland";
-    XDG_CURRENT_DESKTOP = "sway";
-    MOZ_ENABLE_WAYLAND = "1";
-  };
+  MOZ_ENABLE_WAYLAND = "1";
+};
 
   # Allow unfree if you need proprietary packages (you need)
   nixpkgs.config.allowUnfree = true;
