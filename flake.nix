@@ -87,7 +87,7 @@
 
             # State version (keep or set if not already in home.nix)
             # If home.nix already sets home.stateVersion, you can remove this line.
-            home.stateVersion = "24.11";
+            home.stateVersion = "25.11";
 
             # Overlay foot settings (these will merge with whatever `home.nix` defines)
             programs.foot = {
