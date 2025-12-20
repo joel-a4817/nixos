@@ -6,7 +6,7 @@
     [ # Include the results of the hardware scan..nix
       ./hardware-configuration.nix
       # For wayland support see the following config
-      ./qtile.nix
+      # ./qtile.nix
     ];
 
   # Boot (UEFI)
