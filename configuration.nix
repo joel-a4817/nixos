@@ -103,7 +103,7 @@ services.greetd = {
   environment.systemPackages = with pkgs; [
     wget git
     wmenu swaybg
-    grim slurp wf-recorder wl-clipboard pulseaudio brightnessctl fastfetch imv mpv unzip zip
+    grim slurp wf-recorder wl-clipboard pulseaudio brightnessctl imv mpv unzip zip
     clipse
     solaar
     cloudflare-warp
