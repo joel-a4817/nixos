@@ -45,9 +45,9 @@
 
           fonts = {
             enableDefaultFonts = true;
-            fonts = with pkgs; [ jetbrains-mono ];
+            fonts = with pkgs; [ nerd-fonts.jetbrains-mono ];
             fontconfig.enable = true;
-            fontconfig.defaultFonts.monospace = [ "JetBrains Mono" ];
+            fontconfig.defaultFonts.monospace = [ "JetBrainsMono Nerd Font" ];
           };
 
           # Packages (your Yazi override + helpers)
@@ -94,7 +94,7 @@
               enable = true;  # safe if already enabled in home.nix
               settings = {
                 main = {
-                  font = "JetBrainsMono:size=16";
+                  font = "JetBrainsMono Nerd Font:size=16";
                 };
                 colors = {
                   foreground = "ffffff";
