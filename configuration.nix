@@ -109,6 +109,7 @@ services.greetd = {
     cloudflare-warp
     speedtest-cli
     curl gsettings-desktop-schemas #for timezones
+    autotiling
   ];
 
   #warp  
