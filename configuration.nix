@@ -1,4 +1,5 @@
 { config, lib, pkgs, ... }:
+#checking if works
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
