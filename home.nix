@@ -25,6 +25,12 @@ in
     x11.enable = true;
   };
 
+  home.sessionVariables = {
+    XCURSOR_THEME = "Bibata-Modern-Classic";
+    XCURSOR_SIZE  = "24";
+    XCURSOR_PATH  = "/run/current-system/sw/share/icons:/home/joel/.icons";
+  };
+
   # User packages + the wrapper scripts
   home.packages = with pkgs; [
     fastfetch
