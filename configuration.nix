@@ -100,17 +100,24 @@ services.greetd = {
   };
     programs.firefox.enable = true;
 # Packages
-  environment.systemPackages = with pkgs; [
-    wget git
-    wmenu swaybg
-    grim slurp wf-recorder wl-clipboard pulseaudio brightnessctl imv mpv unzip zip
-    clipse
-    solaar
-    cloudflare-warp
-    speedtest-cli
-    curl gsettings-desktop-schemas #for timezones
-    autotiling
-  ];
+
+environment.systemPackages = with pkgs; [
+  wget git
+  wmenu swaybg
+  grim slurp wf-recorder wl-clipboard pulseaudio brightnessctl imv mpv unzip zip
+  clipse
+  solaar
+  cloudflare-warp
+  speedtest-cli
+  curl gsettings-desktop-schemas
+  autotiling
+  gh
+];
+
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+  };
 
   #warp  
   services.cloudflare-warp = {
