@@ -105,7 +105,6 @@ environment.systemPackages = with pkgs; [
   clipse
   solaar
   cloudflare-warp
-  speedtest-cli
   curl gsettings-desktop-schemas
   autotiling
   gh
