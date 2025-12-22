@@ -5,8 +5,6 @@
   imports = 
     [ # Include the results of the hardware scan..nix
       ./hardware-configuration.nix
-      # For wayland support see the following config
-      ./qtile.nix
     ];
 
   # Boot (UEFI)
@@ -54,8 +52,6 @@
   services.dbus.enable = true;
   services.seatd.enable = true;
   programs.xwayland.enable = true;
-
-  services.xserver.windowManager.qtile.enable = true;
 
   programs.sway = {
     enable = true;
