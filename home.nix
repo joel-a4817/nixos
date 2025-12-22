@@ -2,7 +2,7 @@
 { config, pkgs, lib, ... }:
 #need this to work
 let
-  # Wrapper scripts so qtile bindings are short & future-proof
+  # Wrapper scripts so bindings are short & future-proof
   ffMain = pkgs.writeShellScriptBin "ff-main" ''
     exec fastfetch -c main -l none
   '';
