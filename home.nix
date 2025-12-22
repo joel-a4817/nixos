@@ -86,7 +86,7 @@ in
       { "type": "custom", "format": "\u001b[90m└────────────────────────────────────────┘" },
 
       "break",
-      { "type": "custom", "format": "\u001b[90m┌─ Power & Memory ───────────────────────┐" },
+      { "type": "custom", "format": "\u001b[90m┌─ Power, Disk & Memory ───────────────────────┐" },
       { "type": "battery", "key": "Battery", "keyColor": "light_blue",
         "percent": { "type": 3 } },
       // ADDED: memory usage module
@@ -94,6 +94,7 @@ in
         "percent": { "type": 3 } },
       { "type": "swap", "key": "Swap", "keyColor": "light_blue",
         "percent": { "type": 3 } },
+      { "type": "disk",          "key": "Disk", "keyColor": "light_blue" },
       { "type": "custom", "format": "\u001b[90m└────────────────────────────────────────┘" },
 
       "break",
@@ -159,7 +160,6 @@ in
 
       "break",
       { "type": "custom", "format": "\u001b[90m┌─ Storage ──────────────────────────────┐" },
-      { "type": "disk",          "key": "Disk", "keyColor": "light_magenta" },
       { "type": "diskIo",        "key": "Disk I/O", "keyColor": "light_magenta" },
       { "type": "btrfs",         "key": "BTRFS", "keyColor": "light_magenta" },
       { "type": "zpool",         "key": "ZFS Pools", "keyColor": "light_magenta" },
