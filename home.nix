@@ -31,7 +31,6 @@ in
     prismlauncher
     signal-desktop
     vscode
-    gitkraken
     kicad
     prusa-slicer
     bambu-studio
