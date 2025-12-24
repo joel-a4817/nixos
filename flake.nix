@@ -3,6 +3,11 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
+    oxwm = {
+      url = "github:tonybanters/oxwm";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -18,45 +23,49 @@
     };
 
     solaar = {
-      #url = "https://flakehub.com/f/Svenum/Solaar-Flake/*.tar.gz"; # latest stable
-      #url = "https://flakehub.com/f/Svenum/Solaar-Flake/0.1.6.tar.gz"; # pin solaar 1.1.18
-      url = "github:Svenum/Solaar-Flake/main"; # latest unstable
+      url = "github:Svenum/Solaar-Flake/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, yazi, pixy2, solaar, ... }:
-  let
-    system = "x86_64-linux";
-    pkgs = import nixpkgs { inherit system; };
-  in {
+  outputs = inputs@{ self, nixpkgs, home-manager, yazi, pixy2, solaar, oxwm, ... }: {
     nixosConfigurations.rt4817 = nixpkgs.lib.nixosSystem {
-      inherit system;
-
-      # Make `pixy2` available to module functions
-      specialArgs = { inherit pixy2; };
-
+      system = "x86_64-linux";
+      specialArgs = { pixy2 = pixy2; };
       modules = [
-        # Inline NixOS module function
-        ({ config, pkgs, pixy2, ... }: {
-          # Write Pixy udev rule via udev (avoids /etc symlink permission errors)
-          services.udev.extraRules =
-            builtins.readFile (builtins.toPath (pixy2 + "/src/host/linux/pixy.rules"));
+        {
+          services.xserver = {
+            enable = true;
+            windowManager.oxwm.enable = true;
+          };
+        }
 
+        # Pixy2 udev rule (guarded)
+        ({ pixy2, ... }: {
+          services.udev.extraRules =
+            let p = pixy2 + "/src/host/linux/pixy.rules";
+            in if builtins.pathExists (builtins.toPath p)
+               then builtins.readFile (builtins.toPath p)
+               else ''
+                 # Pixy2 rules not found at ${p}; skipping.
+               '';
+        })
+
+        # Fonts + packages — wrapped as a proper module
+        ({ pkgs, ... }: {
           fonts = {
             enableDefaultFonts = true;
-            fonts = with pkgs; [ nerd-fonts.jetbrains-mono ];
-            fontconfig.enable = true;
-            fontconfig.defaultFonts.monospace = [ "JetBrainsMono Nerd Font" ];
+            fontconfig = {
+              enable = true;
+              defaultFonts.monospace = [ "JetBrainsMono Nerd Font" ];
+            };
+            packages = [ pkgs.nerd-fonts.jetbrains-mono ];
           };
 
-          # Packages (your Yazi override + helpers)
           environment.systemPackages = with pkgs; [
-            (yazi.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
-              _7zz = _7zz-rar;
-            })
+            # Keep Yazi flake package; no override here
+            yazi.packages.${pkgs.stdenv.hostPlatform.system}.default
 
-            # Preview / thumbnails / metadata / search helpers for Yazi
             ffmpeg
             p7zip
             jq
@@ -66,32 +75,28 @@
             fzf
             zoxide
             resvg
-            imagemagick
+            imagemagick     
           ];
         })
 
+        # Solaar module
         solaar.nixosModules.default
+
+        # Your other NixOS config
         ./configuration.nix
 
-        # Home Manager as a NixOS module
+        # Home Manager
         home-manager.nixosModules.home-manager
-
-        # Home Manager user config: import `home.nix` and overlay foot settings
         ({ ... }: {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
 
           home-manager.users.joel = { pkgs, ... }: {
-            # Keep your existing Home Manager setup
             imports = [ ./home.nix ];
-
-            # State version (keep or set if not already in home.nix)
-            # If home.nix already sets home.stateVersion, you can remove this line.
             home.stateVersion = "25.11";
 
-            # Overlay foot settings (these will merge with whatever `home.nix` defines)
             programs.foot = {
-              enable = true;  # safe if already enabled in home.nix
+              enable = true;
               settings = {
                 main = {
                   font = "JetBrainsMono Nerd Font:size=16";
@@ -99,7 +104,7 @@
                 colors = {
                   foreground = "ffffff";
                   background = "101010";
-                  alpha = 0.88;  # transparency
+                  alpha = 0.88;
                 };
               };
             };
@@ -109,3 +114,5 @@
     };
   };
 }
+
+

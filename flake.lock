@@ -43,11 +43,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1766387499,
-        "narHash": "sha256-AjK3/UKDzeXFeYNLVBaJ3+HLE9he1g5UrlNd4/BM3eA=",
+        "lastModified": 1766553851,
+        "narHash": "sha256-hHKQhHkXxuPJwLkI8wdu826GLV5AcuW9/HVdc9eBnTU=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "527ad07e6625302b648ed3b28c34b62a79bd103e",
+        "rev": "7eca7f7081036a7b740090994c9ec543927f89a7",
         "type": "github"
       },
       "original": {
@@ -88,6 +88,26 @@
         "type": "github"
       }
     },
+    "oxwm": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1766554693,
+        "narHash": "sha256-X29cP8XrpxQpHVeZ/VVpuyDbpdYPXWl6p9Lw5RgH3bA=",
+        "owner": "tonybanters",
+        "repo": "oxwm",
+        "rev": "05d724f9a7a2c0d1380b49fc5c1de872d7b9a37a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tonybanters",
+        "repo": "oxwm",
+        "type": "github"
+      }
+    },
     "pixy2": {
       "flake": false,
       "locked": {
@@ -105,6 +125,7 @@
       "inputs": {
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
+        "oxwm": "oxwm",
         "pixy2": "pixy2",
         "solaar": "solaar",
         "yazi": "yazi"
@@ -209,11 +230,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1766376399,
-        "narHash": "sha256-gHUuOYMDMtLsXyi6jbBTc+LCtRh6UZxbuRPKs5B0tnQ=",
+        "lastModified": 1766554118,
+        "narHash": "sha256-0BNhC3bMk8DdPMH8Xi/FkG8KwxAVOlKI/DOwDOAfW8M=",
         "owner": "sxyazi",
         "repo": "yazi",
-        "rev": "2267ac7d9382480123d554f0b06721a21d60f03c",
+        "rev": "8c81172a198f25918a31b951977a35a079e980f6",
         "type": "github"
       },
       "original": {
