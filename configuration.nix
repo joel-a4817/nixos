@@ -105,9 +105,9 @@ environment.systemPackages = with pkgs; [
   clipse
   solaar
   cloudflare-warp
-  curl gsettings-desktop-schemas
+  curl gsettings-desktop-schemas #for time-set
   autotiling
-  gh
+  gh #github cli
 ];
 
   programs.neovim = {
