@@ -3,11 +3,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    oxwm = {
-      url = "github:tonybanters/oxwm";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -28,18 +23,11 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, yazi, pixy2, solaar, oxwm, ... }: {
+  outputs = { self, nixpkgs, home-manager, yazi, pixy2, solaar, ... }: {
     nixosConfigurations.rt4817 = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { pixy2 = pixy2; };
       modules = [
-        {
-          services.xserver = {
-            enable = true;
-            windowManager.oxwm.enable = true;
-          };
-        }
-
         # Pixy2 udev rule (guarded)
         ({ pixy2, ... }: {
           services.udev.extraRules =
