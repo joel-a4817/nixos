@@ -11,7 +11,7 @@
     # Yazi flake (for yazi.packages.${system}.default)
     yazi.url = "github:sxyazi/yazi";
 
-    # Your local Pixy2 directory (NOT a flake)
+    # pixy2 dir
     pixy2 = {
       url = "path:/home/joel/pixy2";
       flake = false;
@@ -28,7 +28,8 @@
       system = "x86_64-linux";
       specialArgs = { pixy2 = pixy2; };
       modules = [
-        # Pixy2 udev rule (guarded)
+      
+      # Pixy2 udev rule (guarded)
         ({ pixy2, ... }: {
           services.udev.extraRules =
             let p = pixy2 + "/src/host/linux/pixy.rules";
@@ -78,18 +79,41 @@
         # Solaar module
         solaar.nixosModules.default
 
-        # Your other NixOS config
+        # Other NixOS config
         ./configuration.nix
 
         # Home Manager
         home-manager.nixosModules.home-manager
-        ({ ... }: {
+        ({ pkgs, config, lib, ... }: {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+          home-manager.users.joel = {
 
-          home-manager.users.joel = { pkgs, ... }: {
-            imports = [ ./home.nix ];
+            home.username = "joel";
+            home.homeDirectory = "/home/joel";
             home.stateVersion = "25.11";
+            programs.home-manager.enable = true;
+
+            # Cursor settings
+            home.pointerCursor = {
+              name = "Bibata-Modern-Classic";
+              package = pkgs.bibata-cursors;
+              gtk.enable = true;
+              x11.enable = true;
+            };
+
+            # User packages 
+            home.packages = with pkgs; [
+              prismlauncher
+              signal-desktop
+              kicad
+              prusa-slicer
+              bambu-studio
+              opencv
+              qt5.qtwayland
+            ];
+
+            programs.fastfetch.enable = true;
 
             programs.foot = {
               enable = true;
@@ -104,11 +128,9 @@
                 };
               };
             };
-          };
-        })
-      ];
-    };
-  };
+          }; #home-manager user
+        }) # home-manager module
+      ]; #modules
+    }; # nixos configurations  
+  }; # outputs
 }
-
-

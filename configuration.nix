@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
-#checking if works
+
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   imports = 
-    [ # Include the results of the hardware scan..nix
+    [
       ./hardware-configuration.nix
     ];
 
@@ -13,7 +13,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "rt4817";
-  #time.timeZone = "Australia/Melbourne"; #not needed since to set timezone sets /etc/localtime
+  #time.timeZone = "Australia/Melbourne"; #not needed since keybind exists
 
   security.sudo.extraRules = [
     {
@@ -37,7 +37,7 @@
   networking.networkmanager.enable = true;
   hardware.enableAllFirmware = true;
 
-  # Audio (PipeWire + WirePlumber)
+  # Audio
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -145,24 +145,22 @@ security.pam.services.swaylock = {
   hardware.graphics.enable = true;
 
   # xdg portal enabling
-xdg.portal = {
-  enable = true;
-
+  xdg.portal = {
+    enable = true;
   # Install actual backends (required when enable = true)
-  extraPortals = with pkgs; [
-    xdg-desktop-portal-wlr   # Wayland screencast/screenshot for wlroots
-    xdg-desktop-portal-gtk   # Generic fallback (OpenURI, file chooser, etc.)
-  ];
-
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-wlr   # Wayland screencast/screenshot for wlroots
+      xdg-desktop-portal-gtk   # Generic fallback (OpenURI, file chooser, etc.)
+    ];
   # Post-1.17: explicitly choose which backend handles which interface
-  config = {
-    common = {
-      default = [ "gtk" ];
-      "org.freedesktop.impl.portal.Screenshot" = [ "wlr" ];
-      "org.freedesktop.impl.portal.ScreenCast" = [ "wlr" ];
+    config = {
+      common = {
+        default = [ "gtk" ];
+        "org.freedesktop.impl.portal.Screenshot" = [ "wlr" ];
+        "org.freedesktop.impl.portal.ScreenCast" = [ "wlr" ];
+      };
     };
   };
-};
 
   # Allow unfree if you need proprietary packages (you need)
   nixpkgs.config.allowUnfree = true;
