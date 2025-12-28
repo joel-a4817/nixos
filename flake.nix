@@ -50,10 +50,8 @@
             packages = [ pkgs.nerd-fonts.jetbrains-mono ];
           };
 
-          environment.systemPackages = with pkgs; [
-            # Keep Yazi flake package; no override here
+          environment.systemPackages = with pkgs; 
             yazi.packages.${pkgs.stdenv.hostPlatform.system}.default
-
             ffmpeg
             p7zip
             jq
@@ -63,7 +61,17 @@
             fzf
             zoxide
             resvg
-            imagemagick     
+            imagemagick
+            #below are yazi plugins:
+            #currently don't need chmod or sudo.
+            #yaziPlugins.chmod #https://github.com/yazi-rs/plugins/tree/main/chmod.yazi
+            #yaziPlugins.sudo #https://github.com/TD-Sky/sudo.yazi
+            yaziPlugins.dupes #https://github.com/Mshnwq/dupes.yazi
+            yaziPlugins.git #https://github.com/yazi-rs/plugins/tree/main/git.yazi
+            yaziPlugins.lazygit #https://github.com/Lil-Dank/lazygit.yazi
+            yaziPlugins.recycle-bin #https://github.com/uhs-robert/recycle-bin.yazi             
+            yaziPlugins.toggle-pane #https://github.com/yazi-rs/plugins/tree/main/toggle-pane.yazi
+            yaziPlugins.restore #https://github.com/boydaihungst/restore.yazi
           ];
         })
 
