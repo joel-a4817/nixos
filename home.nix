@@ -25,6 +25,20 @@
     qt5.qtwayland
   ];
 
+  programs.foot = {
+    enable = true;
+    settings = {
+      main = {
+        font = "JetBrainsMono Nerd Font:size=16";
+      };
+      colors = {
+        foreground = "ffffff";
+        background = "101010";
+        alpha = 0.88;
+      };
+    };
+  };
+
 programs.fastfetch.enable = true;
 
 }

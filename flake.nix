@@ -23,7 +23,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, yazi, pixy2, solaar, ... }: {
+  outputs = { self, nixpkgs, home-manager, pixy2, solaar, yazi, ... }: {
     nixosConfigurations.rt4817 = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { pixy2 = pixy2; };
@@ -38,47 +38,19 @@
                  # Pixy2 rules not found at ${p}; skipping.
                '';
         })
-
-        # Fonts + packages — wrapped as a proper module
-        ({ pkgs, ... }: {
-          fonts = {
-            enableDefaultFonts = true;
-            fontconfig = {
-              enable = true;
-              defaultFonts.monospace = [ "JetBrainsMono Nerd Font" ];
-            };
-            packages = [ pkgs.nerd-fonts.jetbrains-mono ];
-          };
-
-          environment.systemPackages = with pkgs; 
-            yazi.packages.${pkgs.stdenv.hostPlatform.system}.default
-            ffmpeg
-            p7zip
-            jq
-            poppler
-            fd
-            ripgrep
-            fzf
-            zoxide
-            resvg
-            imagemagick
-            #below are yazi plugins:
-            #currently don't need chmod or sudo.
-            #yaziPlugins.chmod #https://github.com/yazi-rs/plugins/tree/main/chmod.yazi
-            #yaziPlugins.sudo #https://github.com/TD-Sky/sudo.yazi
-            yaziPlugins.dupes #https://github.com/Mshnwq/dupes.yazi
-            yaziPlugins.git #https://github.com/yazi-rs/plugins/tree/main/git.yazi
-            yaziPlugins.lazygit #https://github.com/Lil-Dank/lazygit.yazi
-            yaziPlugins.recycle-bin #https://github.com/uhs-robert/recycle-bin.yazi             
-            yaziPlugins.toggle-pane #https://github.com/yazi-rs/plugins/tree/main/toggle-pane.yazi
-            yaziPlugins.restore #https://github.com/boydaihungst/restore.yazi
+        
+        #yazi
+				({ pkgs, ... }: {
+					environment.systemPackages = [
+	  				(yazi.packages.${pkgs.system}.default.override {
+							_7zz = pkgs._7zz-rar;  # Support for RAR extraction
+						})
           ];
-        })
+				})
 
         # Solaar module
         solaar.nixosModules.default
 
-        # Your other NixOS config
         ./configuration.nix
 
         # Home Manager
@@ -89,21 +61,6 @@
 
           home-manager.users.joel = { pkgs, ... }: {
             imports = [ ./home.nix ];
-            home.stateVersion = "25.11";
-
-            programs.foot = {
-              enable = true;
-              settings = {
-                main = {
-                  font = "JetBrainsMono Nerd Font:size=16";
-                };
-                colors = {
-                  foreground = "ffffff";
-                  background = "101010";
-                  alpha = 0.88;
-                };
-              };
-            };
           };
         })
       ];

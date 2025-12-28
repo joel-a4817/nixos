@@ -1,5 +1,5 @@
 { config, lib, pkgs, ... }:
-#checking if works
+
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
@@ -89,16 +89,24 @@ services.greetd = {
     programs.firefox.enable = true;
 # Packages
 environment.systemPackages = with pkgs; [
-  wget git
-  wmenu swaybg
-  grim slurp wf-recorder wl-clipboard pulseaudio brightnessctl imv mpv unzip zip trash-cli
-  clipse
-  solaar
-  cloudflare-warp
-  curl gsettings-desktop-schemas #for time-set
-  gh #github cli
+  wget git gh #gh is a github cli
+  wmenu swaybg autotiling
+  grim slurp wf-recorder
+  pulseaudio brightnessctl
+  imv mpv unzip zip trash-cli
+  clipse wl-clipboard
   appimage-run
-  autotiling
+  curl gsettings-desktop-schemas #for time-set 
+  ffmpeg p7zip jq poppler fd ripgrep fzf zoxide resvg imagemagick #yazi
+  #yazi plugins (currently don't need chmod or sudo):
+    #yaziPlugins.chmod #https://github.com/yazi-rs/plugins/tree/main/chmod.yazi
+    #yaziPlugins.sudo #https://github.com/TD-Sky/sudo.yazi
+    yaziPlugins.dupes #https://github.com/Mshnwq/dupes.yazi
+    yaziPlugins.git #https://github.com/yazi-rs/plugins/tree/main/git.yazi
+    yaziPlugins.lazygit #https://github.com/Lil-Dank/lazygit.yazi
+    yaziPlugins.recycle-bin #https://github.com/uhs-robert/recycle-bin.yazi             
+    yaziPlugins.toggle-pane #https://github.com/yazi-rs/plugins/tree/main/toggle-pane.yazi
+    yaziPlugins.restore #https://github.com/boydaihungst/restore.yazi
 ];
 
   programs.neovim = {
