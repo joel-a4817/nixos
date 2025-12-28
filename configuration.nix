@@ -86,9 +86,17 @@ services.greetd = {
     extraArgs = "--headless"; # Extra arguments to pass to solaar on startup
   };
 
+  fonts = {
+    enableDefaultFonts = true;
+    fontconfig = {
+      enable = true;
+      defaultFonts.monospace = [ "JetBrainsMono Nerd Font" ];
+    };
+
     programs.firefox.enable = true;
 # Packages
 environment.systemPackages = with pkgs; [
+  nerd-fonts.jetbrains-mono
   wget git gh #gh is a github cli
   wmenu swaybg autotiling
   grim slurp wf-recorder
