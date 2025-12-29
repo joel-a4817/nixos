@@ -104,7 +104,7 @@ fonts = {
     programs.firefox.enable = true;
 # Packages
 environment.systemPackages = with pkgs; [
-  wget git gh #gh is a github cli
+  wget git gh #use gh to login to github
   wmenu swaybg autotiling
   grim slurp wf-recorder
   pulseaudio brightnessctl
