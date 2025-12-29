@@ -64,7 +64,7 @@ services.greetd = {
   enable = true;
   settings = {
     default_session = {
-      command = "${pkgs.greetd.tuigreet}/bin/tuigreet --remember --remember-session --time";
+      command = "${pkgs.tuigreet}/bin/tuigreet --remember --remember-session --time";
       user = "greeter";
     };
   };
@@ -88,7 +88,7 @@ services.greetd = {
 
 
 fonts = {
-  enableDefaultFonts = true;
+  enableDefaultPackages = true;
   fontconfig = {
     enable = true;
     defaultFonts = {
@@ -108,20 +108,10 @@ environment.systemPackages = with pkgs; [
   wmenu swaybg autotiling
   grim slurp wf-recorder
   pulseaudio brightnessctl
-  imv mpv unzip zip trash-cli
+  imv mpv unzip zip 
   clipse wl-clipboard
   appimage-run
-  curl gsettings-desktop-schemas #for time-set 
-  ffmpeg p7zip jq poppler fd ripgrep fzf zoxide resvg imagemagick #yazi
-  #yazi plugins (currently don't need chmod or sudo):
-    #yaziPlugins.chmod #https://github.com/yazi-rs/plugins/tree/main/chmod.yazi
-    #yaziPlugins.sudo #https://github.com/TD-Sky/sudo.yazi
-    yaziPlugins.dupes #https://github.com/Mshnwq/dupes.yazi
-    yaziPlugins.git #https://github.com/yazi-rs/plugins/tree/main/git.yazi
-    yaziPlugins.lazygit #https://github.com/Lil-Dank/lazygit.yazi
-    yaziPlugins.recycle-bin #https://github.com/uhs-robert/recycle-bin.yazi             
-    yaziPlugins.toggle-pane #https://github.com/yazi-rs/plugins/tree/main/toggle-pane.yazi
-    yaziPlugins.restore #https://github.com/boydaihungst/restore.yazi
+  curl gsettings-desktop-schemas #for time-set  
 ];
 
   programs.neovim = {

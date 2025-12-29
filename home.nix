@@ -1,4 +1,3 @@
-
 { config, pkgs, lib, ... }:
 {
   home.username = "joel";
@@ -14,7 +13,7 @@
     x11.enable = true;
   };
 
-  # User packages (no wrapper scripts)
+  # User packages
   home.packages = with pkgs; [
     prismlauncher
     signal-desktop
@@ -22,8 +21,27 @@
     prusa-slicer
     bambu-studio
     opencv
-    qt5.qtwayland
+    qt5.qtwayland #Required for Qt apps like those above.
+    #yazi pkgs:
+    ffmpeg p7zip jq poppler fd ripgrep fzf zoxide resvg imagemagick
+    trash-cli jdupes lazygit #required by yazi plugins
   ];
+
+  programs.yazi = {
+    enable = true;
+    package = pkgs.yazi.override { _7zz = pkgs._7zz-rar; }; # Support for RAR extraction
+    plugins = { #don't need chmod or sudo for now.
+      #yaziPlugins.chmod #https://github.com/yazi-rs/plugins/tree/main/chmod.yazi
+      #yaziPlugins.sudo #https://github.com/TD-Sky/sudo.yazi
+      
+      dupes       = pkgs.yaziPlugins.dupes; #https://github.com/Mshnwq/dupes.yazi
+      git         = pkgs.yaziPlugins.git; #https://github.com/yazi-rs/plugins/tree/main/git.yazi
+      lazygit     = pkgs.yaziPlugins.lazygit; #https://github.com/Lil-Dank/lazygit.yazi
+      recycle-bin = pkgs.yaziPlugins.recycle-bin; #https://github.com/uhs-robert/recycle-bin.yazi
+      toggle-pane = pkgs.yaziPlugins.toggle-pane; #https://github.com/yazi-rs/plugins/tree/main/toggle-pane.yazi
+      restore     = pkgs.yaziPlugins.restore; #https://github.com/boydaihungst/restore.yazi
+    };
+  };
 
   programs.foot = {
     enable = true;

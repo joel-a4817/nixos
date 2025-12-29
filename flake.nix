@@ -1,4 +1,3 @@
-
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -38,18 +37,13 @@
                  # Pixy2 rules not found at ${p}; skipping.
                '';
         })
-        
-        #yazi
-				({ pkgs, ... }: {
-					environment.systemPackages = [
-	  				(yazi.packages.${pkgs.system}.default.override {
-							_7zz = pkgs._7zz-rar;  # Support for RAR extraction
-						})
-          ];
-				})
 
         # Solaar module
         solaar.nixosModules.default
+
+        ({ pkgs, ... }: {
+          nixpkgs.overlays = [ yazi.overlays.default ];
+        })
 
         ./configuration.nix
 
@@ -58,7 +52,6 @@
         ({ ... }: {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-
           home-manager.users.joel = { pkgs, ... }: {
             imports = [ ./home.nix ];
           };
@@ -67,5 +60,3 @@
     };
   };
 }
-
-
