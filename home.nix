@@ -5,9 +5,9 @@
   home.stateVersion = "25.11";
   programs.home-manager.enable = true;
 
-  # Cursor settings
+  # Cursor settings (configure in sway)
   home.pointerCursor = {
-    name = "Bibata-Modern-Classic";
+    name = "Bibata-Modern-Amber";
     package = pkgs.bibata-cursors;
     gtk.enable = true;
     x11.enable = true;
@@ -42,19 +42,28 @@
     };
   };
 
-  programs.foot = {
-    enable = true;
-    settings = {
-      main = {
-        font = "JetBrainsMono Nerd Font:size=16";
-      };
-      colors = {
-        foreground = "ffffff";
-        background = "101010";
-        alpha = 0.88;
-      };
+programs.foot = {
+  enable = true;
+  settings = {
+    main = {
+      font = "JetBrainsMono Nerd Font:size=16";
+    };
+
+    # Theme 1 (normal): transparent
+    colors = {
+      foreground = "ffffff";
+      background = "101010";
+      alpha = 0.88;
+    };
+
+    # Theme 2 (fullscreen): opaque night theme
+    colors2 = {
+      foreground = "ffffff";
+      background = "1d1c22";
+      alpha = 0.99;
     };
   };
+};
 
 programs.fastfetch.enable = true;
 

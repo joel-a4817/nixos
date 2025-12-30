@@ -104,14 +104,13 @@ fonts = {
     programs.firefox.enable = true;
 # Packages
 environment.systemPackages = with pkgs; [
-  wget git gh #use gh to login to github
+  wget git gh #keep it since you need it for nvim, not just github login.
   wmenu swaybg autotiling
   grim slurp wf-recorder
   pulseaudio brightnessctl
   imv mpv unzip zip 
   clipse wl-clipboard
-  appimage-run
-  curl gsettings-desktop-schemas #for time-set  
+  appimage-run  
 ];
 
   programs.neovim = {
