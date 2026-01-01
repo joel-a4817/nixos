@@ -100,7 +100,6 @@ fonts = {
   ];
 };
 
-
     programs.firefox.enable = true;
 # Packages
 environment.systemPackages = with pkgs; [

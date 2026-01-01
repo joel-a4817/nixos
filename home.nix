@@ -48,19 +48,10 @@ programs.foot = {
     main = {
       font = "JetBrainsMono Nerd Font:size=16";
     };
-
-    # Theme 1 (normal): transparent
     colors = {
-      foreground = "ffffff";
-      background = "101010";
-      alpha = 0.88;
-    };
-
-    # Theme 2 (fullscreen): opaque night theme
-    colors2 = {
-      foreground = "ffffff";
-      background = "1d1c22";
-      alpha = 0.99;
+      alpha=0.88
+      background=1d1c22
+      foreground=ffffff
     };
   };
 };
