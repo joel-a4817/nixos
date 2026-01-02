@@ -143,6 +143,7 @@ environment.systemPackages = with pkgs; [
 security.pam.services.swaylock = {
   enable = true;        # ensure the PAM service exists
   fprintAuth = true;    # attach pam_fprintd.so to swaylock's auth chain
+  unixAuth = true;
 };
 
   # OpenGL - wlroots like sway need
