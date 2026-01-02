@@ -58,15 +58,14 @@
     wrapperFeatures.gtk = true;
   };
 
-# https://github.com/apognu/tuigreet
-services.greetd = {
-  enable = true;
-  settings = {
-    default_session = {
-      command = "${pkgs.tuigreet}/bin/tuigreet --remember --remember-session --time";
-      user = "greeter";
-    };
-  };
+systemd.user.services.sway = {
+  wantedBy = [ "default.target" ];
+  serviceConfig.ExecStart = "${pkgs.sway}/bin/sway";
+};
+
+services.getty = {
+  autologinUser = "joel";
+  autologinOnce = true;
 };
 
 #virtualbox https://wiki.nixos.org/wiki/VirtualBox
@@ -146,20 +145,20 @@ security.pam.services.swaylock = {
   fprintAuth = true;    # attach pam_fprintd.so to swaylock's auth chain
 };
 
-  # OpenGL - wlroots like sway needs
+  # OpenGL - wlroots like sway need
   hardware.graphics.enable = true;
 
-  # xdg portal enabling
+  # xdg portal enabling (wayland needs because everything is locked down and secure by default. To allow screen to be seen by apps this is needed.
 xdg.portal = {
   enable = true;
 
   # Install actual backends (required when enable = true)
   extraPortals = with pkgs; [
-    xdg-desktop-portal-wlr   # Wayland screencast/screenshot for wlroots
-    xdg-desktop-portal-gtk   # Generic fallback (OpenURI, file chooser, etc.)
+    xdg-desktop-portal-wlr   # screenshot/screen-recording in sway
+    xdg-desktop-portal-gtk   # file chooser in firefox, etc.
   ];
 
-  # Post-1.17: explicitly choose which backend handles which interface
+  #post 1.17: explicitly choose which backend portal above handles which interface
   config = {
     common = {
       default = [ "gtk" ];
