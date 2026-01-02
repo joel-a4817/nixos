@@ -13,7 +13,6 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "rt4817";
-  #time.timeZone = "Australia/Melbourne"; #not needed since to set timezone sets /etc/localtime
 
   security.sudo.extraRules = [
     {
@@ -110,76 +109,7 @@ environment.systemPackages = with pkgs; [
   imv mpv unzip zip 
   clipse wl-clipboard
   appimage-run
-  fd ripgrep #required by neovim (telescope) and yazi.
 ];
- 
-
-programs.neovim = {
-  enable = true;
-  defaultEditor = true;
-  viAlias = true;
-  vimAlias = true;
-
-  configure = {
-    packages.myPlugins = with pkgs.vimPlugins; {
-      start = [
-        telescope-nvim
-        plenary-nvim
-        telescope-fzf-native-nvim
-      ];
-      opt = [ ];
-    };
-    customRC = ''
-      lua << 'LUA'
-      vim.g.mapleader = " "
-
-      vim.opt.number = true
-      vim.opt.relativenumber = true
-      vim.opt.termguicolors = true
-      vim.opt.expandtab = true
-      vim.opt.shiftwidth = 2
-      vim.opt.tabstop = 2
-      vim.opt.signcolumn = "yes"
-
-      vim.cmd [[
-        hi Normal guibg=NONE ctermbg=NONE
-        hi NormalNC guibg=NONE ctermbg=NONE
-        hi NonText guibg=NONE ctermbg=NONE
-      ]]
-
-      require("telescope").setup({
-        extensions = {
-          fzf = {
-            fuzzy = true,
-            override_generic_sorter = true,
-            override_file_sorter = true,
-            case_mode = "smart_case",
-          },
-        },
-      })
-      require("telescope").load_extension("fzf")
-
-      local map = vim.keymap.set
-      local opts = { noremap = true, silent = true }
-      local builtin = require("telescope.builtin")
-
-      map("n", "<leader>ff", builtin.find_files, opts)
-      map("n", "<leader>fg", builtin.live_grep, opts)
-      map("n", "<leader>fb", builtin.buffers, opts)
-      map("n", "<leader>fh", builtin.help_tags, opts)
-
-      map("n", "<leader>gc", builtin.git_commits,  { desc = "Git commits" })
-      map("n", "<leader>gC", builtin.git_bcommits, { desc = "Git commits (file)" })
-      map("n", "<leader>gb", builtin.git_branches, { desc = "Git branches" })
-      map("n", "<leader>gs", builtin.git_status,   { desc = "Git status" })
-      map("n", "<leader>gS", builtin.git_stash,    { desc = "Git stash" })
-
-      map("n", "<leader>mm", ":set modifiable<CR>", opts)
-      LUA
-    '';
-  };
-};
-
 
   #warp  
   services.cloudflare-warp = {
