@@ -23,7 +23,7 @@
     opencv
     qt5.qtwayland #Required for Qt apps like those above.
     #yazi pkgs:
-    ffmpeg p7zip jq poppler fd ripgrep fzf zoxide resvg imagemagick
+    ffmpeg p7zip jq poppler fzf zoxide resvg imagemagick
     trash-cli jdupes lazygit #required by yazi plugins
   ];
 
