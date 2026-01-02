@@ -33,8 +33,6 @@
     plugins = { #don't need chmod or sudo for now.
       #yaziPlugins.chmod #https://github.com/yazi-rs/plugins/tree/main/chmod.yazi
       #yaziPlugins.sudo #https://github.com/TD-Sky/sudo.yazi
-      
-      dupes       = pkgs.yaziPlugins.dupes; #https://github.com/Mshnwq/dupes.yazi
       git         = pkgs.yaziPlugins.git; #https://github.com/yazi-rs/plugins/tree/main/git.yazi
       lazygit     = pkgs.yaziPlugins.lazygit; #https://github.com/Lil-Dank/lazygit.yazi
       recycle-bin = pkgs.yaziPlugins.recycle-bin; #https://github.com/uhs-robert/recycle-bin.yazi
@@ -49,9 +47,9 @@ programs.foot = {
       font = "JetBrainsMono Nerd Font:size=16";
     };
     colors = {
-      alpha=0.88
-      background=1d1c22
-      foreground=ffffff
+      alpha = 0.88;
+      background = "1d1c22";
+      foreground = "ffffff";
     };
   };
 };
