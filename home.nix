@@ -24,7 +24,7 @@
     qt5.qtwayland #Required for Qt apps like those above.
     #yazi pkgs:
     ffmpeg p7zip jq poppler fzf zoxide resvg imagemagick
-    trash-cli jdupes lazygit fd ripgrep #required by yazi plugins
+    trash-cli lazygit fd ripgrep nushell #required by yazi plugins
   ];
 
 programs.foot = {
@@ -44,18 +44,14 @@ programs.foot = {
   programs.yazi = {
     enable = true;
     package = pkgs.yazi.override { _7zz = pkgs._7zz-rar; }; # Support for RAR extraction
-    plugins = { #don't need chmod or sudo for now.
-      #yaziPlugins.chmod #https://github.com/yazi-rs/plugins/tree/main/chmod.yazi
-      #yaziPlugins.sudo #https://github.com/TD-Sky/sudo.yazi
-      git         = pkgs.yaziPlugins.git; #https://github.com/yazi-rs/plugins/tree/main/git.yazi
-      lazygit     = pkgs.yaziPlugins.lazygit; #https://github.com/Lil-Dank/lazygit.yazi
+    plugins = {
+      sudo = pkgs.yaziPlugins.sudo; #https://github.com/TD-Sky/sudo.yazi
+      lazygit = pkgs.yaziPlugins.lazygit; #https://github.com/Lil-Dank/lazygit.yazi
       recycle-bin = pkgs.yaziPlugins.recycle-bin; #https://github.com/uhs-robert/recycle-bin.yazi
-      restore     = pkgs.yaziPlugins.restore; #https://github.com/boydaihungst/restore.yazi
+      restore = pkgs.yaziPlugins.restore; #https://github.com/boydaihungst/restore.yazi
     };
   };
 
 programs.fastfetch.enable = true;
 
 }
-
-

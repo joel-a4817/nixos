@@ -79,7 +79,7 @@ services.getty = {
   services.solaar = {
     enable = true; # Enable the service
     package = pkgs.solaar; # The package to use
-    window = "hide"; # Show the window on startup (show, *hide*, only [window only])
+    window = "show"; # Show the window on startup (show, *hide*, only [window only])
 #   batteryIcons = "regular"; # Which battery icons to use (*regular*, symbolic, solaar)
     extraArgs = "--headless"; # Extra arguments to pass to solaar on startup
   };
@@ -97,7 +97,7 @@ fonts = {
   ];
 };
 
-    programs.firefox.enable = true;
+  programs.firefox.enable = true;
 # Packages
 environment.systemPackages = with pkgs; [
   (vim.override { clipboardSupport = true; })
@@ -106,7 +106,7 @@ environment.systemPackages = with pkgs; [
   grim slurp wf-recorder
   pulseaudio brightnessctl
   imv mpv unzip zip 
-  clipse wl-clipboard xclip (vim in xwayland)
+  clipse wl-clipboard xclip # (vim clipboard in xwayland)
   appimage-run
 ];
 
@@ -123,9 +123,9 @@ environment.systemPackages = with pkgs; [
 
  # services.printing.printers = {
  #   BrotherPrinter = {
- #     deviceUri = "ipp://<printer-ip>/ipp/print";  # replace with your printer IP
- #     model = "everywhere";                        # same as lpadmin -m everywhere
- #     enabled = true;                              # same as -E
+ #     deviceUri = "ipp://<printer-ip>/ipp/print"; # replace with your printer IP
+ #     model = "everywhere"; # same as lpadmin -m everywhere
+ #     enabled = true; # same as -E
  #   };
  # };
 
@@ -192,9 +192,9 @@ environment.systemPackages = with pkgs; [
   };
 
 security.pam.services.swaylock = {
-  enable = true;        # ensure the PAM service exists
-  fprintAuth = true;    # attach pam_fprintd.so to swaylock's auth chain
-  unixAuth = true;
+  enable = true; # ensure the PAM service exists
+  fprintAuth = true; # attach pam_fprintd.so to swaylock's auth chain
+  unixAuth = true; # password fallback
 };
 
   # OpenGL - wlroots like sway need
