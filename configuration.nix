@@ -102,7 +102,36 @@ fonts = {
   ];
 };
 
-  programs.firefox.enable = true;
+programs.firefox = {
+  enable = true;
+  package = pkgs.librewolf;
+  policies = {
+    EnableTrackingProtection = {
+      Value = true;
+      Category = "strict";
+      BaselineExceptions = true;
+    };
+    Preferences = {
+      "privacy.resistFingerprinting" = false;
+      "browser.theme.content-theme" = 0;
+      "browser.theme.toolbar-theme" = 0;
+      "browser.download.useDownloadDir" = true;
+      "browser.download.always_ask_before_handling_new_types" = false;
+    };
+    SearchEngines.Default = "DuckDuckGo_Lite";
+    Homepage = {
+      URL = "about:blank";
+      StartPage = "previous-session";
+    };
+    ExtensionSettings = {
+      "addon@darkreader.org" = {
+        install_url = "https://addons.mozilla.org/firefox/downloads/latest/darkreader/latest.xpi";
+        installation_mode = "force_installed";
+      };
+    };
+  }; #policies
+};
+
 # Packages
 environment.systemPackages = with pkgs; [
   wget git
