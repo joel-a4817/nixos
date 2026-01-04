@@ -84,6 +84,11 @@ services.getty = {
     extraArgs = "--headless"; # Extra arguments to pass to solaar on startup
   };
 
+programs.neovim = {
+  enable = true;
+  defaultEditor = true;
+};
+
 fonts = {
   enableDefaultPackages = true;
   fontconfig = {
@@ -100,7 +105,6 @@ fonts = {
   programs.firefox.enable = true;
 # Packages
 environment.systemPackages = with pkgs; [
-  (vim.override { clipboardSupport = true; })
   wget git
   wmenu swaybg autotiling
   grim slurp wf-recorder
@@ -128,57 +132,6 @@ environment.systemPackages = with pkgs; [
  #     enabled = true; # same as -E
  #   };
  # };
-
-  programs.vim = {
-    enable = true;
-    defaultEditor = true;
-    extraConfig = ''
-      " --- Leader key ---
-      let mapleader=" "
-
-      " --- UI ---
-      set number
-      set relativenumber
-      set termguicolors
-      set signcolumn=yes
-
-      " --- Indentation ---
-      set expandtab
-      set shiftwidth=2
-      set tabstop=2
-
-      " --- Clipboard ---
-      set clipboard=unnamedplus
-
-      " --- Transparent background ---
-      highlight Normal      guibg=NONE ctermbg=NONE
-      highlight NormalNC    guibg=NONE ctermbg=NONE
-      highlight NonText     guibg=NONE ctermbg=NONE
-
-      " --- Mouse: scroll WITHOUT moving cursor, but clicking still moves cursor ---
-      set mouse=a
-      set mousemodel=popup_setpos
-
-      " --- Delete without copying (black-hole) ---
-      nnoremap d  "_d
-      xnoremap d  "_d
-      nnoremap dd "_dd
-
-      " --- Cut entire line to system clipboard (dx) ---
-      nnoremap dx "+dd
-
-      " --- Sane defaults ---
-      set ttyfast
-      set incsearch
-      set hlsearch
-      set ignorecase
-      set smartcase
-      set hidden
-      set noswapfile
-      set backspace=indent,eol,start
-      set scrolloff=10
-    '';
-  };
 
   # Fprintd
   services.fprintd.enable = true;
