@@ -113,12 +113,20 @@ programs.firefox = {
     };
     Preferences = {
       "privacy.resistFingerprinting" = false;
+
       "browser.theme.content-theme" = 0;
       "browser.theme.toolbar-theme" = 0;
+      "browser.toolbars.bookmarks.visibility" = "newtab";
+
       "browser.download.useDownloadDir" = true;
       "browser.download.always_ask_before_handling_new_types" = false;
+
+      "browser.sidebar.show" = true;
+      "sidebar.verticalTabs" = true;
+      "sidebar.newTool.migration.bookmarks" = "{}";
+      "sidebar.newTool.migration.history" = "{}";
     };
-    SearchEngines.Default = "DuckDuckGo_Lite";
+    SearchEngines.Default = "DuckDuckGo Lite";
     Homepage = {
       URL = "about:blank";
       StartPage = "previous-session";
