@@ -110,6 +110,7 @@ programs.firefox = {
       Value = true;
       Category = "strict";
       BaselineExceptions = true;
+      ConvenienceExceptions = true;
     };
     Preferences = {
       "privacy.resistFingerprinting" = false;
@@ -125,6 +126,8 @@ programs.firefox = {
       "sidebar.verticalTabs" = true;
       "sidebar.newTool.migration.bookmarks" = "{}";
       "sidebar.newTool.migration.history" = "{}";
+
+      "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
     };
     SearchEngines.Default = "DuckDuckGo Lite";
     Homepage = {
