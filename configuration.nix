@@ -238,7 +238,7 @@ security.pam.services.swaylock = {
   # OpenGL - wlroots like sway need
   hardware.graphics.enable = true;
 
-  # xdg portal enabling (wayland needs because everything is locked down and secure by default. To allow screen to be seen by apps this is needed.
+  # xdg portal enabling (wayland needs because everything is locked down and secure by default. To allow screen to be seen by apps this is needed).
 xdg.portal = {
   enable = true;
 
