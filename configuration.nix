@@ -188,7 +188,7 @@ programs.firefox = {
 
 # Packages
 environment.systemPackages = with pkgs; [
-  wget git
+  wget git gh #need gh to stay logged in
   wmenu swaybg autotiling
   grim slurp wf-recorder
   pulseaudio brightnessctl
