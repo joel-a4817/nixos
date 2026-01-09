@@ -58,15 +58,13 @@
     wrapperFeatures.gtk = true;
   };
 
-systemd.user.services.sway = {
-  wantedBy = [ "default.target" ];
-  serviceConfig.ExecStart = "${pkgs.sway}/bin/sway";
-};
-
 services.getty = {
-  autologinUser = "joel";
+  autologinUser = "your_username";
   autologinOnce = true;
 };
+environment.loginShellInit = ''
+    [[ "$(tty)" == /dev/tty1 ]] && sway
+'';
 
 #virtualbox https://wiki.nixos.org/wiki/VirtualBox
   virtualisation.virtualbox.host = {
