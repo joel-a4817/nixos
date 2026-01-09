@@ -53,18 +53,11 @@
   services.seatd.enable = true;
   programs.xwayland.enable = true;
 
+#start sway with exec sway!!
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
   };
-
-services.getty = {
-  autologinUser = "your_username";
-  autologinOnce = true;
-};
-environment.loginShellInit = ''
-    [[ "$(tty)" == /dev/tty1 ]] && sway
-'';
 
 #virtualbox https://wiki.nixos.org/wiki/VirtualBox
   virtualisation.virtualbox.host = {
@@ -203,18 +196,33 @@ environment.systemPackages = with pkgs; [
     openFirewall = true;
   };
 
-  # Printing + Avahi for mDNS/IPP
-  services.avahi.enable = true;
-  services.printing.enable = true;
-  services.printing.drivers = [ pkgs.cups-filters ]; # for 'everywhere' model
+  #Printing
+services.avahi = {
+  enable = true;
+  nssmdns4 = true;
+  openFirewall = true;
+};
 
- # services.printing.printers = {
- #   BrotherPrinter = {
- #     deviceUri = "ipp://<printer-ip>/ipp/print"; # replace with your printer IP
- #     model = "everywhere"; # same as lpadmin -m everywhere
- #     enabled = true; # same as -E
- #   };
- # };
+services.printing = {
+  enable = true;
+  drivers = with pkgs; [
+    cups-filters
+    cups-browsed
+  ];
+};
+
+hardware.printers = {
+  ensureDefaultPrinter = "BrotherPrinterHome";
+  ensurePrinters = [
+    {
+      deviceUri = "ipp://BRWD812659C29A4.local:631/ipp/print";
+      location = "home";
+      name = "BrotherPrinterHome";
+      model = "everywhere";
+    }
+  ];
+};
+
 
   # Fprintd
   services.fprintd.enable = true;
