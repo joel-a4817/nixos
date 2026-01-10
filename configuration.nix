@@ -121,6 +121,8 @@ environment.systemPackages = with pkgs; [
   appimage-run
 ];
 
+services.udev.extraRules = builtins.readFile ./pixy.rules;
+
   #warp  
   services.cloudflare-warp = {
     enable = true;
