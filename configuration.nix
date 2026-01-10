@@ -97,87 +97,18 @@ fonts = {
 programs.firefox = {
   enable = true;
   package = pkgs.librewolf;
-
-  preferencesStatus = "locked";
-
+  preferencesStatus = "locked";  
   policies = {
-    EnableTrackingProtection = {
-      Value = true;
-      Category = "strict";
-      BaselineExceptions = true;
-      ConvenienceExceptions = true;
-    };
-
-    SearchEngines.Default = "DuckDuckGo Lite";
-
-    Homepage = {
-      URL = "about:blank";
-      StartPage = "previous-session";
-    };
-
     ExtensionSettings = {
       "addon@darkreader.org" = {
         install_url = "https://addons.mozilla.org/firefox/downloads/latest/darkreader/latest.xpi";
         installation_mode = "force_installed";
       };
     };
-  }; # policies
-
-  preferences = {
-    "privacy.resistFingerprinting" = false;
-
-    "browser.theme.content-theme" = 0;
-    "browser.theme.toolbar-theme" = 0;
-    "browser.toolbars.bookmarks.visibility" = "newtab";
-
-    "browser.download.useDownloadDir" = true;
-    "browser.download.always_ask_before_handling_new_types" = false;
-
-    "browser.sidebar.show" = true;
-    "sidebar.verticalTabs" = true;
-    "sidebar.newTool.migration.bookmarks" = "{}";
-    "sidebar.newTool.migration.history" = "{}";
-
-    "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-
-    ############################################################
-    # Contrast Control (High Contrast Mode) + palette
-    ############################################################
-
-    "browser.display.document_color_use" = 2;
-
-    "browser.display.use_system_colors" = false;
-
-    "browser.background_color" = "#1D1C22";
-    "browser.foreground_color" = "#FFFFFF";
-    "browser.anchor_color" = "#FFFFFF";   # unvisited links
-    "browser.visited_color" = "#FFFFFF";  # visited links
-
-    ############################################################
-    # Advanced Fonts (Text settings)
-    ############################################################
-    "font.default.x-western" = "sans-serif";
-    "font.default.x-unicode" = "sans-serif";
-
-    "font.name.serif.x-western" = "JetBrainsMono Nerd Font";
-    "font.name.sans-serif.x-western" = "JetBrainsMono Nerd Font";
-    "font.name.monospace.x-western" = "JetBrainsMono Nerd Font";
-
-    "font.name.serif.x-unicode" = "JetBrainsMono Nerd Font";
-    "font.name.sans-serif.x-unicode" = "JetBrainsMono Nerd Font";
-    "font.name.monospace.x-unicode" = "JetBrainsMono Nerd Font";
-
-    "browser.display.use_document_fonts" = 0;
-
-    "font.minimum-size.x-western" = 16;
-    "font.minimum-size.x-unicode" = 16;
-
-    "font.size.variable.x-western" = 16;
-    "font.size.fixed.x-western" = 16;
-    "font.size.variable.x-unicode" = 16;
-    "font.size.fixed.x-unicode" = 16;
   };
 };
+
+environment.etc."firefox/policies/policies.json".target = "librewolf/policies/policies.json";
 
 # Packages
 environment.systemPackages = with pkgs; [
