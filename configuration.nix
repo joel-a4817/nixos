@@ -131,7 +131,6 @@ environment.systemPackages = with pkgs; [
 services.avahi = {
   enable = true;
   nssmdns4 = true;
-  openFirewall = true;
 };
 
 services.printing = {
@@ -146,7 +145,7 @@ hardware.printers = {
   ensureDefaultPrinter = "BrotherPrinterHome";
   ensurePrinters = [
     {
-      deviceUri = "ipp://BRWD812659C29A4.local:631/ipp/print";
+      deviceUri = "dnssd://Brother%20MFC-L2750DW%20series._ipp._tcp.local/?uuid=e3248000-80ce-11db-8000-3c2af4f6c121";
       location = "home";
       name = "BrotherPrinterHome";
       model = "everywhere";

@@ -88,24 +88,10 @@
         "type": "github"
       }
     },
-    "pixy2": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1767988860,
-        "narHash": "sha256-Tn/ysgmI4Ads0xLv2gOYfkf+6yb/ZHCo5sNjwCAQLoA=",
-        "path": "/home/joel/pixy2",
-        "type": "path"
-      },
-      "original": {
-        "path": "/home/joel/pixy2",
-        "type": "path"
-      }
-    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
-        "pixy2": "pixy2",
         "solaar": "solaar",
         "yazi": "yazi"
       }

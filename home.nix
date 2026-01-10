@@ -13,17 +13,6 @@
     x11.enable = true;
   };
 
-programs.git = {
-  enable = true;
-  settings = {
-    user = {
-      user.name = "rt4817";
-      user.email = "joel.ag789@gmail.com";
-    };
-    init.defaultBranch = "main";
-  };
-};
-
   # User packages
   home.packages = with pkgs; [
     prismlauncher
