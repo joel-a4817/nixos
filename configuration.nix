@@ -110,117 +110,202 @@ fonts = {
   ];
 };
 
+  programs.firefox = {
+    enable = true;
+    package = pkgs.librewolf;
+    preferencesStatus = "locked";
+    preferences = {
+      # -------------------------
+      # Homepage & session restore
+      # -------------------------
+      "browser.startup.homepage" = "about:blank";
+      "browser.newtabpage.enabled" = false;
+
+      # 3 = Restore previous session
+      "browser.startup.page" = 3;
+
+      # -------------------------
+      # Default search same in private and normal
+      # -------------------------
+      "browser.search.separatePrivateDefault" = false;
+
+      # -------------------------
+      # Downloads
+      # -------------------------
+      "browser.download.useDownloadDir" = true;
+      "browser.download.always_ask_before_handling_new_types" = false;
+
+      # -------------------------
+      # Sidebar visibility (this one wasn't in your blocked list)
+      # -------------------------
+      "browser.sidebar.show" = true;
+
+      # -------------------------
+      # Bookmarks toolbar
+      # -------------------------
+      "browser.toolbars.bookmarks.visibility" = "newtab";
+
+      # -------------------------
+      # userContent.css / userChrome.css
+      # -------------------------
+      "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+
+      # -------------------------
+      # Default appearance
+      # -------------------------
+      "browser.display.document_color_use" = 2;
+      "browser.display.background_color" = "#1D1C22";
+      "browser.display.foreground_color" = "#FFFFFF";
+      "browser.anchor_color" = "#FFFFFF";
+      "browser.active_color.dark" = "{}";
+      "browser.visited_color" = "#FFFFFF";
+
+      "layout.css.prefers-color-scheme.content-override" = 0;
+    };
+
+    # ------------------------------------------------------------------
+    # AutoConfig: for prefs blocked by the Enterprise "Preferences" policy
+    # ("Preference not allowed for stability reasons")
+    #
+    # ------------------------------------------------------------------
+    autoConfig = ''
+      // IMPORTANT: Start your code on the 2nd line
 
 
-programs.firefox = {
-  enable = true;
-  package = pkgs.librewolf;
-  preferencesStatus = "locked"; 
-  # "mozilla.cfg" prefs go here as a plain attrset.
-  preferences = {
-    # -------------------------
-    # Privacy
-    # -------------------------
-    "privacy.resistFingerprinting" = false;
+      // fix tool-bar: reset to default + put sidebar toggle on far left
+      try {
+        var prefs = Components.classes["@mozilla.org/preferences-service;1"]
+          .getService(Components.interfaces.nsIPrefBranch);
 
-    # Your clear-on-shutdown v2 prefs:
-    "privacy.clearOnShutdown_v2.cache" = false;
-    "privacy.clearOnShutdown_v2.cookiesAndStorage" = false;
+        var markerPref = "nixos.toolbar.defaultPlusSidebarLeft.applied";
 
-    # WebCompat exceptions tiers (FF 142+)
-    "privacy.trackingprotection.allow_list.convenience.enabled" = true;
-    "privacy.trackingprotection.allow_list.baseline.enabled" = true;
+        if (!prefs.getBoolPref(markerPref, false)) {
+          if (prefs.prefHasUserValue("browser.uiCustomization.state")) {
+            prefs.clearUserPref("browser.uiCustomization.state");
+          }
 
-    # -------------------------
-    # Homepage & session restore
-    # -------------------------
-    "browser.startup.homepage" = "about:blank";
-    "browser.newtabpage.enabled" = false;
+          if (prefs.prefHasUserValue("browser.uiCustomization.navBarWhenVerticalTabs")) {
+            prefs.clearUserPref("browser.uiCustomization.navBarWhenVerticalTabs");
+          }
 
-    # 3 = Restore previous session
-    "browser.startup.page" = 3;
+          var obs = Components.classes["@mozilla.org/observer-service;1"]
+            .getService(Components.interfaces.nsIObserverService);
 
-    # -------------------------
-    # Default search
-    # -------------------------
-    "browser.newtabpage.activity-stream.trendingSearch.defaultSearchEngine" = "DuckDuckGo";
+          var observer = {
+            observe: function (subject, topic, data) {
+              try {
+                var win = subject; // browser window
+                if (!win) return;
 
-    "browser.search.separatePrivateDefault" = false;
+                var CUI = win.CustomizableUI;
+                if (!CUI) return;
 
-    # -------------------------
-    # Downloads
-    # -------------------------
-    "browser.download.useDownloadDir" = true;
-    "browser.download.always_ask_before_handling_new_types" = false;
+                if (CUI.addWidgetToArea) {
+                  var placement = CUI.getPlacementOfWidget && CUI.getPlacementOfWidget("sidebar-button");
+                  if (!placement || placement.area !== "nav-bar") {
+                    CUI.addWidgetToArea("sidebar-button", "nav-bar", 0);
+                  }
+                }
 
-    # -------------------------
-    # Sidebar / vertical tabs
-    # -------------------------
-    "sidebar.revamp" = true;
-    "sidebar.verticalTabs" = true;
+                if (CUI.moveWidgetWithinArea) {
+                  CUI.moveWidgetWithinArea("sidebar-button", 0);
+                }
 
-    "browser.sidebar.show" = true;
-    "sidebar.newTool.migration.bookmarks" = "{}";
-    "sidebar.newTool.migration.history" = "{}";
-    "sidebar.hideTabsAndSidebar" = false;
+                prefs.setBoolPref(markerPref, true);
+              } catch (e) {
+              }
 
-    "browser.toolbars.bookmarks.visibility" = "newtab";
+              try {
+                obs.removeObserver(observer, "browser-delayed-startup-finished");
+              } catch (e) {
+              }
+            }
+          };
 
-    # -------------------------
-    # userContent.css / userChrome.css
-    # -------------------------
-    "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+          obs.addObserver(observer, "browser-delayed-startup-finished");
+        }
+      } catch (e) {
+      }
 
-    # -------------------------
-    # Default appearance
-    # -------------------------
-    "browser.display.document_color_use" = 2;
-    "browser.display.background_color" = "#1D1C22";
-    "browser.display.foreground_color" = "#FFFFFF";
-    "browser.anchor_color" = "#FFFFFF";
-    "browser.active_color.dark" = "{}";
-    "browser.visited_color" = "#FFFFFF";
 
-    "layout.css.prefers-color-scheme.content-override" = 0;
+      // -------------------------
+      // Privacy (blocked via policy Preferences)
+      // -------------------------
+      lockPref("privacy.resistFingerprinting", false);
 
-    # -------------------------
-    # Advanced Fonts (Text settings)
-    # -------------------------
-    "font.default.x-western" = "sans-serif";
-    "font.default.x-unicode" = "sans-serif";
+      lockPref("privacy.clearOnShutdown_v2.cache", false);
+      lockPref("privacy.clearOnShutdown_v2.cookiesAndStorage", false);
 
-    "font.name.serif.x-western" = "JetBrainsMono Nerd Font";
-    "font.name.sans-serif.x-western" = "JetBrainsMono Nerd Font";
-    "font.name.monospace.x-western" = "JetBrainsMono Nerd Font";
+      lockPref("privacy.trackingprotection.allow_list.convenience.enabled", true);
+      lockPref("privacy.trackingprotection.allow_list.baseline.enabled", true);
 
-    "font.name.serif.x-unicode" = "JetBrainsMono Nerd Font";
-    "font.name.sans-serif.x-unicode" = "JetBrainsMono Nerd Font";
-    "font.name.monospace.x-unicode" = "JetBrainsMono Nerd Font";
+      // -------------------------
+      // Sidebar / vertical tabs (blocked via policy Preferences)
+      // -------------------------
+      lockPref("sidebar.revamp", true);
+      lockPref("sidebar.verticalTabs", true);
 
-    "browser.display.use_document_fonts" = 0;
+      lockPref("sidebar.newTool.migration.bookmarks", "{}");
+      lockPref("sidebar.newTool.migration.history", "{}");
+      lockPref("sidebar.hideTabsAndSidebar", false);
 
-    "font.minimum-size.x-western" = 16;
-    "font.minimum-size.x-unicode" = 16;
+      // -------------------------
+      // Advanced Fonts (blocked via policy Preferences)
+      // -------------------------
+      lockPref("font.default.x-western", "sans-serif");
+      lockPref("font.default.x-unicode", "sans-serif");
 
-    "font.size.variable.x-western" = 16;
-    "font.size.fixed.x-western" = 16;
-    "font.size.variable.x-unicode" = 16;
-    "font.size.fixed.x-unicode" = 16;
-  };
+      lockPref("font.name.serif.x-western", "JetBrainsMono Nerd Font");
+      lockPref("font.name.sans-serif.x-western", "JetBrainsMono Nerd Font");
+      lockPref("font.name.monospace.x-western", "JetBrainsMono Nerd Font");
 
-  # Policies are for things Firefox treats as "enterprise managed" like extension installation.
-  policies = {
-    ExtensionSettings = {
-      "addon@darkreader.org" = {
-        install_url =
-          "https://addons.mozilla.org/firefox/downloads/latest/darkreader/latest.xpi";
-        installation_mode = "force_installed";
+      lockPref("font.name.serif.x-unicode", "JetBrainsMono Nerd Font");
+      lockPref("font.name.sans-serif.x-unicode", "JetBrainsMono Nerd Font");
+      lockPref("font.name.monospace.x-unicode", "JetBrainsMono Nerd Font");
+
+      lockPref("browser.display.use_document_fonts", 0);
+
+      lockPref("font.minimum-size.x-western", 16);
+      lockPref("font.minimum-size.x-unicode", 16);
+
+      lockPref("font.size.variable.x-western", 16);
+      lockPref("font.size.fixed.x-western", 16);
+      lockPref("font.size.variable.x-unicode", 16);
+      lockPref("font.size.fixed.x-unicode", 16);
+    '';
+
+    # Policies for extension installation (Enterprise managed)
+    policies = {
+      SearchEngines = {
+        Default = "DuckDuckGo";
+        PreventInstalls = true;
+      };
+      ExtensionSettings = {
+        # uBlock Origin (force installed)
+        "uBlock0@raymondhill.net" = {
+          install_url = "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
+          installation_mode = "force_installed";
+          default_area = "navbar";
+        };
+
+        # Dark Reader (force installed)
+        "addon@darkreader.org" = {
+          install_url = "https://addons.mozilla.org/firefox/downloads/latest/darkreader/latest.xpi";
+          installation_mode = "force_installed";
+          default_area = "navbar";
+        };
       };
     };
   };
-};
 
-environment.etc."firefox/policies/policies.json".target = "librewolf/policies/policies.json";
+  # -----------------------------------------------------------------
+  # This below is different, but works so keep.
+  # -----------------------------------------------------------------
+
+  environment.etc."librewolf/policies/policies.json".source =
+    config.environment.etc."firefox/policies/policies.json".source;
+
+
 
 # Packages
 environment.systemPackages = with pkgs; [
