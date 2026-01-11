@@ -115,13 +115,8 @@ fonts = {
 programs.firefox = {
   enable = true;
   package = pkgs.librewolf;
-
-  # This controls how NixOS marks the generated Preferences policy entries.
-  # "locked" = cannot be changed in the UI (matches what you're doing now).
-  preferencesStatus = "locked";  # [1](https://codeberg.org/librewolf/settings)
-
-  # Your "mozilla.cfg" prefs go here as a plain attrset.
-  # NixOS converts this to a Firefox enterprise policy "Preferences" block automatically. [1](https://codeberg.org/librewolf/settings)
+  preferencesStatus = "locked"; 
+  # "mozilla.cfg" prefs go here as a plain attrset.
   preferences = {
     # -------------------------
     # Privacy
@@ -150,7 +145,6 @@ programs.firefox = {
     # -------------------------
     "browser.newtabpage.activity-stream.trendingSearch.defaultSearchEngine" = "DuckDuckGo";
 
-    # NOTE: you had "seperate" in your file. The actual pref is "separate".
     "browser.search.separatePrivateDefault" = false;
 
     # -------------------------
@@ -162,14 +156,9 @@ programs.firefox = {
     # -------------------------
     # Sidebar / vertical tabs
     # -------------------------
-    # For Firefox vertical tabs / revamped sidebar, the common controlling prefs include:
-    # - sidebar.revamp
-    # - sidebar.verticalTabs
-    # per Mozilla/Firefox docs and community references. [2](https://support.mozilla.org/en-US/kb/use-sidebar-access-tools-and-vertical-tabs)[3](https://winaero.com/firefox-enable-vertical-tabs/)[4](https://www.askvg.com/tips-tweak-and-customize-firefox-sidebar-and-vertical-tabs-like-a-pro/)
     "sidebar.revamp" = true;
     "sidebar.verticalTabs" = true;
 
-    # Your additional sidebar prefs (as provided):
     "browser.sidebar.show" = true;
     "sidebar.newTool.migration.bookmarks" = "{}";
     "sidebar.newTool.migration.history" = "{}";
