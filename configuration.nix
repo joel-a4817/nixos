@@ -153,6 +153,7 @@ fonts = {
       # -------------------------
       # Default appearance
       # -------------------------
+      "browser.display.document_color_use" = 2;
       "browser.display.background_color" = "#1D1C22";
       "browser.display.foreground_color" = "#FFFFFF";
       "browser.anchor_color" = "#FFFFFF";
@@ -170,81 +171,62 @@ fonts = {
     autoConfig = ''
       // IMPORTANT: Start your code on the 2nd line
 
-// fix tool-bar: reset to default + put sidebar toggle on far left + add downloads icon (and auto-open panel on download)
-try {
-  var prefs = Components.classes["@mozilla.org/preferences-service;1"]
-    .getService(Components.interfaces.nsIPrefBranch);
 
-  var markerPref = "nixos.toolbar.defaultPlusSidebarLeft.applied";
+      // fix tool-bar: reset to default + put sidebar toggle on far left
+      try {
+        var prefs = Components.classes["@mozilla.org/preferences-service;1"]
+          .getService(Components.interfaces.nsIPrefBranch);
 
-  // Ensure the downloads panel opens automatically when a download starts
-  try {
-    prefs.setBoolPref("browser.download.alwaysOpenPanel", true);
-  } catch (e) {}
+        var markerPref = "nixos.toolbar.defaultPlusSidebarLeft.applied";
 
-  if (!prefs.getBoolPref(markerPref, false)) {
-    if (prefs.prefHasUserValue("browser.uiCustomization.state")) {
-      prefs.clearUserPref("browser.uiCustomization.state");
-    }
+        if (!prefs.getBoolPref(markerPref, false)) {
+          if (prefs.prefHasUserValue("browser.uiCustomization.state")) {
+            prefs.clearUserPref("browser.uiCustomization.state");
+          }
 
-    if (prefs.prefHasUserValue("browser.uiCustomization.navBarWhenVerticalTabs")) {
-      prefs.clearUserPref("browser.uiCustomization.navBarWhenVerticalTabs");
-    }
+          if (prefs.prefHasUserValue("browser.uiCustomization.navBarWhenVerticalTabs")) {
+            prefs.clearUserPref("browser.uiCustomization.navBarWhenVerticalTabs");
+          }
 
-    var obs = Components.classes["@mozilla.org/observer-service;1"]
-      .getService(Components.interfaces.nsIObserverService);
+          var obs = Components.classes["@mozilla.org/observer-service;1"]
+            .getService(Components.interfaces.nsIObserverService);
 
-    var observer = {
-      observe: function (subject, topic, data) {
-        try {
-          var win = subject; // browser window
-          if (!win) return;
+          var observer = {
+            observe: function (subject, topic, data) {
+              try {
+                var win = subject; // browser window
+                if (!win) return;
 
-          var CUI = win.CustomizableUI;
-          if (!CUI) return;
+                var CUI = win.CustomizableUI;
+                if (!CUI) return;
 
-          // --- Sidebar button on the far left ---
-          if (CUI.addWidgetToArea) {
-            var sbPlacement = CUI.getPlacementOfWidget && CUI.getPlacementOfWidget("sidebar-button");
-            if (!sbPlacement || sbPlacement.area !== "nav-bar") {
-              CUI.addWidgetToArea("sidebar-button", "nav-bar", 0);
+                if (CUI.addWidgetToArea) {
+                  var placement = CUI.getPlacementOfWidget && CUI.getPlacementOfWidget("sidebar-button");
+                  if (!placement || placement.area !== "nav-bar") {
+                    CUI.addWidgetToArea("sidebar-button", "nav-bar", 0);
+                  }
+                }
+
+                if (CUI.moveWidgetWithinArea) {
+                  CUI.moveWidgetWithinArea("sidebar-button", 0);
+                }
+
+                prefs.setBoolPref(markerPref, true);
+              } catch (e) {
+              }
+
+              try {
+                obs.removeObserver(observer, "browser-delayed-startup-finished");
+              } catch (e) {
+              }
             }
-          }
-          if (CUI.moveWidgetWithinArea) {
-            // Ensure it stays as the first item
-            CUI.moveWidgetWithinArea("sidebar-button", 0);
-          }
+          };
 
-          // --- Downloads button visible in the toolbar ---
-          // Firefox widget id for the downloads button is "downloads-button".
-          // Place it near the left (after the sidebar button), or adjust index as you prefer.
-          if (CUI.addWidgetToArea) {
-            var dlPlacement = CUI.getPlacementOfWidget && CUI.getPlacementOfWidget("downloads-button");
-            // If it's not already on the nav-bar, add it. Position 1 puts it right after the sidebar button.
-            if (!dlPlacement || dlPlacement.area !== "nav-bar") {
-              CUI.addWidgetToArea("downloads-button", "nav-bar", 1);
-            }
-          }
-          if (CUI.moveWidgetWithinArea) {
-            // Keep it right after the sidebar button (index 1). Change index if you want a different spot.
-            CUI.moveWidgetWithinArea("downloads-button", 1);
-          }
-
-          // Mark as applied
-          prefs.setBoolPref(markerPref, true);
-        } catch (e) {
+          obs.addObserver(observer, "browser-delayed-startup-finished");
         }
-
-        try {
-          obs.removeObserver(observer, "browser-delayed-startup-finished");
-        } catch (e) {
-        }
+      } catch (e) {
       }
-    };
 
-    obs.addObserver(observer, "browser-delayed-startup-finished");
-  }
-} catch (e) {}
 
       // -------------------------
       // Privacy (blocked via policy Preferences)
