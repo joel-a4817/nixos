@@ -168,64 +168,7 @@ fonts = {
     #
     # ------------------------------------------------------------------
     autoConfig = ''
-      // IMPORTANT: Start your code on the 2nd line
-
-
-      // fix tool-bar: reset to default + put sidebar toggle on far left
-      try {
-        var prefs = Components.classes["@mozilla.org/preferences-service;1"]
-          .getService(Components.interfaces.nsIPrefBranch);
-
-        var markerPref = "nixos.toolbar.defaultPlusSidebarLeft.applied";
-
-        if (!prefs.getBoolPref(markerPref, false)) {
-          if (prefs.prefHasUserValue("browser.uiCustomization.state")) {
-            prefs.clearUserPref("browser.uiCustomization.state");
-          }
-
-          if (prefs.prefHasUserValue("browser.uiCustomization.navBarWhenVerticalTabs")) {
-            prefs.clearUserPref("browser.uiCustomization.navBarWhenVerticalTabs");
-          }
-
-          var obs = Components.classes["@mozilla.org/observer-service;1"]
-            .getService(Components.interfaces.nsIObserverService);
-
-          var observer = {
-            observe: function (subject, topic, data) {
-              try {
-                var win = subject; // browser window
-                if (!win) return;
-
-                var CUI = win.CustomizableUI;
-                if (!CUI) return;
-
-                if (CUI.addWidgetToArea) {
-                  var placement = CUI.getPlacementOfWidget && CUI.getPlacementOfWidget("sidebar-button");
-                  if (!placement || placement.area !== "nav-bar") {
-                    CUI.addWidgetToArea("sidebar-button", "nav-bar", 0);
-                  }
-                }
-
-                if (CUI.moveWidgetWithinArea) {
-                  CUI.moveWidgetWithinArea("sidebar-button", 0);
-                }
-
-                prefs.setBoolPref(markerPref, true);
-              } catch (e) {
-              }
-
-              try {
-                obs.removeObserver(observer, "browser-delayed-startup-finished");
-              } catch (e) {
-              }
-            }
-          };
-
-          obs.addObserver(observer, "browser-delayed-startup-finished");
-        }
-      } catch (e) {
-      }
-
+     // IMPORTANT: Start your code on the 2nd line
 
       // -------------------------
       // Privacy (blocked via policy Preferences)
