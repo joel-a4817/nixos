@@ -153,7 +153,6 @@ fonts = {
       # -------------------------
       # Default appearance
       # -------------------------
-      "browser.display.document_color_use" = 2;
       "browser.display.background_color" = "#1D1C22";
       "browser.display.foreground_color" = "#FFFFFF";
       "browser.anchor_color" = "#FFFFFF";
