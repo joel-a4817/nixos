@@ -1,6 +1,23 @@
 { config, lib, pkgs, ... }:
 
+let
+  pixy2UdevRules = pkgs.stdenvNoCC.mkDerivation {
+    pname = "pixy2-udev-rules";
+    version = "1";
+    src = ./pixy.rules;
+    dontUnpack = true;
+
+    installPhase = ''
+      mkdir -p $out/lib/udev/rules.d
+      # name it with a prefix so ordering is sane
+      cp "$src" $out/lib/udev/rules.d/99-pixy.rules
+    '';
+  };
+in
 {
+  # NixOS will collect rule files from packages under {lib,etc}/udev/rules.d
+  services.udev.packages = [ pixy2UdevRules ];
+
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   imports = 
@@ -93,22 +110,134 @@ fonts = {
   ];
 };
 
+  programs.firefox = {
+    enable = true;
+    package = pkgs.librewolf;
+    preferencesStatus = "locked";
+    preferences = {
+      # -------------------------
+      # Homepage & session restore
+      # -------------------------
+      "browser.startup.homepage" = "about:blank";
+      "browser.newtabpage.enabled" = false;
 
-programs.firefox = {
-  enable = true;
-  package = pkgs.librewolf;
-  preferencesStatus = "locked";  
-  policies = {
-    ExtensionSettings = {
-      "addon@darkreader.org" = {
-        install_url = "https://addons.mozilla.org/firefox/downloads/latest/darkreader/latest.xpi";
-        installation_mode = "force_installed";
+      # 3 = Restore previous session
+      "browser.startup.page" = 3;
+
+      # -------------------------
+      # Default search same in private and normal
+      # -------------------------
+      "browser.search.separatePrivateDefault" = false;
+
+      # -------------------------
+      # Downloads
+      # -------------------------
+      "browser.download.useDownloadDir" = true;
+      "browser.download.always_ask_before_handling_new_types" = false;
+
+      # -------------------------
+      # Sidebar visibility (this one wasn't in your blocked list)
+      # -------------------------
+      "browser.sidebar.show" = true;
+
+      # -------------------------
+      # Bookmarks toolbar
+      # -------------------------
+      "browser.toolbars.bookmarks.visibility" = "newtab";
+
+      # -------------------------
+      # userContent.css / userChrome.css
+      # -------------------------
+      "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+
+      # -------------------------
+      # Default appearance
+      # -------------------------
+      "browser.display.background_color" = "#1D1C22";
+      "browser.display.foreground_color" = "#FFFFFF";
+      "browser.anchor_color" = "#FFFFFF";
+      "browser.active_color.dark" = "{}";
+      "browser.visited_color" = "#FFFFFF";
+
+      "layout.css.prefers-color-scheme.content-override" = 0;
+    };
+
+    # ------------------------------------------------------------------
+    # AutoConfig: for prefs blocked by the Enterprise "Preferences" policy
+    # ("Preference not allowed for stability reasons")
+    #
+    # ------------------------------------------------------------------
+    autoConfig = ''
+     // IMPORTANT: Start your code on the 2nd line
+
+      // -------------------------
+      // Privacy (blocked via policy Preferences)
+      // -------------------------
+      lockPref("privacy.resistFingerprinting", false);
+
+      lockPref("privacy.clearOnShutdown_v2.cache", false);
+      lockPref("privacy.clearOnShutdown_v2.cookiesAndStorage", false);
+
+      lockPref("privacy.trackingprotection.allow_list.convenience.enabled", true);
+      lockPref("privacy.trackingprotection.allow_list.baseline.enabled", true);
+
+      // -------------------------
+      // Sidebar / vertical tabs (blocked via policy Preferences)
+      // -------------------------
+      lockPref("sidebar.revamp", true);
+      lockPref("sidebar.verticalTabs", true);
+
+      lockPref("sidebar.newTool.migration.bookmarks", "{}");
+      lockPref("sidebar.newTool.migration.history", "{}");
+      lockPref("sidebar.hideTabsAndSidebar", false);
+
+      // -------------------------
+      // Advanced Fonts (blocked via policy Preferences)
+      // -------------------------
+      lockPref("font.default.x-western", "sans-serif");
+      lockPref("font.name.serif.x-western", "JetBrainsMono Nerd Font");
+      lockPref("font.name.sans-serif.x-western", "JetBrainsMono Nerd Font");
+      lockPref("font.name.monospace.x-western", "JetBrainsMono Nerd Font");
+
+      lockPref("font.minimum-size.x-western", 16);
+
+      lockPref("font.size.variable.x-western", 16);
+      lockPref("font.size.fixed.x-western", 16);
+      lockPref("font.size.monospace.x-western", 16);
+    '';
+
+    # Policies for extension installation (Enterprise managed)
+    policies = {
+      SearchEngines = {
+        Default = "DuckDuckGo";
+        PreventInstalls = true;
+      };
+      ExtensionSettings = {
+        # uBlock Origin (force installed)
+        "uBlock0@raymondhill.net" = {
+          install_url = "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
+          installation_mode = "force_installed";
+          default_area = "navbar";
+        };
+
+        # Dark Reader (force installed)
+        "addon@darkreader.org" = {
+          install_url = "https://addons.mozilla.org/firefox/downloads/latest/darkreader/latest.xpi";
+          installation_mode = "force_installed";
+          default_area = "navbar";
+        };
       };
     };
   };
-};
 
-environment.etc."firefox/policies/policies.json".target = "librewolf/policies/policies.json";
+  # -----------------------------------------------------------------
+  # This below is different, but works so keep.
+  # -----------------------------------------------------------------
+
+  environment.etc."librewolf/policies/policies.json".source =
+    config.environment.etc."firefox/policies/policies.json".source;
+
+
 
 # Packages
 environment.systemPackages = with pkgs; [
@@ -121,7 +250,6 @@ environment.systemPackages = with pkgs; [
   appimage-run
 ];
 
-services.udev.extraRules = builtins.readFile ./pixy.rules;
 
   #warp  
   services.cloudflare-warp = {
