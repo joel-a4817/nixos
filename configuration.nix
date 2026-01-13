@@ -195,25 +195,15 @@ fonts = {
       // Advanced Fonts (blocked via policy Preferences)
       // -------------------------
       lockPref("font.default.x-western", "sans-serif");
-      lockPref("font.default.x-unicode", "sans-serif");
-
       lockPref("font.name.serif.x-western", "JetBrainsMono Nerd Font");
       lockPref("font.name.sans-serif.x-western", "JetBrainsMono Nerd Font");
       lockPref("font.name.monospace.x-western", "JetBrainsMono Nerd Font");
 
-      lockPref("font.name.serif.x-unicode", "JetBrainsMono Nerd Font");
-      lockPref("font.name.sans-serif.x-unicode", "JetBrainsMono Nerd Font");
-      lockPref("font.name.monospace.x-unicode", "JetBrainsMono Nerd Font");
-
-      lockPref("browser.display.use_document_fonts", 0);
-
       lockPref("font.minimum-size.x-western", 16);
-      lockPref("font.minimum-size.x-unicode", 16);
 
       lockPref("font.size.variable.x-western", 16);
       lockPref("font.size.fixed.x-western", 16);
-      lockPref("font.size.variable.x-unicode", 16);
-      lockPref("font.size.fixed.x-unicode", 16);
+      lockPref("font.size.monospace.x-western", 16);
     '';
 
     # Policies for extension installation (Enterprise managed)
