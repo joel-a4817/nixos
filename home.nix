@@ -33,11 +33,6 @@ programs.foot = {
     main = {
       font = "JetBrainsMono Nerd Font:size=16";
     };
-    colors = {
-      alpha = 0.90;
-      background = "1d1c22";
-      foreground = "ffffff";
-    };
   };
 };
 
