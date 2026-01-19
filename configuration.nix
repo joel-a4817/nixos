@@ -110,6 +110,25 @@ fonts = {
   ];
 };
 
+  nixpkgs.overlays = [
+    (final: prev: { qutebrowser = prev.qutebrowser.override { enableWideVine = true; }; })
+  ];
+
+  # XDG MIME defaults 
+  xdg.mime.enable = true; # default is true, but explicit is fine [3]
+  xdg.mime.defaultApplications = {
+    "text/html"              = "org.qutebrowser.qutebrowser.desktop";
+    "application/xhtml+xml"  = "org.qutebrowser.qutebrowser.desktop";
+    "x-scheme-handler/http"  = "org.qutebrowser.qutebrowser.desktop";
+    "x-scheme-handler/https" = "org.qutebrowser.qutebrowser.desktop";
+    "x-scheme-handler/about" = "org.qutebrowser.qutebrowser.desktop";
+    "x-scheme-handler/unknown" = "org.qutebrowser.qutebrowser.desktop";
+  };
+  # Extra “make it stick” for some Electron apps:
+  environment.sessionVariables.DEFAULT_BROWSER = "${pkgs.qutebrowser}/bin/qutebrowser";
+  # Optional: some tools still read BROWSER too
+  environment.sessionVariables.BROWSER = "${pkgs.qutebrowser}/bin/qutebrowser";
+
 # Packages
 environment.systemPackages = with pkgs; [
   qutebrowser
