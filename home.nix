@@ -71,6 +71,7 @@
 
   # User packages
   home.packages = with pkgs; [
+    libreoffice
     prismlauncher
     signal-desktop
     kicad
