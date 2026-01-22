@@ -6,22 +6,36 @@ let
     version = "1";
     src = ./pixy.rules;
     dontUnpack = true;
-
     installPhase = ''
       mkdir -p $out/lib/udev/rules.d
       # name it with a prefix so ordering is sane
       cp "$src" $out/lib/udev/rules.d/99-pixy.rules
     '';
   };
+
+  # Custom python-adblock (Brave Rust-based + Python wrapper for ABP/EasyList support in qutebrowser)
+  pythonAdblock = pkgs.callPackage ./python-adblock.nix { };
+
+  # Python 3 with adblock module added (qutebrowser will use this interpreter)
+  pythonWithAdblock = pkgs.python3.override {
+    packageOverrides = self: super: {
+      adblock = pythonAdblock;
+    };
+  };
+
+  # qutebrowser using the custom Python + WideVine enabled
+  qutebrowser-with-adblock = pkgs.qutebrowser.override {
+    python3 = pythonWithAdblock;
+    enableWideVine = true;
+  };
+
 in
 {
   # NixOS will collect rule files from packages under {lib,etc}/udev/rules.d
   services.udev.packages = [ pixy2UdevRules ];
-
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
-  imports = 
-    [ # Include the results of the hardware scan..nix
+  imports =
+    [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
 
@@ -63,116 +77,108 @@ in
     jack.enable = true;
     wireplumber.enable = true;
   };
-    
+
   # Seatd for wlroots compositors (sway); polkit for permissions
   security.polkit.enable = true;
   services.dbus.enable = true;
   services.seatd.enable = true;
   programs.xwayland.enable = true;
 
-#start sway with exec sway!!
+  # start sway with exec sway!!
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
   };
 
-#virtualbox https://wiki.nixos.org/wiki/VirtualBox
+  # virtualbox
   virtualisation.virtualbox.host = {
     enable = true;
     enableExtensionPack = true;
   };
   users.extraGroups.vboxusers.members = [ "joel" ];
 
-#solaar https://github.com/Svenum/Solaar-Flake
+  # solaar
   services.solaar = {
-    enable = true; # Enable the service
-    package = pkgs.solaar; # The package to use
-    window = "show"; # Show the window on startup (show, *hide*, only [window only])
-#   batteryIcons = "regular"; # Which battery icons to use (*regular*, symbolic, solaar)
-    extraArgs = "--headless"; # Extra arguments to pass to solaar on startup
-  };
-
-programs.neovim = {
-  enable = true;
-  defaultEditor = true;
-};
-
-fonts = {
-  enableDefaultPackages = true;
-  fontconfig = {
     enable = true;
-    defaultFonts = {
-      monospace = [ "JetBrainsMono Nerd Font" ];
-    };
+    package = pkgs.solaar;
+    window = "show";
+    extraArgs = "--headless";
   };
-  packages = with pkgs; [
-    nerd-fonts.jetbrains-mono
-  ];
-};
 
-  nixpkgs.overlays = [
-    (final: prev: { qutebrowser = prev.qutebrowser.override { enableWideVine = true; }; })
-  ];
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+  };
 
-  # XDG MIME defaults 
-  xdg.mime.enable = true; # default is true, but explicit is fine [3]
+  fonts = {
+    enableDefaultPackages = true;
+    fontconfig = {
+      enable = true;
+      defaultFonts = {
+        monospace = [ "JetBrainsMono Nerd Font" ];
+      };
+    };
+    packages = with pkgs; [
+      nerd-fonts.jetbrains-mono
+    ];
+  };
+
+  # XDG MIME defaults
+  xdg.mime.enable = true;
   xdg.mime.defaultApplications = {
-    "text/html"              = "org.qutebrowser.qutebrowser.desktop";
-    "application/xhtml+xml"  = "org.qutebrowser.qutebrowser.desktop";
-    "x-scheme-handler/http"  = "org.qutebrowser.qutebrowser.desktop";
+    "text/html" = "org.qutebrowser.qutebrowser.desktop";
+    "application/xhtml+xml" = "org.qutebrowser.qutebrowser.desktop";
+    "x-scheme-handler/http" = "org.qutebrowser.qutebrowser.desktop";
     "x-scheme-handler/https" = "org.qutebrowser.qutebrowser.desktop";
     "x-scheme-handler/about" = "org.qutebrowser.qutebrowser.desktop";
     "x-scheme-handler/unknown" = "org.qutebrowser.qutebrowser.desktop";
   };
+
   # Extra “make it stick” for some Electron apps:
-  environment.sessionVariables.DEFAULT_BROWSER = "${pkgs.qutebrowser}/bin/qutebrowser";
-  # Optional: some tools still read BROWSER too
-  environment.sessionVariables.BROWSER = "${pkgs.qutebrowser}/bin/qutebrowser";
+  environment.sessionVariables.DEFAULT_BROWSER = "${qutebrowser-with-adblock}/bin/qutebrowser";
+  environment.sessionVariables.BROWSER = "${qutebrowser-with-adblock}/bin/qutebrowser";
 
-# Packages
-environment.systemPackages = with pkgs; [
-  qutebrowser
-  wget git gh #need gh to stay logged in
-  wmenu swaybg autotiling
-  grim slurp wf-recorder
-  pulseaudio brightnessctl
-  imv mpv unzip zip 
-  clipse wl-clipboard
-  appimage-run
-];
+  # Packages
+  environment.systemPackages = with pkgs; [
+    qutebrowser-with-adblock   # ← the enhanced version with adblock support
+    wget git gh
+    wmenu swaybg autotiling
+    grim slurp wf-recorder
+    pulseaudio brightnessctl
+    imv mpv unzip zip
+    clipse wl-clipboard
+    appimage-run
+  ];
 
-  #warp  
+  # warp
   services.cloudflare-warp = {
     enable = true;
     openFirewall = true;
   };
 
-  #Printing
-services.avahi = {
-  enable = true;
-  nssmdns4 = true;
-};
-
-services.printing = {
-  enable = true;
-  drivers = with pkgs; [
-    cups-filters
-    cups-browsed
-  ];
-};
-
-hardware.printers = {
-  ensureDefaultPrinter = "BrotherPrinterHome";
-  ensurePrinters = [
-    {
-      deviceUri = "dnssd://Brother%20MFC-L2750DW%20series._ipp._tcp.local/?uuid=e3248000-80ce-11db-8000-3c2af4f6c121";
-      location = "home";
-      name = "BrotherPrinterHome";
-      model = "everywhere";
-    }
-  ];
-};
-
+  # Printing
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+  };
+  services.printing = {
+    enable = true;
+    drivers = with pkgs; [
+      cups-filters
+      cups-browsed
+    ];
+  };
+  hardware.printers = {
+    ensureDefaultPrinter = "BrotherPrinterHome";
+    ensurePrinters = [
+      {
+        deviceUri = "dnssd://Brother%20MFC-L2750DW%20series._ipp._tcp.local/?uuid=e3248000-80ce-11db-8000-3c2af4f6c121";
+        location = "home";
+        name = "BrotherPrinterHome";
+        model = "everywhere";
+      }
+    ];
+  };
 
   # Fprintd
   services.fprintd.enable = true;
@@ -184,37 +190,32 @@ hardware.printers = {
     sudo.fprintAuth = true;
     greetd.fprintAuth = true;
   };
-
-security.pam.services.swaylock = {
-  enable = true; # ensure the PAM service exists
-  fprintAuth = true; # attach pam_fprintd.so to swaylock's auth chain
-  unixAuth = true; # password fallback
-};
+  security.pam.services.swaylock = {
+    enable = true;
+    fprintAuth = true;
+    unixAuth = true;
+  };
 
   # OpenGL - wlroots like sway need
   hardware.graphics.enable = true;
 
-  # xdg portal enabling (wayland needs because everything is locked down and secure by default. To allow screen to be seen by apps this is needed).
-xdg.portal = {
-  enable = true;
-
-  # Install actual backends (required when enable = true)
-  extraPortals = with pkgs; [
-    xdg-desktop-portal-wlr   # screenshot/screen-recording in sway
-    xdg-desktop-portal-gtk   # file chooser in firefox, etc.
-  ];
-
-  #post 1.17: explicitly choose which backend portal above handles which interface
-  config = {
-    common = {
-      default = [ "gtk" ];
-      "org.freedesktop.impl.portal.Screenshot" = [ "wlr" ];
-      "org.freedesktop.impl.portal.ScreenCast" = [ "wlr" ];
+  # xdg portal enabling
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-wlr
+      xdg-desktop-portal-gtk
+    ];
+    config = {
+      common = {
+        default = [ "gtk" ];
+        "org.freedesktop.impl.portal.Screenshot" = [ "wlr" ];
+        "org.freedesktop.impl.portal.ScreenCast" = [ "wlr" ];
+      };
     };
   };
-};
 
-  # Allow unfree if you need proprietary packages (you need)
+  # Allow unfree (needed for Widevine)
   nixpkgs.config.allowUnfree = true;
 
   system.stateVersion = "25.11";
