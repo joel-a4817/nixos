@@ -71,7 +71,7 @@
 
   # User packages
   home.packages = with pkgs; [
-    libreoffice
+    libreoffice-qt6-fresh hunspell hunspellDicts.en_AU
     prismlauncher
     signal-desktop
     kicad
