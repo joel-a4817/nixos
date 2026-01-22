@@ -140,7 +140,6 @@ in
 
   # Packages
   environment.systemPackages = with pkgs; [
-    libreoffice
     qutebrowser-with-adblock   # ← the enhanced version with adblock support
     wget git gh
     wmenu swaybg autotiling
