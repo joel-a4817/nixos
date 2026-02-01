@@ -127,6 +127,7 @@ in
   xdg.mime.enable = true;
   xdg.mime.defaultApplications = {
     "text/html" = "org.qutebrowser.qutebrowser.desktop";
+    "application/pdf" = "org.pwmt.zathura.desktop";
     "application/xhtml+xml" = "org.qutebrowser.qutebrowser.desktop";
     "x-scheme-handler/http" = "org.qutebrowser.qutebrowser.desktop";
     "x-scheme-handler/https" = "org.qutebrowser.qutebrowser.desktop";

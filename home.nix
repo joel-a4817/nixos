@@ -72,6 +72,8 @@
   # User packages
   home.packages = with pkgs; [
     libreoffice-qt6-fresh hunspell hunspellDicts.en_AU
+    zathura zathuraPkgs.zathura_pdf_mupdf
+    discord
     prismlauncher
     signal-desktop
     kicad
