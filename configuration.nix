@@ -91,9 +91,12 @@ in
   };
 
   # virtualbox
-  virtualisation.virtualbox.host = {
-    enable = true;
-    enableExtensionPack = true;
+  virtualisation.virtualbox = {
+    host.enable = true;
+    host.enableExtensionPack = true;
+    guest.enable = true;
+    guest.dragAndDrop = true;
+    guest.clipboard = true;
   };
   users.extraGroups.vboxusers.members = [ "joel" ];
 
@@ -147,7 +150,7 @@ in
     grim slurp wf-recorder
     pulseaudio brightnessctl
     imv mpv unzip zip
-    clipse wl-clipboard
+    wl-clipboard
     appimage-run
   ];
 
