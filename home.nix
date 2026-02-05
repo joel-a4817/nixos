@@ -71,6 +71,7 @@
 
   # User packages
   home.packages = with pkgs; [
+    snapshot
     clipse
     calcurse
     libreoffice-qt6-fresh hunspell hunspellDicts.en_AU
