@@ -80,7 +80,6 @@
     prismlauncher
     signal-desktop
     kicad
-    prusa-slicer
     bambu-studio
     opencv
     qt5.qtwayland #Required for Qt apps like those above.
