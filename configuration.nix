@@ -130,25 +130,9 @@ in
     ];
   };
 
-  # XDG MIME defaults
-  xdg.mime.enable = true;
-  xdg.mime.defaultApplications = {
-    "text/html" = "org.qutebrowser.qutebrowser.desktop";
-    "application/pdf" = "org.pwmt.zathura.desktop";
-    "application/xhtml+xml" = "org.qutebrowser.qutebrowser.desktop";
-    "x-scheme-handler/http" = "org.qutebrowser.qutebrowser.desktop";
-    "x-scheme-handler/https" = "org.qutebrowser.qutebrowser.desktop";
-    "x-scheme-handler/about" = "org.qutebrowser.qutebrowser.desktop";
-    "x-scheme-handler/unknown" = "org.qutebrowser.qutebrowser.desktop";
-  };
-
-  # Extra “make it stick” for some Electron apps:
-  environment.sessionVariables.DEFAULT_BROWSER = "${qutebrowser-with-adblock}/bin/qutebrowser";
-  environment.sessionVariables.BROWSER = "${qutebrowser-with-adblock}/bin/qutebrowser";
-
   # Packages
   environment.systemPackages = with pkgs; [
-    qutebrowser-with-adblock   # ← the enhanced version with adblock support
+    qutebrowser-with-adblock
     wget git gh
     wmenu swaybg autotiling
     grim slurp wf-recorder
