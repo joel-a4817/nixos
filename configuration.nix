@@ -39,6 +39,10 @@ in
       ./hardware-configuration.nix
     ];
 
+  services.udev.extraRules = ''
+    SUBSYSTEM=="input", KERNEL=="input2", ATTR{device/power/wakeup}="disabled"
+  '';
+
   # Boot (UEFI)
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
