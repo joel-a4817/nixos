@@ -94,6 +94,10 @@ in
     wrapperFeatures.gtk = true;
   };
 
+  environment.shellAliases = {
+    s = "exec sway";
+  };
+
   # virtualbox
   virtualisation.virtualbox = {
     host.enable = true;
