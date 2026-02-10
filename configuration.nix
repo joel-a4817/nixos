@@ -39,9 +39,15 @@ in
       ./hardware-configuration.nix
     ];
 
-  services.udev.extraRules = ''
-    SUBSYSTEM=="input", KERNEL=="input2", ATTR{device/power/wakeup}="disabled"
-  '';
+services.udev.extraRules = ''
+  SUBSYSTEM=="input", KERNEL=="input2", ATTR{device/power/wakeup}="disabled"
+
+  ACTION=="add|change", SUBSYSTEM=="usb", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
+
+  ACTION=="add|change", SUBSYSTEM=="input", KERNEL=="event*", ATTRS{phys}=="usb-*", TEST=="device/power/wakeup", ATTR{device/power/wakeup}="disabled"
+
+  ACTION=="add|change", SUBSYSTEM=="pci", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
+'';
 
   # Boot (UEFI)
   boot.loader.systemd-boot.enable = true;
