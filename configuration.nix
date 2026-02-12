@@ -40,13 +40,43 @@ in
     ];
 
 services.udev.extraRules = ''
-  SUBSYSTEM=="input", KERNEL=="input2", ATTR{device/power/wakeup}="disabled"
+  # ACPI: lid switch (PNP0C0D)
+  ACTION=="add|change", SUBSYSTEM=="acpi", KERNEL=="PNP0C0D:*", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
 
+  # ACPI: battery/AC device (PNP0C0A)
+  ACTION=="add|change", SUBSYSTEM=="acpi", KERNEL=="PNP0C0A:*", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
+
+  # ACPI: sleep button (PNP0C0E)
+  ACTION=="add|change", SUBSYSTEM=="acpi", KERNEL=="PNP0C0E:*", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
+
+  # ACPI: power button (LNXPWRBN) — keep enabled (flip to disabled if you want keyboard-only)
+  ACTION=="add|change", SUBSYSTEM=="acpi", KERNEL=="LNXPWRBN:*", TEST=="power/wakeup", ATTR{power/wakeup}="enabled"
+
+  # I2C: Synaptics touchpad/touchscreen (SYNA30BC)
+  ACTION=="add|change", SUBSYSTEM=="i2c", KERNEL=="i2c-SYNA30BC:00", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
+  ACTION=="add|change", SUBSYSTEM=="i2c", KERNEL=="i2c-SYNA30BC:00", TEST=="device/power/wakeup", ATTR{device/power/wakeup}="disabled"
+
+  # Platform: INTC1051:00
+  ACTION=="add|change", SUBSYSTEM=="platform", KERNEL=="INTC1051:00", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
+
+  # Platform: alarmtimer.0.auto
+  ACTION=="add|change", SUBSYSTEM=="platform", KERNEL=="alarmtimer.0.auto", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
+
+  # PNP: 00:01
+  ACTION=="add|change", SUBSYSTEM=="pnp", KERNEL=="00:01", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
+
+  # Thunderbolt: both nodes you reported
+  ACTION=="add|change", SUBSYSTEM=="thunderbolt", KERNEL=="domain0", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
+  ACTION=="add|change", SUBSYSTEM=="thunderbolt", KERNEL=="0-0", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
+
+  # USB: keep wake disabled for any usb device exposing it
   ACTION=="add|change", SUBSYSTEM=="usb", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
 
-  ACTION=="add|change", SUBSYSTEM=="input", KERNEL=="event*", ATTRS{phys}=="usb-*", TEST=="device/power/wakeup", ATTR{device/power/wakeup}="disabled"
-
+  # PCI: keep wake disabled for any pci device exposing it
   ACTION=="add|change", SUBSYSTEM=="pci", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
+
+  # Re-enable only the PS/2 keyboard (serio0 atkbd)
+  ACTION=="add|change", SUBSYSTEM=="serio", KERNEL=="serio0", ATTR{description}=="i8042 KBD port", TEST=="power/wakeup", ATTR{power/wakeup}="enabled"
 '';
 
   # Boot (UEFI)
