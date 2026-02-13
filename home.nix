@@ -71,6 +71,7 @@
 
   # User packages
   home.packages = with pkgs; [
+    heimdall-gui android-tools
     snapshot
     clipse
     calcurse
