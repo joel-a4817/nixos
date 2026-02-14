@@ -98,9 +98,6 @@ services.udev.extraRules = ''
   users.users.joel = {
     isNormalUser = true;
     extraGroups = [ "wheel" "seat" "networkmanager" "audio" "video" ];
-    packages = with pkgs; [
-      tree
-    ];
   };
 
   # Networking
