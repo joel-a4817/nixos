@@ -223,6 +223,18 @@ services.radicale = {
   };
 };
 
+services.caddy = {
+  enable = true;
+
+  virtualHosts."rt4817calendar.com" = {
+    extraConfig = ''
+      reverse_proxy http://127.0.0.1:5232
+    '';
+  };
+};
+
+networking.firewall.allowedTCPPorts = [ 80 443 ];
+
   # Fprintd
   services.fprintd.enable = true;
   security.pam.services = {
