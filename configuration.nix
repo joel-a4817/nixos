@@ -246,6 +246,11 @@ services.udev.extraRules = ''
     };
   };
 
+nix.settings = {
+  max-jobs = 1;
+  cores = 1;
+};
+
   # Allow unfree (needed for Widevine)
   nixpkgs.config.allowUnfree = true;
 
