@@ -210,6 +210,19 @@ services.udev.extraRules = ''
     ];
   };
 
+services.radicale = {
+  enable = true;
+  settings = {
+    server.hosts = [ "0.0.0.0:5232" ];
+    storage.filesystem_folder = "/var/lib/radicale/collections";
+    auth = {
+      type = "htpasswd";
+      htpasswd_filename = "/etc/radicale/users";
+      htpasswd_encryption = "bcrypt";
+    };
+  };
+};
+
   # Fprintd
   services.fprintd.enable = true;
   security.pam.services = {
