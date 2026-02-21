@@ -36,7 +36,7 @@ in
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   imports =
     [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
+      /etc/nixos/hardware-configuration.nix
     ];
 
 services.udev.extraRules = ''
@@ -169,6 +169,7 @@ services.udev.extraRules = ''
 
   # Packages
   environment.systemPackages = with pkgs; [
+    rustdesk
     qutebrowser-with-adblock
     wget git gh
     wmenu swaybg autotiling
