@@ -169,7 +169,7 @@ services.udev.extraRules = ''
 
   # Packages
   environment.systemPackages = with pkgs; [
-    rustdesk
+    rustdesk apacheHttpd
     qutebrowser-with-adblock
     wget git gh
     wmenu swaybg autotiling
