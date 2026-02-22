@@ -127,6 +127,20 @@ services.udev.extraRules = ''
     wrapperFeatures.gtk = true;
   };
 
+  services.xserver = {
+    enable = true;
+    windowManager.i3 = {
+      enable = true;
+      extraPackages = with pkgs; [
+        i3lock-color
+      ];
+    };
+    displayManager.startx.enable = true;
+    autorun = false;
+    autoRepeatDelay = 200;
+    autoRepeatInterval = 35;
+  };
+
   environment.shellAliases = {
     s = "exec sway";
   };
@@ -173,10 +187,10 @@ services.udev.extraRules = ''
     qutebrowser-with-adblock
     wget git gh
     wmenu swaybg autotiling
-    grim slurp wf-recorder
+    grim slurp wf-recorder wl-clipboard
+    xwallpaper dmenu xclip maim xterm ffmpeg
     pulseaudio brightnessctl
     imv mpv unzip zip
-    wl-clipboard
     appimage-run
   ];
 
@@ -210,30 +224,34 @@ services.udev.extraRules = ''
     ];
   };
 
-services.radicale = {
-  enable = true;
-  settings = {
-    server.hosts = [ "0.0.0.0:5232" ];
-    storage.filesystem_folder = "/var/lib/radicale/collections";
-    auth = {
-      type = "htpasswd";
-      htpasswd_filename = "/etc/radicale/users";
-      htpasswd_encryption = "bcrypt";
+  services.radicale = {
+    enable = true;
+    settings = {
+      server = {
+        host = "0.0.0.0";   # If you want LAN/Tailscale access
+        port = 5232;
+        # To keep it simple: run TLS directly in Radicale (self-signed cert below)
+        ssl = true;
+        certificate = "/var/lib/radicale/cert.pem";
+        key = "/var/lib/radicale/key.pem";
+      };
+      auth = {
+        type = "htpasswd";
+        htpasswd_filename = "/var/lib/radicale/users";
+        htpasswd_encryption = "bcrypt";
+      };
+      storage = {
+        filesystem_folder = "/var/lib/radicale/collections";
+      };
+      logging = {
+        debug = false;
+        full_environment = false;
+      };
     };
   };
-};
 
-services.caddy = {
-  enable = true;
-
-  virtualHosts."rt4817calendar.com" = {
-    extraConfig = ''
-      reverse_proxy http://127.0.0.1:5232
-    '';
-  };
-};
-
-networking.firewall.allowedTCPPorts = [ 80 443 ];
+  # Optional but recommended: firewall open on LAN/Tailscale
+  networking.firewall.allowedTCPPorts = [ 5232 ];
 
   # Fprintd
   services.fprintd.enable = true;
@@ -244,6 +262,7 @@ networking.firewall.allowedTCPPorts = [ 80 443 ];
     login.fprintAuth = true;
     sudo.fprintAuth = true;
     greetd.fprintAuth = true;
+    i3lock.enable = true;
   };
   security.pam.services.swaylock = {
     enable = true;
