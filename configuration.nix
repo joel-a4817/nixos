@@ -49,7 +49,7 @@ services.udev.extraRules = ''
   # ACPI: sleep button (PNP0C0E)
   ACTION=="add|change", SUBSYSTEM=="acpi", KERNEL=="PNP0C0E:*", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
 
-  # ACPI: power button (LNXPWRBN) — keep enabled (flip to disabled if you want keyboard-only)
+  # ACPI: power button (LNXPWRBN) — keep enabled
   ACTION=="add|change", SUBSYSTEM=="acpi", KERNEL=="LNXPWRBN:*", TEST=="power/wakeup", ATTR{power/wakeup}="enabled"
 
   # I2C: Synaptics touchpad/touchscreen (SYNA30BC)
@@ -78,11 +78,12 @@ services.udev.extraRules = ''
   # Re-enable only the PS/2 keyboard (serio0 atkbd)
   ACTION=="add|change", SUBSYSTEM=="serio", KERNEL=="serio0", ATTR{description}=="i8042 KBD port", TEST=="power/wakeup", ATTR{power/wakeup}="enabled"
 
-  ## lenovo
-  # ACPI: LID switch
+  ## lenovo (second machine specifics)
+
+  # ACPI: LID switch (specific instance)
   ACTION=="add|change", SUBSYSTEM=="acpi", KERNEL=="PNP0C0D:00", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
 
-  # ACPI: sleep button
+  # ACPI: sleep button (specific instance)
   ACTION=="add|change", SUBSYSTEM=="acpi", KERNEL=="PNP0C0E:00", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
 
   # Platform: AWAC (timer)
@@ -92,20 +93,20 @@ services.udev.extraRules = ''
   ACTION=="add|change", SUBSYSTEM=="platform", KERNEL=="rtsx_pci_sdmmc.0", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
 
   # PCI devices discovered in /proc/acpi/wakeup
-  ACTION=="add|change", SUBSYSTEM=="pci", KERNEL=="0000:00:1f.6", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"  # GLAN
-  ACTION=="add|change", SUBSYSTEM=="pci", KERNEL=="0000:00:14.0", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"  # XHC (USB)
-  ACTION=="add|change", SUBSYSTEM=="pci", KERNEL=="0000:00:1f.3", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"  # HDAS
-  ACTION=="add|change", SUBSYSTEM=="pci", KERNEL=="0000:00:1d.0", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"  # RP09
-  ACTION=="add|change", SUBSYSTEM=="pci", KERNEL=="0000:03:00.0", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"  # PXSX
-  ACTION=="add|change", SUBSYSTEM=="pci", KERNEL=="0000:05:00.0", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"  # PXSX
-  ACTION=="add|change", SUBSYSTEM=="pci", KERNEL=="0000:00:14.3", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"  # CNVW (WiFi/BT)
-
-  # Disable wake for all USB and all PCI as global fallback
-  ACTION=="add|change", SUBSYSTEM=="usb", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
-  ACTION=="add|change", SUBSYSTEM=="pci", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
-
-  # Re-enable only the PS/2 keyboard (if present)
-  ACTION=="add|change", SUBSYSTEM=="serio", KERNEL=="serio0", ATTR{description}=="i8042 KBD port", TEST=="power/wakeup", ATTR{power/wakeup}="enabled"
+  # GLAN
+  ACTION=="add|change", SUBSYSTEM=="pci", KERNEL=="0000:00:1f.6", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
+  # XHC (USB)
+  ACTION=="add|change", SUBSYSTEM=="pci", KERNEL=="0000:00:14.0", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
+  # HDAS
+  ACTION=="add|change", SUBSYSTEM=="pci", KERNEL=="0000:00:1f.3", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
+  # RP09
+  ACTION=="add|change", SUBSYSTEM=="pci", KERNEL=="0000:00:1d.0", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
+  # PXSX
+  ACTION=="add|change", SUBSYSTEM=="pci", KERNEL=="0000:03:00.0", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
+  # PXSX
+  ACTION=="add|change", SUBSYSTEM=="pci", KERNEL=="0000:05:00.0", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
+  # CNVW (WiFi/BT)
+  ACTION=="add|change", SUBSYSTEM=="pci", KERNEL=="0000:00:14.3", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
 '';
 
   # Boot (UEFI)
