@@ -1,4 +1,5 @@
 { config, pkgs, lib, ... }:
+
 {
   home.username = "joel";
   home.homeDirectory = "/home/joel";
@@ -71,6 +72,7 @@
 
   # User packages
   home.packages = with pkgs; [
+    wvkbd
     heimdall-gui android-tools
     snapshot
     clipse
@@ -91,61 +93,8 @@
 
 programs.foot = {
   enable = true;
-  settings = {
-    main = {
-      font = "JetBrainsMono Nerd Font:size=16";
-    };
-  };
+  settings.main.font = "JetBrainsMono Nerd Font:size=16";
 };
-
-  fonts.fontconfig.enable = true;
-  xresources = {
-    enable = true;
-    properties = {
-      "XTerm*renderFont" = "true"; 
-      "XTerm*faceName"   = "JetBrains Mono";  
-      "XTerm*faceSize"   = "16";
-      "XTerm.termName"   = "xterm-256color"; 
-
-      "XTerm.vt100.utf8"            = "2";        
-      "XTerm.vt100.metaSendsEscape" = "true";     
-      "XTerm.vt100.backarrowKey"    = "false";    
-      "XTerm.ttyModes"              = "erase ^?"; 
- 
-      "XTerm*saveLines"        = "10000";
-      "XTerm*scrollBar"        = "false";
-      "XTerm*scrollTtyOutput"  = "false";
-      "XTerm*scrollKey"        = "true";
-      "XTerm.vt100.selectToClipboard" = "true";   
-      "XTerm*internalBorder"   = "6";
- 
-      "XTerm*foreground" = "rgb:a8/a8/a8";
-      "XTerm*background" = "rgb:22/22/22";
-      "XTerm*color0"  = "#000000";
-      "XTerm*color1"  = "#a80000";
-      "XTerm*color2"  = "#00a800";
-      "XTerm*color3"  = "#a85400";
-      "XTerm*color4"  = "#5858b8";
-      "XTerm*color5"  = "#a800a8";
-      "XTerm*color6"  = "#00a8a8";
-      "XTerm*color7"  = "#a8a8a8";
-      "XTerm*color8"  = "#545454";
-      "XTerm*color9"  = "#fc5454";
-      "XTerm*color10" = "#54fc54";
-      "XTerm*color11" = "#fcfc54";
-      "XTerm*color12" = "#5454fc";
-      "XTerm*color13" = "#fc54fc";
-      "XTerm*color14" = "#54fcfc";
-      "XTerm*color15" = "#fcfcfc";
-
-      "XTerm.vt100.translations" =
-        ''#override \
-           Ctrl Shift <Key>plus:        larger-vt-font() \n\
-           Ctrl Shift <Key>KP_Add:      larger-vt-font() \n\
-           Ctrl Shift <Key>minus:       smaller-vt-font() \n\
-           Ctrl Shift <Key>KP_Subtract: smaller-vt-font()'';
-    };
-  };
 
   programs.yazi = {
     enable = true;

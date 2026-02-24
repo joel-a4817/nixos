@@ -15,11 +15,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-
   outputs = { self, nixpkgs, home-manager, solaar, yazi, ... }: {
     nixosConfigurations.rt4817 = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
+
         # Solaar module
         solaar.nixosModules.default
 

@@ -126,21 +126,7 @@ services.udev.extraRules = ''
     enable = true;
     wrapperFeatures.gtk = true;
   };
-
-  services.xserver = {
-    enable = true;
-    windowManager.i3 = {
-      enable = true;
-      extraPackages = with pkgs; [
-        i3lock-color
-      ];
-    };
-    displayManager.startx.enable = true;
-    autorun = false;
-    autoRepeatDelay = 200;
-    autoRepeatInterval = 35;
-  };
-
+  
   environment.shellAliases = {
     s = "exec sway";
   };
@@ -183,19 +169,18 @@ services.udev.extraRules = ''
 
   # Packages
   environment.systemPackages = with pkgs; [
-    rustdesk apacheHttpd
     qutebrowser-with-adblock
     wget git gh
     wmenu swaybg autotiling
     grim slurp wf-recorder wl-clipboard
-    xwallpaper dmenu xclip maim xterm ffmpeg
+    xwallpaper dmenu xclip maim ffmpeg
     pulseaudio brightnessctl
     imv mpv unzip zip
     appimage-run
   ];
-
+  
   # warp
-  services.cloudflare-warp = {
+services.cloudflare-warp = {
     enable = true;
     openFirewall = true;
   };
@@ -208,7 +193,7 @@ services.udev.extraRules = ''
   services.printing = {
     enable = true;
     drivers = with pkgs; [
-      cups-filters
+cups-filters
       cups-browsed
     ];
   };
@@ -224,34 +209,13 @@ services.udev.extraRules = ''
     ];
   };
 
-  services.radicale = {
+  services.syncthing = {
     enable = true;
-    settings = {
-      server = {
-        host = "0.0.0.0";   # If you want LAN/Tailscale access
-        port = 5232;
-        # To keep it simple: run TLS directly in Radicale (self-signed cert below)
-        ssl = true;
-        certificate = "/var/lib/radicale/cert.pem";
-        key = "/var/lib/radicale/key.pem";
-      };
-      auth = {
-        type = "htpasswd";
-        htpasswd_filename = "/var/lib/radicale/users";
-        htpasswd_encryption = "bcrypt";
-      };
-      storage = {
-        filesystem_folder = "/var/lib/radicale/collections";
-      };
-      logging = {
-        debug = false;
-        full_environment = false;
-      };
-    };
+    openDefaultPorts = true;
   };
-
-  # Optional but recommended: firewall open on LAN/Tailscale
-  networking.firewall.allowedTCPPorts = [ 5232 ];
+  networking.firewall.allowedTCPPorts = [ 8384 47984 47989 47990 48010 ];
+  networking.firewall.allowedUDPPortRanges = [{ from = 47998; to = 48000;}];
+  services.sunshine.enable = true;
 
   # Fprintd
   services.fprintd.enable = true;
@@ -262,7 +226,6 @@ services.udev.extraRules = ''
     login.fprintAuth = true;
     sudo.fprintAuth = true;
     greetd.fprintAuth = true;
-    i3lock.enable = true;
   };
   security.pam.services.swaylock = {
     enable = true;
