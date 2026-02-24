@@ -77,7 +77,7 @@
     snapshot
     clipse
     calcurse
-    libreoffice-qt6-fresh hunspell hunspellDicts.en_AU
+    libreoffice-qt6-fresh hunspell hunspellDicts.en_AU corefonts
     zathura zathuraPkgs.zathura_pdf_mupdf
     discord
     prismlauncher
