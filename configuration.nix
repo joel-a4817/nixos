@@ -245,6 +245,7 @@ cups-filters
   networking.firewall.allowedTCPPorts = [ 8384 47984 47989 47990 48010 ];
   networking.firewall.allowedUDPPortRanges = [{ from = 47998; to = 48000;}];
   services.sunshine.enable = true;
+  services.tailscale.enable = true;
 
   # Fprintd
   services.fprintd.enable = true;
