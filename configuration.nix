@@ -39,6 +39,12 @@ in
       /etc/nixos/hardware-configuration.nix
     ];
 
+services.logind.settings.Login = {
+  HandleLidSwitchDocked = "ignore";
+  HandleLidSwitch = "ignore";
+  HandleLidSwitchExternalPower = "ignore";
+};
+
 services.udev.extraRules = ''
   # ACPI: lid switch (PNP0C0D)
   ACTION=="add|change", SUBSYSTEM=="acpi", KERNEL=="PNP0C0D:*", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
