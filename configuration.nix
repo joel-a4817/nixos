@@ -248,12 +248,15 @@ cups-filters
     enable = true;
     openDefaultPorts = true;
   };
-  networking.firewall.allowedTCPPorts = [ 8384 47984 47989 47990 48010 ];
-  networking.firewall.allowedUDPPortRanges = [{ from = 47998; to = 48020;}];
-  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 443 8384 47984 47989 47990 48010 ];
-  networking.firewall.interfaces.tailscale0.allowedUDPPortRanges = [{ from = 47998; to = 48020;}];
+  networking.firewall.allowedTCPPorts = [ 8384 ];
 
-  services.sunshine.enable = true;
+  services.sunshine = {
+    enable = true;
+    autoStart = true;
+    capSysAdmin = true;
+    openFirewall = true;
+  };
+  
   services.tailscale.enable = true;
 
   # Fprintd
