@@ -72,7 +72,7 @@
 
   # User packages
   home.packages = with pkgs; [
-    wvkbd
+    wvkbd moonlight-qt
     heimdall-gui android-tools
     snapshot
     clipse
