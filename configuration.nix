@@ -126,19 +126,19 @@ services.udev.extraRules = ''
 
   networking.hostName = "rt4817";
 
-  security.sudo.extraRules = [
-    {
-      users = [ "joel" ];
-      commands = [
-        { command = "/run/current-system/sw/bin/timedatectl"; options = [ "NOPASSWD" ]; }
-        { command = "${pkgs.procps}/bin/pkill"; options = [ "NOPASSWD" ]; }
-        { command = "${pkgs.util-linux}/bin/setsid"; options = [ "NOPASSWD" ]; }
-        { command = "/home/joel/.config/sway/scripts/rotate-touchpad.py"; options = [ "NOPASSWD" ]; }
-      ];
-    }
-  ];
-
-  # Users
+security.sudo.extraRules = [
+  {
+    users = [ "joel" ];
+    commands = [
+      { command = "/run/current-system/sw/bin/timedatectl"; options = [ "NOPASSWD" ]; }
+      { command = "/run/current-system/sw/bin/pkill"; options = [ "NOPASSWD" ]; }
+      { command = "/run/current-system/sw/bin/setsid"; options = [ "NOPASSWD" ]; }
+      { command = "/home/joel/.config/sway/scripts/rotate-touchpad.py"; options = [ "NOPASSWD" ]; }
+    ];
+  }
+];
+ 
+ # Users
   users.users.joel = {
     isNormalUser = true;
     extraGroups = [ "wheel" "seat" "networkmanager" "audio" "video" "input" ];
@@ -213,7 +213,7 @@ services.udev.extraRules = ''
 
   # Packages
   environment.systemPackages = with pkgs; [
-    (pkgs.python3.withPackages (ps: with ps; [ evdev ]))
+    (pkgs.python3.withPackages (ps: with ps; [ evdev ])) procps util-linux #portability for rotate commands
     qutebrowser-with-adblock
     wget git gh
     wmenu swaybg autotiling
