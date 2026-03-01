@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 {
-
   hardware.enableAllFirmware = true;
 
   # Audio (PipeWire + WirePlumber)

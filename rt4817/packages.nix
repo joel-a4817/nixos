@@ -18,7 +18,7 @@ in
 
   # Packages
   environment.systemPackages = with pkgs; [
-    (pkgs.python3.withPackages (ps: with ps; [ evdev ]))
+    (pkgs.python3.withPackages (ps: with ps; [ evdev ])) procps util-linux
     qutebrowser-widevine
     wget git gh
     wmenu swaybg autotiling

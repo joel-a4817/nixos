@@ -5,8 +5,7 @@
     # Include the results of the hardware scan.
     /etc/nixos/hardware-configuration.nix
 
-    ./rt4817/system.nix
-    ./rt4817/udev-lid.nix
+    ./rt4817/hardware-nix.nix
     ./rt4817/users.nix
     ./rt4817/wayland.nix
     ./rt4817/fonts.nix
@@ -15,5 +14,7 @@
     ./rt4817/services.nix
   ];
 
+  networking.hostName = "rt4817";
+  networking.networkmanager.enable = true;
   system.stateVersion = "25.11";
 }
