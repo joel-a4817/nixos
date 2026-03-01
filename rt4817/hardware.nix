@@ -14,13 +14,6 @@ let
   };
 in
 {
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
-  nix.settings = {
-    max-jobs = 1;
-    cores = 1;
-  };
-
   boot.kernelModules = [ "uinput" ];
 
   # Boot (UEFI)
