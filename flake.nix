@@ -2,7 +2,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    # Sunshine pinned to the known-good revision from your flake.lock
+    # Sunshine pinned to known-good revision
     nixpkgs-sunshine.url = "github:NixOS/nixpkgs/ed142ab1b3a092c4d149245d0c4126a5d7ea00b0";
 
     home-manager = {
@@ -18,26 +18,27 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-sunshine, home-manager, solaar, yazi, ... }: {
+  outputs = { self, nixpkgs, nixpkgs-sunshine, home-manager, solaar, yazi, ... }:
+  let
+    system = "x86_64-linux";
+
+    overlays = [
+      yazi.overlays.default
+
+      # Sunshine stays on the pinned nixpkgs revision
+      (final: prev: {
+        sunshine = (import nixpkgs-sunshine { system = prev.system; }).sunshine;
+      })
+    ];
+  in
+  {
     nixosConfigurations.rt4817 = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
+      inherit system;
 
       modules = [
-
         solaar.nixosModules.default
 
-        ({ pkgs, ... }: {
-          nixpkgs.overlays = [
-            yazi.overlays.default
-
-            # ⭐ Sunshine stays on ed142ab1… (yesterday's working version)
-            (final: prev: {
-              sunshine = (import nixpkgs-sunshine {
-                system = prev.system;
-              }).sunshine;
-            })
-          ];
-        })
+        ({ ... }: { nixpkgs.overlays = overlays; })
 
         ./configuration.nix
 
@@ -45,9 +46,8 @@
         ({ ... }: {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.users.joel = { pkgs, ... }: {
-            imports = [ ./home.nix ];
-          };
+
+          home-manager.users.joel = import ./home.nix;
         })
       ];
     };
