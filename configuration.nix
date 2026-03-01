@@ -45,7 +45,12 @@ services.logind.settings.Login = {
   HandleLidSwitchExternalPower = "ignore";
 };
 
+boot.kernelModules = [ "uinput" ];
+
 services.udev.extraRules = ''
+  SUBSYSTEM=="input", KERNEL=="event*", ATTRS{name}=="SYNA30BC:00 06CB:CE07 Touchpad", SYMLINK+="input/syna-touchpad"
+  KERNEL=="uinput", GROUP="input", MODE="0660", TAG+="uaccess"
+
   # ACPI: lid switch (PNP0C0D)
   ACTION=="add|change", SUBSYSTEM=="acpi", KERNEL=="PNP0C0D:*", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
 
@@ -126,6 +131,9 @@ services.udev.extraRules = ''
       users = [ "joel" ];
       commands = [
         { command = "/run/current-system/sw/bin/timedatectl"; options = [ "NOPASSWD" ]; }
+        { command = "${pkgs.procps}/bin/pkill"; options = [ "NOPASSWD" ]; }
+        { command = "${pkgs.util-linux}/bin/setsid"; options = [ "NOPASSWD" ]; }
+        { command = "/home/joel/.config/sway/scripts/rotate-touchpad.py"; options = [ "NOPASSWD" ]; }
       ];
     }
   ];
@@ -133,7 +141,7 @@ services.udev.extraRules = ''
   # Users
   users.users.joel = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "seat" "networkmanager" "audio" "video" ];
+    extraGroups = [ "wheel" "seat" "networkmanager" "audio" "video" "input" ];
   };
 
   # Networking
@@ -205,6 +213,7 @@ services.udev.extraRules = ''
 
   # Packages
   environment.systemPackages = with pkgs; [
+    (pkgs.python3.withPackages (ps: with ps; [ evdev ]))
     qutebrowser-with-adblock
     wget git gh
     wmenu swaybg autotiling
