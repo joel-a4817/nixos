@@ -48,6 +48,7 @@ services.logind.settings.Login = {
 boot.kernelModules = [ "uinput" ];
 
 services.udev.extraRules = ''
+SUBSYSTEM=="input", KERNEL=="event*", ATTRS{name}=="Elan Touchpad", SYMLINK+="input/touchpad-internal"
   SUBSYSTEM=="input", KERNEL=="event*", ATTRS{name}=="SYNA30BC:00 06CB:CE07 Touchpad", SYMLINK+="input/syna-touchpad"
   KERNEL=="uinput", GROUP="input", MODE="0660", TAG+="uaccess"
 
@@ -213,7 +214,7 @@ security.sudo.extraRules = [
 
   # Packages
   environment.systemPackages = with pkgs; [
-    (pkgs.python3.withPackages (ps: with ps; [ evdev ])) procps util-linux #portability for rotate commands
+    (pkgs.python3.withPackages (ps: with ps; [ evdev ]))
     qutebrowser-with-adblock
     wget git gh
     wmenu swaybg autotiling
