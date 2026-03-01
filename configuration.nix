@@ -48,9 +48,12 @@ services.logind.settings.Login = {
 boot.kernelModules = [ "uinput" ];
 
 services.udev.extraRules = ''
+# Dell/Lenovo with Elan touchpad
 SUBSYSTEM=="input", KERNEL=="event*", ATTRS{name}=="Elan Touchpad", SYMLINK+="input/touchpad-internal"
-  SUBSYSTEM=="input", KERNEL=="event*", ATTRS{name}=="SYNA30BC:00 06CB:CE07 Touchpad", SYMLINK+="input/syna-touchpad"
-  KERNEL=="uinput", GROUP="input", MODE="0660", TAG+="uaccess"
+# first laptop with Synaptics/UTS (SYNA)
+SUBSYSTEM=="input", KERNEL=="event*", ATTRS{name}=="SYNA30BC:00 06CB:CE07 Touchpad", SYMLINK+="input/touchpad-internal"
+# uinput permissions
+KERNEL=="uinput", GROUP="input", MODE="0660", TAG+="uaccess"
 
   # ACPI: lid switch (PNP0C0D)
   ACTION=="add|change", SUBSYSTEM=="acpi", KERNEL=="PNP0C0D:*", TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
