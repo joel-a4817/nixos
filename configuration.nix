@@ -217,7 +217,7 @@ security.sudo.extraRules = [
 
   # Packages
   environment.systemPackages = with pkgs; [
-    (pkgs.python3.withPackages (ps: with ps; [ evdev ]))
+    (pkgs.python3.withPackages (ps: with ps; [ evdev ])) procps util-linux #packages to keep sudo working across devices
     qutebrowser-with-adblock
     wget git gh
     wmenu swaybg autotiling
