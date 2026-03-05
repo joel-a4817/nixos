@@ -35,9 +35,6 @@
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
-    extraPackages = [
-      pkgs.polkit_gnome
-    ];
   };
 
   # OpenGL - wlroots like sway need
