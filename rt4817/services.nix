@@ -23,11 +23,16 @@
 
   services.printing = {
     enable = true;
+    defaultShared = true;
+    allowFrom = [ "all" ];
+    listenAddresses = [ "*:631" ];
     drivers = with pkgs; [
       cups-filters
       cups-browsed
     ];
   };
+
+  services.samba.enable = true;
 
   hardware.printers = {
     ensureDefaultPrinter = "BrotherPrinterHome";
@@ -45,7 +50,7 @@
     enable = true;
     openDefaultPorts = true;
   };
-  networking.firewall.allowedTCPPorts = [ 8384 ];
+  networking.firewall.allowedTCPPorts = [ 8384 9191 ];
 
   services.sunshine = {
     enable = true;

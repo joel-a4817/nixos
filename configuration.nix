@@ -7,7 +7,7 @@
 
     ./rt4817/hardware.nix
     ./rt4817/users.nix
-    ./rt4817/wayland.nix
+    ./rt4817/display.nix
     ./rt4817/fonts.nix
     ./rt4817/packages.nix
     ./rt4817/virtualisation.nix

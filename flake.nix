@@ -5,6 +5,9 @@
     # Sunshine pinned to known-good revision
     nixpkgs-sunshine.url = "github:NixOS/nixpkgs/ed142ab1b3a092c4d149245d0c4126a5d7ea00b0";
 
+    # Cloudflare WARP pinned to your known-good revision (from nixos-version: ...cf59864)
+    nixpkgs-warp.url = "github:NixOS/nixpkgs/cf59864";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -18,7 +21,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-sunshine, home-manager, solaar, yazi, ... }:
+  outputs = { self, nixpkgs, nixpkgs-sunshine, nixpkgs-warp, home-manager, solaar, yazi, ... }:
   let
     system = "x86_64-linux";
 
@@ -27,7 +30,18 @@
 
       # Sunshine stays on the pinned nixpkgs revision
       (final: prev: {
-        sunshine = (import nixpkgs-sunshine { system = prev.system; }).sunshine;
+        sunshine = (import nixpkgs-sunshine {
+          system = prev.system;
+          config.allowUnfree = true;
+        }).sunshine;
+      })
+
+      # WARP stays on the pinned nixpkgs revision
+      (final: prev: {
+        cloudflare-warp = (import nixpkgs-warp {
+          system = prev.system;
+          config.allowUnfree = true;
+        }).cloudflare-warp;
       })
     ];
   in
@@ -39,6 +53,11 @@
         solaar.nixosModules.default
 
         ({ ... }: { nixpkgs.overlays = overlays; })
+
+        # Force the service to use the pinned package explicitly (extra safety)
+        ({ pkgs, ... }: {
+          services.cloudflare-warp.package = pkgs.cloudflare-warp;
+        })
 
         ./configuration.nix
 

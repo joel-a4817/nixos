@@ -1,6 +1,17 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, callPackage, ... }:
 
 {
+  # x11
+  services.xserver = {
+    enable = true;
+    autoRepeatDelay = 200;
+    autoRepeatInterval = 35;
+  };
+  services.xserver.displayManager.lightdm.enable = false;
+  services.xserver.displayManager.startx.enable = true;
+  services.xserver.desktopManager.xfce.enable = true;
+  services.libinput.enable = true;
+
   hardware.enableAllFirmware = true;
 
   # Audio (PipeWire + WirePlumber)
@@ -24,6 +35,9 @@
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
+    extraPackages = [
+      pkgs.polkit_gnome
+    ];
   };
 
   # OpenGL - wlroots like sway need
