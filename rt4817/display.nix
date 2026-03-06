@@ -1,17 +1,6 @@
 { config, lib, pkgs, callPackage, ... }:
 
 {
-  # x11
-  services.xserver = {
-    enable = true;
-    autoRepeatDelay = 200;
-    autoRepeatInterval = 35;
-  };
-  services.xserver.displayManager.lightdm.enable = false;
-  services.xserver.displayManager.startx.enable = true;
-  services.xserver.desktopManager.xfce.enable = true;
-  services.libinput.enable = true;
-
   hardware.enableAllFirmware = true;
 
   # Audio (PipeWire + WirePlumber)
@@ -30,6 +19,7 @@
   services.dbus.enable = true;
   services.seatd.enable = true;
   programs.xwayland.enable = true;
+  services.libinput.enable = true;
 
   # start sway with exec sway!!
   programs.sway = {
