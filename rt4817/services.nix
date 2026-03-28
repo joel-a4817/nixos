@@ -28,7 +28,6 @@
     listenAddresses = [ "*:631" ];
     drivers = with pkgs; [
       cups-filters
-      cups-browsed
     ];
   };
 

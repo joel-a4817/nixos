@@ -1,4 +1,4 @@
-{ config, lib, pkgs, callPackage, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   hardware.enableAllFirmware = true;

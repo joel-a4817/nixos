@@ -2,6 +2,7 @@
 
 {
   home.packages = with pkgs; [
+    anki
     wvkbd moonlight-qt
     heimdall-gui android-tools
     snapshot

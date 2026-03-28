@@ -26,6 +26,9 @@ in
     HandleLidSwitchExternalPower = "ignore";
   };
 
+  powerManagement.enable = true;
+  services.tlp.enable = true;
+
   # NixOS will collect rule files from packages under {lib,etc}/udev/rules.d
   services.udev.packages = [ pixy2UdevRules ];
 
