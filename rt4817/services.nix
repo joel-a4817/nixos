@@ -31,8 +31,16 @@
     ];
   };
 
-  services.samba.enable = true;
-
+  services.samba = {
+    enable = true;
+    settings.global = {
+      workgroup = "ADMINISTRATION";
+      "client min protocol" = "NT1";
+      "client max protocol" = "SMB3";
+      "client ntlmv2 auth" = "no";
+      "client use spnego" = "yes";
+    };
+  };
   hardware.printers = {
     ensureDefaultPrinter = "BrotherPrinterHome";
     ensurePrinters = [
