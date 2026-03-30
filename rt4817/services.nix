@@ -39,6 +39,7 @@
       "client max protocol" = "SMB3";
       "client ntlmv2 auth" = "no";
       "client use spnego" = "yes";
+      "client use kerberos" = "no";
     };
   };
   hardware.printers = {
