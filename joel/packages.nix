@@ -5,7 +5,7 @@
     anki
     wvkbd moonlight-qt
     heimdall-gui android-tools
-    snapshot
+    kdePackages.kamoso
     clipse
     calcurse
     libreoffice-qt6-fresh hunspell hunspellDicts.en_AU corefonts
