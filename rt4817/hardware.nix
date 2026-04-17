@@ -40,8 +40,8 @@ SUBSYSTEM=="input", KERNEL=="event*", ATTRS{name}=="Elan Touchpad", SYMLINK+="in
 # First laptop with Synaptics/UTS (SYNA)
 SUBSYSTEM=="input", KERNEL=="event*", ATTRS{name}=="SYNA30BC:00 06CB:CE07 Touchpad", SYMLINK+="input/touchpad-internal"
 
-# Logitech M720 mouse
-SUBSYSTEM=="input", KERNEL=="event*", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="b015", ENV{ID_INPUT_MOUSE}=="1", SYMLINK+="input/mouse-internal"
+# Internal mouse (Logitech M720)
+SUBSYSTEM=="input", KERNEL=="event*", ATTRS{name}=="Logitech M720 Triathlon", SYMLINK+="input/mouse-internal"
 
 # uinput permissions
 KERNEL=="uinput", GROUP="input", MODE="0660", TAG+="uaccess"
