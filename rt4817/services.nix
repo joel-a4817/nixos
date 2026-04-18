@@ -10,9 +10,7 @@
   # solaar
   services.solaar = {
     enable = true;
-    package = pkgs.solaar;
     window = "show";
-    extraArgs = "--headless";
   };
 
   # Printing
