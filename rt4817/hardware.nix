@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-
 let
   pixy2UdevRules = pkgs.stdenvNoCC.mkDerivation {
     pname = "pixy2-udev-rules";
@@ -14,6 +13,26 @@ let
   };
 in
 {
+#Required for moonlight
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
+  hardware.opengl = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver      # iHD (modern Intel, REQUIRED)
+      intel-vaapi-driver      # legacy fallback
+      libva-vdpau-driver
+      libvdpau-va-gl
+    ];
+  };
+  environment.systemPackages = with pkgs; [
+    mesa
+    libva
+    libva-utils
+  ];
+
   boot.kernelModules = [ "uinput" ];
 
   # Boot (UEFI)
