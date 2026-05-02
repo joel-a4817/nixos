@@ -17,9 +17,6 @@ in
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
-  };
-  hardware.opengl = {
-    enable = true;
     extraPackages = with pkgs; [
       intel-media-driver      # iHD (modern Intel, REQUIRED)
       intel-vaapi-driver      # legacy fallback
@@ -27,6 +24,7 @@ in
       libvdpau-va-gl
     ];
   };
+  
   environment.systemPackages = with pkgs; [
     mesa
     libva
