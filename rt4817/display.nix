@@ -24,9 +24,6 @@
   # start sway with exec sway!!
   programs.sway = {
     enable = true;
-    extraSessionCommands = ''
-      export WLR_DRM_NO_MODIFIERS=1
-    '';
     wrapperFeatures.gtk = true;
   };
 
