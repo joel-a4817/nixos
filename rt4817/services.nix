@@ -38,7 +38,7 @@
     ensureDefaultPrinter = "BrotherPrinterHome";
     ensurePrinters = [
       {
-        deviceUri = "dnssd://Brother%20MFC-L2750DW%20series._ipp._tcp.local/?uuid=e3248000-80ce-11db-8000-3c2af4f6c121";
+        deviceUri = "socket://192.168.0.25:9100";
         location = "home";
         name = "BrotherPrinterHome";
         model = "everywhere";
