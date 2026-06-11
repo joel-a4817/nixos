@@ -93,6 +93,7 @@
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "solaar": "solaar",
+        "vieb-nix": "vieb-nix",
         "yazi": "yazi"
       }
     },
@@ -185,6 +186,26 @@
         "owner": "gytis-ivaskevicius",
         "repo": "flake-utils-plus",
         "rev": "afcb15b845e74ac5e998358709b2b5fe42a948d1",
+        "type": "github"
+      }
+    },
+    "vieb-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1778452913,
+        "narHash": "sha256-DCtmbLm66PXvRCg/lkqlig7hLQIC2GnkWLxDy5OjTPk=",
+        "owner": "tejing1",
+        "repo": "vieb-nix",
+        "rev": "9bfaa2761e6328e293d8214365da495dcbe20428",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tejing1",
+        "repo": "vieb-nix",
         "type": "github"
       }
     },
