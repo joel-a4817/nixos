@@ -15,7 +15,7 @@
     kicad
     bambu-studio
     opencv
-    qt5.qtwayland #Required for Qt apps like those above.
+    qt6.qtwayland #Required for Qt apps like those above.
     #yazi pkgs:
     ffmpeg p7zip jq poppler fzf zoxide resvg imagemagick
     trash-cli lazygit fd ripgrep nushell #required by yazi plugins
