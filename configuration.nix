@@ -19,10 +19,5 @@
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  nix.settings = {
-    max-jobs = 2;
-    cores = 1;
-  };
-
   system.stateVersion = "25.11";
 }
