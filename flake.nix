@@ -1,8 +1,9 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    vieb-nix.url = "github:tejing1/vieb-nix";
-    vieb-nix.inputs.nixpkgs.follows = "nixpkgs";
+
+    glide.url = "github:Matthew-K310/glide-flake";
+    glide.inputs.nixpkgs.follows = "nixpkgs";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -17,7 +18,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, solaar, yazi, vieb-nix, ... }:
+  outputs = { self, nixpkgs, home-manager, solaar, yazi, glide, ... }:
   let
     system = "x86_64-linux";
 
@@ -30,12 +31,19 @@
       inherit system;
       modules = [
         solaar.nixosModules.default
+
         ({ ... }: { nixpkgs.overlays = overlays; })
+
         ./configuration.nix
-        ({pkgs, ...}: {
-          environment.systemPackages = [ (vieb-nix.packagesFunc pkgs).vieb ];
+
+        ({ pkgs, ... }: {
+          environment.systemPackages = [
+            glide.packages.${system}.default
+          ];
         })
+
         home-manager.nixosModules.home-manager
+
         ({ ... }: {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
