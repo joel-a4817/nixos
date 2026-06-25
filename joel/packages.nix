@@ -9,7 +9,6 @@
     clipse
     calcurse
     libreoffice-qt6-fresh hunspell hunspellDicts.en_AU corefonts
-    zathura zathuraPkgs.zathura_pdf_mupdf
     discord signal-desktop karere
     prismlauncher
     kicad
