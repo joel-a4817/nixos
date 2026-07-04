@@ -18,6 +18,15 @@
   networking.networkmanager.enable = true;
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings = {
+    substituters = [
+      "https://cache.nixos.org"
+      "https://chaotic-nyx.cachix.org"
+    ];
+    trusted-public-keys = [
+      "chaotic-nyx.cachix.org-1:HfnXSw4pj95iI/n17rIDy40agHj12WfF+Gqk6SonIT8="
+    ];
+  };
 
   system.stateVersion = "25.11";
 }

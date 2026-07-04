@@ -1,7 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-
+    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     glide.url = "github:Matthew-K310/glide-flake";
     glide.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -30,6 +30,7 @@
     nixosConfigurations.rt4817 = nixpkgs.lib.nixosSystem {
       inherit system;
       modules = [
+        chaotic.nixosModules.default
         solaar.nixosModules.default
 
         ({ ... }: { nixpkgs.overlays = overlays; })
