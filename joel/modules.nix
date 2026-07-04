@@ -1,6 +1,12 @@
 { config, pkgs, lib, ... }:
 
 {
+  home.file.".config/nixpkgs/config.nix".text = ''
+    {
+      allowUnfree = true;
+    }
+  '';
+
   programs.foot = {
     enable = true;
     settings.main.font = "JetBrainsMono Nerd Font:size=16";
