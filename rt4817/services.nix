@@ -34,17 +34,17 @@
     settings.global.workgroup = "ADMINISTRATION";
   };
   
-  hardware.printers = {
-    ensureDefaultPrinter = "BrotherPrinterHome";
-    ensurePrinters = [
-      {
-        deviceUri = "socket://192.168.0.25:9100";
-        location = "home";
-        name = "BrotherPrinterHome";
-        model = "everywhere";
-      }
-    ];
-  };
+hardware.printers = {
+  ensureDefaultPrinter = "BrotherPrinterHome";
+  ensurePrinters = [
+    {
+      name = "BrotherPrinterHome";
+      location = "home";
+      deviceUri = "ipp://192.168.0.25/ipp/print";
+      model = "everywhere";
+    }
+  ];
+};
 
   services.syncthing = {
     enable = true;
