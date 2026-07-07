@@ -24,8 +24,6 @@
       "https://cache.garnix.io"
     ];
     trusted-public-keys = [
-      # Official Hydra
-      "cache.nixos.org-1:6NCHdD59X431o0gWypbQxLy5J10WlF0viZw4JY0Y="
       # Chaotic
       "chaotic-nyx.cachix.org-1:HfnXSw4pj95iI/n17rIDy40agHj12WfF+Gqk6SonIT8="
       # nix-community
