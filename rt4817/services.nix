@@ -46,6 +46,17 @@ hardware.printers = {
   ];
 };
 
+systemd.services.ensure-printers = {
+  wants = [
+    "network-online.target"
+  ];
+
+  after = [
+    "network-online.target"
+    "cups.service"
+  ];
+};
+
   services.syncthing = {
     enable = true;
     openDefaultPorts = true;

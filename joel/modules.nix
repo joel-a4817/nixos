@@ -26,6 +26,7 @@
   };
 
   home.pointerCursor = {
+    enable = true;
     name = "Bibata-Modern-Amber";
     package = pkgs.bibata-cursors;
     gtk.enable = true;
