@@ -2,6 +2,7 @@
 
 {
   home.packages = with pkgs; [
+    waydroid-helper
     anki
     wvkbd moonlight-qt
     heimdall-gui android-tools

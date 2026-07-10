@@ -1,6 +1,19 @@
 { config, lib, pkgs, ... }:
 
 {
+  #security
+  security.polkit = {
+    enable = true;
+    enablePkexecWrapper = true;    
+    extraConfig = ''
+      polkit.addRule(function(action, subject) {
+        if (subject.user == "joel") {
+          return polkit.Result.YES;
+        }
+      });
+    '';
+  };
+
   # warp
   services.cloudflare-warp = {
     enable = true;

@@ -14,8 +14,7 @@
     wireplumber.enable = true;
   };
 
-  # Seatd for wlroots compositors (sway); polkit for permissions
-  security.polkit.enable = true;
+  # Seatd for wlroots compositors (sway)
   services.dbus.enable = true;
   services.seatd.enable = true;
   programs.xwayland.enable = true;

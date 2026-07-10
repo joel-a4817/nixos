@@ -19,7 +19,7 @@
     grim slurp wf-recorder wl-clipboard
     pulseaudio brightnessctl
     imv mpv unzip zip
-    appimage-run
+    appimage-run 
   ];
 
   nixpkgs.config.allowUnfree = true;
