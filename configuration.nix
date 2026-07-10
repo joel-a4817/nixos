@@ -21,15 +21,12 @@
       "https://cache.nixos.org"
       "https://chaotic-nyx.cachix.org"
       "https://nix-community.cachix.org"
-      "https://cache.garnix.io"
+      "https://yazi.cachix.org"
     ];
     trusted-public-keys = [
-      # Chaotic
       "chaotic-nyx.cachix.org-1:HfnXSw4pj95iI/n17rIDy40agHj12WfF+Gqk6SonIT8="
-      # nix-community
       "nix-community.cachix.org-1:mB9FSZYgrk2KRGnsRO+5nQ+9FSh9qRO0SHGFK1/NbV4="
-      # Garnix
-      "cache.garnix.io:vz+wZy3+CB5jAdy3gCjW0rUGWmZ+rhk5giDuce4GDyk="
+      "yazi.cachix.org-1:Dcdz63NZKfvUCbDGngQDAZq6kOroIrFoyO064uvLh8k="
     ];
   };
 
