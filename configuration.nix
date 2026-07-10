@@ -22,11 +22,13 @@
       "https://chaotic-nyx.cachix.org"
       "https://nix-community.cachix.org"
       "https://yazi.cachix.org"
+      "https://cachix-action.cachix.org"
     ];
     trusted-public-keys = [
       "chaotic-nyx.cachix.org-1:HfnXSw4pj95iI/n17rIDy40agHj12WfF+Gqk6SonIT8="
-      "nix-community.cachix.org-1:mB9FSZYgrk2KRGnsRO+5nQ+9FSh9qRO0SHGFK1/NbV4="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "yazi.cachix.org-1:Dcdz63NZKfvUCbDGngQDAZq6kOroIrFoyO064uvLh8k="
+      "cachix-action.cachix.org-1:y4Dd8m5DCPMKmhgbInx10qNsnFCsVopL6zPB0iGaN40="
     ];
   };
 
