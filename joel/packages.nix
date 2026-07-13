@@ -9,7 +9,7 @@
     kdePackages.kamoso
     clipse
     calcurse
-    libreoffice-qt6-fresh hunspell hunspellDicts.en_AU corefonts
+    collabora-desktop
     discord signal-desktop karere
     prismlauncher
     kicad
