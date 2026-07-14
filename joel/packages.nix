@@ -2,6 +2,7 @@
 
 {
   home.packages = with pkgs; [
+    localsend
     chromium poppler-utils 
     anki
     heimdall-gui android-tools
