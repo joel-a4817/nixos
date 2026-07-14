@@ -13,17 +13,6 @@ let
   };
 in
 {
-#Required for moonlight
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-    extraPackages = with pkgs; [
-      intel-media-driver      # iHD (modern Intel, REQUIRED)
-      intel-vaapi-driver      # legacy fallback
-      libva-vdpau-driver
-      libvdpau-va-gl
-    ];
-  };
   
   environment.systemPackages = with pkgs; [
     mesa

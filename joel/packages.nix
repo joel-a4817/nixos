@@ -2,9 +2,8 @@
 
 {
   home.packages = with pkgs; [
-    chromium excalifont poppler-utils 
+    chromium poppler-utils 
     anki
-    wvkbd moonlight-qt
     heimdall-gui android-tools
     kdePackages.kamoso
     clipse calcurse

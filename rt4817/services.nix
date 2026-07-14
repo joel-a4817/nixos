@@ -76,15 +76,6 @@ systemd.services.ensure-printers = {
   };
   networking.firewall.allowedTCPPorts = [ 8384 9191 ];
 
-  services.sunshine = {
-    enable = true;
-    autoStart = true;
-    capSysAdmin = true;
-    openFirewall = true;
-  };
-
-  services.tailscale.enable = true;
-
   # Fprintd
   services.fprintd.enable = true;
   security.pam.services = {
