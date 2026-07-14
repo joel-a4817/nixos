@@ -26,7 +26,7 @@
     window = "show";
   };
 
-  # Printing
+# Printing
   services.avahi = {
     enable = true;
     nssmdns4 = true;
