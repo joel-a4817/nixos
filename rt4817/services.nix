@@ -74,7 +74,12 @@ systemd.services.ensure-printers = {
     enable = true;
     openDefaultPorts = true;
   };
-  networking.firewall.allowedTCPPorts = [ 8384 9191 ];
+
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 8384 53317 ]; #syncthing, localsend
+    allowedUDPPorts = [ 53317 ];
+  };
 
   # Fprintd
   services.fprintd.enable = true;
