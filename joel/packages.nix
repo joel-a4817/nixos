@@ -3,9 +3,9 @@
 {
   home.packages = with pkgs; [
     localsend
-    chromium poppler-utils 
+    ungoogled-chromium poppler-utils #svg -> pdf 
     anki
-    heimdall-gui android-tools
+    #android-installing heimdall-gui android-tools
     kdePackages.kamoso
     clipse calcurse
     collabora-desktop

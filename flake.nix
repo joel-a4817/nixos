@@ -1,8 +1,6 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    glide.url = "github:Matthew-K310/glide-flake";
-    glide.inputs.nixpkgs.follows = "nixpkgs";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -17,7 +15,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, solaar, yazi, glide, ... }:
+  outputs = { self, nixpkgs, home-manager, solaar, yazi, ... }:
   let
     system = "x86_64-linux";
 
@@ -34,12 +32,6 @@
         ({ ... }: { nixpkgs.overlays = overlays; })
 
         ./configuration.nix
-
-        ({ pkgs, ... }: {
-          environment.systemPackages = [
-            glide.packages.${system}.default
-          ];
-        })
 
         home-manager.nixosModules.home-manager
 

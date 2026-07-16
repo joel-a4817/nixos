@@ -1,6 +1,10 @@
 { config, lib, pkgs, ... }:
 
-{  
+{ 
+  environment.shellAliases = {
+    s = "exec sway";
+  };
+
   # Users
   users.users.joel = {
     isNormalUser = true;
