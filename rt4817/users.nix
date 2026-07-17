@@ -8,7 +8,7 @@
   # Users
   users.users.joel = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "seat" "networkmanager" "audio" "video" "input" ];
+    extraGroups = [ "wheel" "seat" "networkmanager" "audio" "video" "input" "docker"];
   };
 
 security.sudo.extraRules = [

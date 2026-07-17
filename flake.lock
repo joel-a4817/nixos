@@ -36,26 +36,6 @@
         "type": "github"
       }
     },
-    "glide": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1773263835,
-        "narHash": "sha256-FZLIo890/fOVnk0QvaEgtvYYOePWoPSbsLZwLEkfCSI=",
-        "owner": "Matthew-K310",
-        "repo": "glide-flake",
-        "rev": "f2cf26ba77f6af0b249d7ab9be752eee2a5b8eb2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Matthew-K310",
-        "repo": "glide-flake",
-        "type": "github"
-      }
-    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -63,11 +43,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1783963347,
-        "narHash": "sha256-r376E2XpakiXwModDHIxlvB6qLq4iFVEq730vxOO4JY=",
+        "lastModified": 1784129366,
+        "narHash": "sha256-N5JiyICSeQF14x+OQebNyPpYowOT9Rs1iKyeCylSzOA=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "a45a7c451455a51ae740ec3bce4024b312809c29",
+        "rev": "165228b0efefc3e635e5174020c40ea64271dc25",
         "type": "github"
       },
       "original": {
@@ -110,7 +90,6 @@
     },
     "root": {
       "inputs": {
-        "glide": "glide",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "solaar": "solaar",

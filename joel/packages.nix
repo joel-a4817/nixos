@@ -5,13 +5,12 @@
     localsend
     ungoogled-chromium poppler-utils #svg -> pdf 
     anki
-    #android-installing heimdall-gui android-tools
+    heimdall-gui android-tools
     kdePackages.kamoso
     clipse calcurse
     collabora-desktop
     discord signal-desktop karere
-    prismlauncher
-    kicad bambu-studio opencv
+    prismlauncher freecad kicad bambu-studio opencv
     qt6.qtwayland #Required for Qt apps like those above.
     #yazi pkgs:
     ffmpeg p7zip jq fzf zoxide resvg imagemagick

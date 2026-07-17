@@ -8,7 +8,6 @@
     ./rt4817/display.nix
     ./rt4817/fonts.nix
     ./rt4817/packages.nix
-    ./rt4817/virtualisation.nix
     ./rt4817/services.nix
   ];
 
