@@ -2,7 +2,7 @@
 
 {
   home.packages = with pkgs; [
-    localsend
+    localsend yt-dlp
     ungoogled-chromium poppler-utils #svg -> pdf 
     anki
     heimdall-gui android-tools
@@ -10,7 +10,7 @@
     clipse calcurse
     collabora-desktop
     discord signal-desktop karere
-    prismlauncher freecad kicad bambu-studio opencv
+    prismlauncher kicad bambu-studio opencv
     qt6.qtwayland #Required for Qt apps like those above.
     #yazi pkgs:
     ffmpeg p7zip jq fzf zoxide resvg imagemagick
