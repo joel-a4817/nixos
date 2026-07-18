@@ -29,6 +29,27 @@
       modules = [
         solaar.nixosModules.default
 
+        ({ pkgs, ... }: {
+          nixpkgs.overlays = [
+            (final: prev: {
+              wvkbd-deskintl = prev.wvkbd.overrideAttrs (old: {
+                buildPhase = ''
+                  make LAYOUT=deskintl
+                '';
+                installPhase = ''
+                  runHook preInstall
+                  mkdir -p $out/bin
+                  install -Dm755 wvkbd-deskintl $out/bin/wvkbd-deskintl
+                  runHook postInstall
+                '';
+              });
+            })
+          ];
+          environment.systemPackages = [
+            pkgs.wvkbd-deskintl
+          ];
+        })
+
         ({ ... }: { nixpkgs.overlays = overlays; })
 
         ./configuration.nix

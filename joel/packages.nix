@@ -7,7 +7,7 @@
     anki
     heimdall-gui android-tools
     kdePackages.kamoso
-    clipse calcurse wvkbd
+    clipse calcurse
     collabora-desktop
     discord signal-desktop karere
     prismlauncher kicad bambu-studio opencv
