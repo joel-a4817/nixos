@@ -2,6 +2,8 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
+    nixpkgs-old.url = "github:NixOS/nixpkgs/nixos-22.05";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -15,9 +17,13 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, solaar, yazi, ... }:
+  outputs = { self, nixpkgs, nixpkgs-old, home-manager, solaar, yazi, ... }:
   let
     system = "x86_64-linux";
+
+    pkgsOld = import nixpkgs-old {
+      inherit system;
+    };
 
     overlays = [
       yazi.overlays.default
@@ -26,6 +32,11 @@
   {
     nixosConfigurations.rt4817 = nixpkgs.lib.nixosSystem {
       inherit system;
+
+      specialArgs = {
+        inherit pkgsOld;
+      };
+
       modules = [
         solaar.nixosModules.default
 
