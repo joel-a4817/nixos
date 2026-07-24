@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 
-{
+{ 
   home.file.".config/nixpkgs/config.nix".text = ''
     {
       allowUnfree = true;
@@ -16,6 +16,7 @@
 
     programs.yazi = {
     enable = true;
+    shellWrapperName = "y";
     package = pkgs.yazi.override { _7zz = pkgs._7zz-rar; }; # Support for RAR extraction
     plugins = {
       sudo = pkgs.yaziPlugins.sudo; #https://github.com/TD-Sky/sudo.yazi

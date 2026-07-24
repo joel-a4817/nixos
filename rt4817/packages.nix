@@ -6,10 +6,12 @@
     defaultEditor = true;
   };
 
+  programs.nix-ld.enable = true;
+
   # Packages
   environment.systemPackages = with pkgs; [
     (pkgs.python3.withPackages (ps: with ps; [ evdev ])) procps util-linux
-    libimobiledevice ifuse usbmuxd usbutils steam-run #run all binaries
+    libimobiledevice ifuse usbmuxd usbutils
     temurin-jre-bin
     wget git gh
     wmenu swaybg autotiling
