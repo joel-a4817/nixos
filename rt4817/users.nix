@@ -22,6 +22,4 @@ security.sudo.extraRules = [
     ];
   }
 ];
-
-  users.extraGroups.vboxusers.members = [ "joel" ];
 }
