@@ -26,6 +26,10 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # Boot (BIOS)
+  # boot.loader.grub.enable = true;
+  # boot.loader.grub.device = "/dev/sda";
+
   services.logind.settings.Login = {
     HandleLidSwitchDocked = "ignore";
     HandleLidSwitch = "ignore";
