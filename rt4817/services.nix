@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
 
 {
-  services.usbmuxd.enable = true;
-
   #security
   security.polkit = {
     enable = true;
