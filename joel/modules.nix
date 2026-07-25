@@ -14,7 +14,7 @@
 
   programs.fastfetch.enable = true;
 
-    programs.yazi = {
+  programs.yazi = {
     enable = true;
     shellWrapperName = "y";
     package = pkgs.yazi.override { _7zz = pkgs._7zz-rar; }; # Support for RAR extraction

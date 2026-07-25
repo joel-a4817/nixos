@@ -7,7 +7,6 @@
   programs.home-manager.enable = true;
 
   imports = [
-    ./joel/xcompose-greek.nix
     ./joel/modules.nix
     ./joel/packages.nix
   ];
