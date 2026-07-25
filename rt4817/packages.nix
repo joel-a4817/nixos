@@ -11,8 +11,7 @@
   # Packages
   environment.systemPackages = with pkgs; [
     (pkgs.python3.withPackages (ps: with ps; [ evdev ])) procps util-linux
-    libimobiledevice ifuse usbmuxd usbutils
-    temurin-jre-bin
+    temurin-jre-bin #java
     wget git gh
     wmenu swaybg autotiling
     grim slurp wf-recorder wl-clipboard

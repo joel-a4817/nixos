@@ -6,6 +6,7 @@
     ungoogled-chromium poppler-utils #svg -> pdf 
     anki
     heimdall-gui android-tools
+    libimobiledevice ifuse usbmuxd usbutils
     kdePackages.kamoso
     clipse calcurse
     collabora-desktop
