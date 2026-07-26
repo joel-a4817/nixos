@@ -53,5 +53,7 @@ SUBSYSTEM=="input", KERNEL=="event*", ATTRS{name}=="Logitech M720 Triathlon", SY
 # uinput permissions
 KERNEL=="uinput", GROUP="input", MODE="0660", TAG+="uaccess"
 
+# Optical Drive access for K3b
+KERNEL=="sr[0-9]*", GROUP="cdrom", MODE="0660"
   '';
 }
