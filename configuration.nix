@@ -4,11 +4,10 @@
   imports = [
     /etc/nixos/hardware-configuration.nix
     ./rt4817/hardware.nix
-    ./rt4817/users.nix
-    ./rt4817/display.nix
-    ./rt4817/fonts.nix
+    ./rt4817/other.nix
     ./rt4817/packages.nix
-    ./rt4817/services.nix
+    ./rt4817/printing.nix
+    ./rt4817/users.nix
   ];
 
   networking.hostName = "rt4817";
@@ -30,6 +29,7 @@
       "cachix-action.cachix.org-1:y4Dd8m5DCPMKmhgbInx10qNsnFCsVopL6zPB0iGaN40="
     ];
   };
-
+  
+  nixpkgs.config.allowUnfree = true;
   system.stateVersion = "25.11";
 }

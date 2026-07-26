@@ -13,13 +13,6 @@ let
   };
 in
 {
-  
-  environment.systemPackages = with pkgs; [
-    mesa
-    libva
-    libva-utils
-  ];
-
   boot.kernelModules = [ "uinput" ];
 
   # Boot (UEFI)
@@ -35,6 +28,9 @@ in
     HandleLidSwitch = "ignore";
     HandleLidSwitchExternalPower = "ignore";
   };
+
+  hardware.graphics.enable = true; #opengl
+  hardware.enableAllFirmware = true;
 
   powerManagement.enable = true;
   services.tlp.enable = true;

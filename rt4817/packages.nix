@@ -1,16 +1,34 @@
 { config, lib, pkgs, ... }:
 
 {
+  fonts = {
+    enableDefaultPackages = true;
+    fontconfig = {
+      enable = true;
+      defaultFonts = {
+        monospace = [ "JetBrainsMono Nerd Font" ];
+      };
+    };
+    packages = with pkgs; [
+      nerd-fonts.jetbrains-mono
+    ];
+  };
+
   programs.neovim = {
     enable = true;
     defaultEditor = true;
   };
 
-  programs.nix-ld.enable = true;
+  programs.xwayland.enable = true;
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
+  };
 
   # Packages
   environment.systemPackages = with pkgs; [
     (pkgs.python3.withPackages (ps: with ps; [ evdev ])) procps util-linux
+    mesa libva libva-utils #graphics
     temurin-jre-bin #java
     wget git gh
     wmenu swaybg autotiling
@@ -19,6 +37,4 @@
     imv mpv unzip zip
     appimage-run 
   ];
-
-  nixpkgs.config.allowUnfree = true;
 }

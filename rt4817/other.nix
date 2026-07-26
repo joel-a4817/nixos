@@ -1,6 +1,32 @@
 { config, lib, pkgs, ... }:
 
 {
+  # Audio (PipeWire + WirePlumber)
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    jack.enable = true;
+    wireplumber.enable = true;
+  };
+
+  # Seatd for wlroots compositors (sway)
+  services.dbus.enable = true;
+  services.seatd.enable = true;
+  services.libinput.enable = true; #input driver stack (mice, touchpads, etc.)
+
+  # xdg portal enabling
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-wlr
+      xdg-desktop-portal-gtk
+    ];
+  };
+
   #security
   security.polkit = {
     enable = true;
@@ -26,50 +52,6 @@
     window = "show";
   };
 
-# Printing
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-  };
-
-  services.printing = {
-    enable = true;
-    defaultShared = true;
-    allowFrom = [ "all" ];
-    listenAddresses = [ "*:631" ];
-    drivers = with pkgs; [
-      cups-filters
-    ];
-  };
-
-  services.samba = {
-    enable = true;
-    settings.global.workgroup = "ADMINISTRATION";
-  };
-  
-hardware.printers = {
-  ensureDefaultPrinter = "BrotherPrinterHome";
-  ensurePrinters = [
-    {
-      name = "BrotherPrinterHome";
-      location = "home";
-      deviceUri = "ipp://192.168.0.25/ipp/print";
-      model = "everywhere";
-    }
-  ];
-};
-
-systemd.services.ensure-printers = {
-  wants = [
-    "network-online.target"
-  ];
-
-  after = [
-    "network-online.target"
-    "cups.service"
-  ];
-};
-
   services.syncthing = {
     enable = true;
     openDefaultPorts = true;
@@ -90,10 +72,10 @@ systemd.services.ensure-printers = {
     login.fprintAuth = true;
     sudo.fprintAuth = true;
     greetd.fprintAuth = true;
-  };
-  security.pam.services.swaylock = {
-    enable = true;
-    fprintAuth = true;
-    unixAuth = true;
+    swaylock = {
+      enable = true;
+      fprintAuth = true;
+      unixAuth = true;
+    }
   };
 }
