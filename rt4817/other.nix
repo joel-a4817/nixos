@@ -76,6 +76,6 @@
       enable = true;
       fprintAuth = true;
       unixAuth = true;
-    }
+    };
   };
 }

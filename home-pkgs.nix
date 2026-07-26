@@ -28,7 +28,4 @@
       restore = pkgs.yaziPlugins.restore; #https://github.com/boydaihungst/restore.yazi
     };
   };
-
-  programs.nix-ld.enable = true;
-
 }
