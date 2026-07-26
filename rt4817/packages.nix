@@ -37,6 +37,11 @@
     grim slurp wf-recorder wl-clipboard
     pulseaudio brightnessctl
     imv mpv unzip zip
-    appimage-run 
+    appimage-run
+    qt6.qtwayland #Required for Qt apps
+    # heimdall-gui android-tools (for lineageos)
+    # libimobiledevice ifuse usbmuxd (for ios jailbreak)
+    usbutils
+    yt-dlp
   ];
 }
