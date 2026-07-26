@@ -25,8 +25,6 @@
     wrapperFeatures.gtk = true;
   };
 
-  programs.k3b.enable = true;
-
   # Packages
   environment.systemPackages = with pkgs; [
     (pkgs.python3.withPackages (ps: with ps; [ evdev ])) procps util-linux
@@ -42,6 +40,6 @@
     # heimdall-gui android-tools (for lineageos)
     # libimobiledevice ifuse usbmuxd (for ios jailbreak)
     usbutils
-    yt-dlp
+    yt-dlp cdrkit dvdplusrwtools
   ];
 }
