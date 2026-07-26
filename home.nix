@@ -24,7 +24,7 @@
     x11.enable = true;
   };
 
-    programs.foot = {
+  programs.foot = {
     enable = true;
     settings.main.font = "JetBrainsMono Nerd Font:size=16";
   };
