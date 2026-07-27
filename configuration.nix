@@ -11,6 +11,8 @@
     ./rt4817/virtualisation.nix
   ];
 
+  security.pki.certificateFiles = [ ./rt4817/mhs-ca.pem ];
+
   networking.hostName = "rt4817";
   networking.networkmanager.enable = true;
 
