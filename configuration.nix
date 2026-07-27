@@ -8,6 +8,7 @@
     ./rt4817/packages.nix
     ./rt4817/printing.nix
     ./rt4817/users.nix
+    ./rt4817/virtualisation.nix
   ];
 
   networking.hostName = "rt4817";
