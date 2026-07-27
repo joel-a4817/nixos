@@ -25,6 +25,10 @@
     wrapperFeatures.gtk = true;
   };
 
+  virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true;
+  virtualisation.spiceUSBRedirection.enable = true;
+
   # Packages
   environment.systemPackages = with pkgs; [
     (pkgs.python3.withPackages (ps: with ps; [ evdev ])) procps util-linux
@@ -36,10 +40,10 @@
     pulseaudio brightnessctl
     imv mpv unzip zip
     appimage-run
-    qt6.qtwayland #Required for Qt apps
-    # heimdall-gui android-tools (for lineageos)
-    # libimobiledevice ifuse usbmuxd (for ios jailbreak)
-    usbutils
+    qt6.qtwayland #qt apps in home-manager
+    heimdall-gui android-tools #lineageos
+    libimobiledevice ifuse #ios
+    usbutils steam-run
     yt-dlp cdrkit dvdplusrwtools
   ];
 }
