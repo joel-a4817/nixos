@@ -43,12 +43,6 @@
     '';
   };
 
-  # warp
-  services.cloudflare-warp = {
-    enable = true;
-    openFirewall = true;
-  };
-
   # solaar
   services.solaar = {
     enable = true;
