@@ -8,7 +8,6 @@
     ./rt4817/packages.nix
     ./rt4817/printing.nix
     ./rt4817/users.nix
-    ./rt4817/virtualisation.nix
   ];
 
   security.pki.certificateFiles = [ ./rt4817/mhs-ca.pem ];
