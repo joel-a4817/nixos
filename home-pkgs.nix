@@ -23,7 +23,7 @@ in
     ungoogled-chromium poppler-utils #svg -> pdf 
     anki
     kdePackages.kamoso
-    clipse calcurse
+    clipse
     collabora-desktop
     discord signal-desktop karere
     prismlauncher kicad bambu-studio opencv
