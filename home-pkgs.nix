@@ -20,7 +20,6 @@ in
 {
   home.packages = with pkgs; [
     localsend 
-    ungoogled-chromium poppler-utils #svg -> pdf 
     anki
     kdePackages.kamoso
     clipse
