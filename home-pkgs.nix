@@ -19,14 +19,14 @@ let
 in
 {
   home.packages = with pkgs; [
+    clipse
+    trash-cli lazygit fd ripgrep nushell #required by yazi plugins
     localsend 
     anki
     kdePackages.kamoso
-    clipse
     collabora-desktop
     discord signal-desktop karere
     prismlauncher kicad bambu-studio opencv
-    trash-cli lazygit fd ripgrep nushell #required by yazi plugins
   ];
 
   programs.yazi = {
