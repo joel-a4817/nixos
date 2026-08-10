@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 
 {
+  services.usbmuxd.enable = true;
+
   # Audio (PipeWire + WirePlumber)
   security.rtkit.enable = true;
   services.pipewire = {

@@ -40,5 +40,6 @@
     usbutils steam-run
     yt-dlp cdrkit dvdplusrwtools
     ffmpeg p7zip fzf zoxide resvg imagemagick jq #yazi pkgs (jq rotation script too)
+    libimobiledevice
   ];
 }
