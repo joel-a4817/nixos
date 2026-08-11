@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, glide, ... }:
 
 let
   sudo-yazi-fixed = pkgs.yaziPlugins.sudo.overrideAttrs (old: {
@@ -20,8 +20,8 @@ in
 {
   home.packages = with pkgs; [
     clipse
-    trash-cli lazygit fd ripgrep nushell ripdrag #required by yazi plugins
-    localsend 
+    localsend
+    glide.packages.${pkgs.stdenv.hostPlatform.system}.default
     anki
     kdePackages.kamoso
     collabora-desktop
@@ -38,7 +38,6 @@ in
       lazygit = pkgs.yaziPlugins.lazygit; #https://github.com/Lil-Dank/lazygit.yazi
       recycle-bin = pkgs.yaziPlugins.recycle-bin; #https://github.com/uhs-robert/recycle-bin.yazi
       restore = pkgs.yaziPlugins.restore; #https://github.com/boydaihungst/restore.yazi
-      drag = pkgs.yaziPlugins.drag; #https://github.com/Joao-Queiroga/drag.yazi
     };
   };
 }

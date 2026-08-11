@@ -35,17 +35,14 @@
 
         ./configuration.nix
 
-        ({ pkgs, ... }: {
-          environment.systemPackages = [
-            glide.packages.${system}.default
-          ];
-        })
-
         home-manager.nixosModules.home-manager
 
         ({ ... }: {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+          home-manager.extraSpecialArgs = {
+            inherit glide;
+          };
           home-manager.users.joel = import ./home.nix;
         })
       ];
