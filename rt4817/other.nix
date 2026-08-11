@@ -48,11 +48,15 @@
     window = "show";
   };
 
-  services.syncthing = {
-    enable = true;
-    openDefaultPorts = true;
-    user = "joel";
-  };
+services.syncthing = {
+  enable = true;
+  openDefaultPorts = true;
+  user = "joel";
+  dataDir = "/home/joel";
+  configDir = "/home/joel/.local/state/syncthing";
+};
+
+  networking.firewall.enable = true;
 
   # Fprintd
   services.fprintd.enable = true;
