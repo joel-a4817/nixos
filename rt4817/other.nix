@@ -53,11 +53,6 @@
     openDefaultPorts = true;
   };
 
-  networking.firewall = {
-    enable = true;
-    allowedTCPPorts = [ 8384 ]; #syncthinggui
-  };
-
   # Fprintd
   services.fprintd.enable = true;
   security.pam.services = {
