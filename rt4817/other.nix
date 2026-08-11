@@ -55,8 +55,7 @@
 
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 53317 ]; #syncthing
-    allowedUDPPorts = [ 53317 ];
+    allowedTCPPorts = [ 8384 ]; #syncthinggui
   };
 
   # Fprintd
