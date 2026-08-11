@@ -6,6 +6,10 @@
   home.stateVersion = "25.11";
   programs.home-manager.enable = true;
 
+  services.syncthing = {
+    enable = true;
+  };
+
   imports = [
     ./home-pkgs.nix
   ];
