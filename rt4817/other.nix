@@ -55,7 +55,7 @@
 
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 8384 53317 ]; #syncthing, localsend
+    allowedTCPPorts = [ 53317 ]; #syncthing
     allowedUDPPorts = [ 53317 ];
   };
 
