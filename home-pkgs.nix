@@ -20,7 +20,6 @@ in
 {
   home.packages = with pkgs; [
     clipse
-    localsend
     glide.packages.${pkgs.stdenv.hostPlatform.system}.default
     anki
     kdePackages.kamoso
