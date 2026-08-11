@@ -20,7 +20,7 @@ in
 {
   home.packages = with pkgs; [
     clipse
-    trash-cli lazygit fd ripgrep nushell #required by yazi plugins
+    trash-cli lazygit fd ripgrep nushell ripdrag #required by yazi plugins
     localsend 
     anki
     kdePackages.kamoso
@@ -38,6 +38,7 @@ in
       lazygit = pkgs.yaziPlugins.lazygit; #https://github.com/Lil-Dank/lazygit.yazi
       recycle-bin = pkgs.yaziPlugins.recycle-bin; #https://github.com/uhs-robert/recycle-bin.yazi
       restore = pkgs.yaziPlugins.restore; #https://github.com/boydaihungst/restore.yazi
+      drag = pkgs.yaziPlugins.drag; #https://github.com/Joao-Queiroga/drag.yazi
     };
   };
 }
