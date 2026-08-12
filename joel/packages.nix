@@ -25,7 +25,7 @@ in
     kdePackages.kamoso
     collabora-desktop
     discord signal-desktop karere
-    prismlauncher kicad bambu-studio opencv
+    prismlauncher kicad bambu-studio
   ];
 
   programs.yazi = {
@@ -39,4 +39,6 @@ in
       restore = pkgs.yaziPlugins.restore; #https://github.com/boydaihungst/restore.yazi
     };
   };
+
+  programs.fastfetch.enable = true;
 }

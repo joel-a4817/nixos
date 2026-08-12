@@ -4,7 +4,7 @@ let
   pixy2UdevRules = pkgs.stdenvNoCC.mkDerivation {
     pname = "pixy2-udev-rules";
     version = "1";
-    src = ./../pixy.rules;
+    src = ./pixy.rules;
     dontUnpack = true;
     installPhase = ''
       mkdir -p $out/lib/udev/rules.d
