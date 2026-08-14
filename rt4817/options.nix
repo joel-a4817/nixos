@@ -69,6 +69,8 @@
     allowedUDPPorts = [ 22000 21027 ];
   };
 
+  services.tailscale.enable = true;
+
   # Fprintd
   services.fprintd.enable = true;
   security.pam.services = {
