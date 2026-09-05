@@ -1,6 +1,31 @@
 { config, lib, pkgs, ... }:
 
 {
+  programs.appimage = {
+    enable = true;
+    binfmt = true;
+
+    package = pkgs.appimage-run.override {
+      extraPkgs = pkgs: [
+        pkgs.webkitgtk_4_1
+        pkgs.libsoup_3
+
+        pkgs.mpv
+        pkgs.libepoxy
+        pkgs.gtk3
+        pkgs.glib
+        pkgs.pango
+        pkgs.harfbuzz
+        pkgs.cairo
+        pkgs.gdk-pixbuf
+        pkgs.atk
+        pkgs.fontconfig
+        pkgs.zlib
+        pkgs.stdenv.cc.cc
+      ];
+    };
+  };
+
   programs.neovim = {
     enable = true;
     defaultEditor = true;
@@ -27,7 +52,6 @@
     grim slurp wf-recorder wl-clipboard
     pulseaudio brightnessctl
     imv mpv unzip zip
-    appimage-run
     qt6.qtwayland #qt apps in home-manager
     usbutils steam-run
     yt-dlp cdrkit dvdplusrwtools
@@ -35,5 +59,6 @@
     trash-cli lazygit fd ripgrep nushell ripdrag #required by yazi plugins
     libimobiledevice
     opencv
+    alsa-utils
   ];
 }

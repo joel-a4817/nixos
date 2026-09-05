@@ -14,9 +14,36 @@
     ];
   };
 
-  services.resolved.enable = true;
+  systemd.timers.audio-fixes = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnBootSec = "30s";
+      OnUnitActiveSec = "10s";
+    };
+  };
 
-  services.usbmuxd.enable = true;
+  systemd.services.audio-fixes = {
+    description = "Normalize ALSA capture gains";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "sound.target" ];
+    serviceConfig.Type = "oneshot";
+    script = ''
+      sleep 5
+      for card in $(seq 0 20); do
+        ${pkgs.alsa-utils}/bin/amixer -c "$card" \
+          sset 'Auto-Mute Mode' Disabled >/dev/null 2>&1 || true
+        ${pkgs.alsa-utils}/bin/amixer -c "$card" \
+          set Capture cap >/dev/null 2>&1 || true
+        ${pkgs.alsa-utils}/bin/amixer -c "$card" scontrols 2>/dev/null |
+        sed -n "s/^Simple mixer control '\(.*\)',0$/\1/p" |
+        grep -Ei 'capture|mic' |
+        while IFS= read -r ctl; do
+          ${pkgs.alsa-utils}/bin/amixer -c "$card" \
+            set "$ctl" 0dB >/dev/null 2>&1 || true
+        done
+      done
+    '';
+  };
 
   # Audio (PipeWire + WirePlumber)
   security.rtkit.enable = true;
@@ -33,6 +60,10 @@
   services.dbus.enable = true;
   services.seatd.enable = true;
   services.libinput.enable = true; #input driver stack (mice, touchpads, etc.)
+
+  services.resolved.enable = true;
+
+  services.usbmuxd.enable = true;
 
   # xdg portal enabling
   xdg.portal = {
