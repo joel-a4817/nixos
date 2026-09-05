@@ -1,5 +1,30 @@
 { config, lib, pkgs, ... }:
 
+let
+  earpodsFilter = pkgs.writeText "earpods_flat.txt" ''
+    Preamp: -11.0 dB
+    Filter 1: ON LSC Fc 20 Hz Gain 11.0 dB Q 0.50
+    Filter 2: ON PK Fc 65 Hz Gain 6.2 dB Q 0.70
+    Filter 3: ON PK Fc 240 Hz Gain -3.5 dB Q 1.20
+    Filter 4: ON PK Fc 1100 Hz Gain 4.0 dB Q 0.90
+    Filter 5: ON PK Fc 3200 Hz Gain -8.5 dB Q 2.10
+    Filter 6: ON PK Fc 5500 Hz Gain 3.0 dB Q 1.80
+    Filter 7: ON PK Fc 7100 Hz Gain -9.0 dB Q 3.50
+    Filter 8: ON PK Fc 12000 Hz Gain 5.0 dB Q 2.00
+  '';
+
+  cloud3Filter = pkgs.writeText "cloud3_flat.txt" ''
+    Preamp: -4.5 dB
+    Filter 1: ON LSC Fc 35 Hz Gain 4.5 dB Q 0.60
+    Filter 2: ON PK Fc 160 Hz Gain -4.2 dB Q 1.10
+    Filter 3: ON PK Fc 450 Hz Gain 2.0 dB Q 1.40
+    Filter 4: ON PK Fc 1800 Hz Gain 3.5 dB Q 2.00
+    Filter 5: ON PK Fc 3150 Hz Gain -7.0 dB Q 2.80
+    Filter 6: ON PK Fc 4800 Hz Gain -3.0 dB Q 3.00
+    Filter 7: ON PK Fc 6300 Hz Gain -9.5 dB Q 4.00
+    Filter 8: ON PK Fc 14000 Hz Gain 4.0 dB Q 1.50
+  '';
+in
 {
   fonts = {
     enableDefaultPackages = true;
@@ -54,6 +79,47 @@
     pulse.enable = true;
     jack.enable = true;
     wireplumber.enable = true;
+
+    extraConfig.pipewire = {
+      "99-flat-headphones" = {
+        "context.modules" = [
+          {
+            name = "libpipewire-module-parametric-equalizer";
+            args = {
+              "equalizer.filepath" = "${earpodsFilter}";
+              "equalizer.description" = "EarPods Flat";
+
+              "capture.props" = {
+                "node.name" = "earpods-flat";
+                "node.description" = "EarPods Flat";
+              };
+
+              "playback.props" = {
+                "node.name" = "earpods-flat-output";
+                "node.description" = "EarPods Flat";
+              };
+            };
+          }
+          {
+            name = "libpipewire-module-parametric-equalizer";
+            args = {
+              "equalizer.filepath" = "${cloud3Filter}";
+              "equalizer.description" = "Cloud III Flat";
+
+              "capture.props" = {
+                "node.name" = "cloud3-flat";
+                "node.description" = "Cloud III Flat";
+              };
+
+              "playback.props" = {
+                "node.name" = "cloud3-flat-output";
+                "node.description" = "Cloud III Flat";
+              };
+            };
+          }
+        ];
+      };
+    };
   };
 
   # Seatd for wlroots compositors (sway)

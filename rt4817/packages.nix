@@ -59,6 +59,6 @@
     trash-cli lazygit fd ripgrep nushell ripdrag #required by yazi plugins
     libimobiledevice
     opencv
-    alsa-utils
+    alsa-utils easyeffects
   ];
 }
