@@ -10,7 +10,7 @@
     ./rt4817/users.nix
   ];
 
-  security.pki.certificateFiles = [ ./rt4817/mhs-ca.pem ];
+  security.pki.certificateFiles = [ /home/joel/Documents/prefs/mhs-ca.pem ];
 
   networking.hostName = "rt4817";
   networking.networkmanager.enable = true;

@@ -1,4 +1,8 @@
 { config, lib, pkgs, ... }:
+
+let
+  ladspa-bs2b = pkgs.callPackage ./ladspa-bs2b.nix {};
+in
 {
   fonts = {
     enableDefaultPackages = true;
@@ -53,6 +57,9 @@
     pulse.enable = true;
     jack.enable = true;
     wireplumber.enable = true;
+    extraLadspaPackages = [
+      ladspa-bs2b
+    ];
     extraConfig.pipewire."90-earpods-fir" = {
       "context.modules" = [
         {
@@ -158,6 +165,174 @@
             "capture.props" = {
               "node.name" = "cloud3_fir";
               "node.description" = "Cloud III FIR";
+              "media.class" = "Audio/Sink";
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+            };
+          };
+        }
+      ];
+    };
+    extraConfig.pipewire."92-earpods-fir-bs2b" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "EarPods FIR + BS2B";
+
+            "filter.graph" = {
+              nodes = [
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "left";
+
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/output/earpods_stereo.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "right";
+
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/output/earpods_stereo.wav";
+                    channel = 1;
+                  };
+                }
+
+                {
+                  type = "ladspa";
+                  plugin = "bs2b";
+                  label = "bs2b";
+                  name = "crossfeed";
+
+                  control = {
+                    fcut = 650.0;
+                    feed = 9.5;
+                  };
+                }
+              ];
+
+              inputs = [
+                "left:In"
+                "right:In"
+              ];
+
+              outputs = [
+                "crossfeed:Output left"
+                "crossfeed:Output right"
+              ];
+
+              links = [
+                {
+                  output = "left:Out";
+                  input = "crossfeed:Input left";
+                }
+
+                {
+                  output = "right:Out";
+                  input = "crossfeed:Input right";
+                }
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "earpods_fir_bs2b";
+              "node.description" = "EarPods FIR + BS2B";
+              "media.class" = "Audio/Sink";
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+            };
+          };
+        }
+      ];
+    };
+    extraConfig.pipewire."93-cloud3-fir-bs2b" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "Cloud III FIR + BS2B";
+
+            "filter.graph" = {
+              nodes = [
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "left";
+
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/output/cloud3_stereo.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "right";
+
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/output/cloud3_stereo.wav";
+                    channel = 1;
+                  };
+                }
+
+                {
+                  type = "ladspa";
+                  plugin = "bs2b";
+                  label = "bs2b";
+                  name = "crossfeed";
+
+                  control = {
+                    fcut = 650.0;
+                    feed = 9.5;
+                  };
+                }
+              ];
+
+              inputs = [
+                "left:In"
+                "right:In"
+              ];
+
+              outputs = [
+                "crossfeed:Output left"
+                "crossfeed:Output right"
+              ];
+
+              links = [
+                {
+                  output = "left:Out";
+                  input = "crossfeed:Input left";
+                }
+
+                {
+                  output = "right:Out";
+                  input = "crossfeed:Input right";
+                }
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "cloud3_fir_bs2b";
+              "node.description" = "Cloud III FIR + BS2B";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
