@@ -2,6 +2,7 @@
 
 let
   ladspa-bs2b = pkgs.callPackage ./ladspa-bs2b.nix {};
+  sofaFile = "${pkgs.libmysofa}/share/libmysofa/MIT_KEMAR_normal_pinna.sofa";
 in
 {
   fonts = {
@@ -60,7 +61,7 @@ in
     extraLadspaPackages = [
       ladspa-bs2b
     ];
-    extraConfig.pipewire."90-earpods-fir" = {
+    extraConfig.pipewire."89-earpods-fir" = {
       "context.modules" = [
         {
           name = "libpipewire-module-filter-chain";
@@ -76,7 +77,7 @@ in
                 name = "left";
 
                 config = {
-                  filename = "/home/joel/Documents/prefs/audio/output/earpods_stereo.wav";
+                  filename = "/home/joel/Documents/prefs/audio/output/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
                   channel = 0;
                 };
               }
@@ -87,7 +88,7 @@ in
                 name = "right";
 
                 config = {
-                  filename = "/home/joel/Documents/prefs/audio/output/earpods_stereo.wav";
+                  filename = "/home/joel/Documents/prefs/audio/output/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
                   channel = 1;
                 };
               }
@@ -120,7 +121,7 @@ in
         }
       ];
     };
-    extraConfig.pipewire."91-cloud3-fir" = {
+    extraConfig.pipewire."90-cloud3-fir" = {
       "context.modules" = [
         {
           name = "libpipewire-module-filter-chain";
@@ -135,7 +136,7 @@ in
                 name = "left";
 
                 config = {
-                  filename = "/home/joel/Documents/prefs/audio/output/cloud3_stereo.wav";
+                  filename = "/home/joel/Documents/prefs/audio/output/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
                   channel = 0;
                 };
               }
@@ -146,7 +147,7 @@ in
                 name = "right";
 
                 config = {
-                  filename = "/home/joel/Documents/prefs/audio/output/cloud3_stereo.wav";
+                  filename = "/home/joel/Documents/prefs/audio/output/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
                   channel = 1;
                 };
               }
@@ -178,6 +179,49 @@ in
         }
       ];
     };
+    extraConfig.pipewire."91-bs2b" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "BS2B";
+
+            "filter.graph" = {
+              nodes = [
+                {
+                  type = "ladspa";
+                  plugin = "bs2b";
+                  label = "bs2b";
+                  name = "crossfeed";
+
+                  control = {
+                    fcut = 700.0;
+                    feed = 4.5;
+                  };
+                }
+              ];
+
+              inputs = [
+                "crossfeed:Input left"
+                "crossfeed:Input right"
+              ];
+
+              outputs = [
+                "crossfeed:Output left"
+                "crossfeed:Output right"
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "bs2b";
+              "node.description" = "BS2B";
+              "media.class" = "Audio/Sink";
+            };
+          };
+        }
+      ];
+    };
     extraConfig.pipewire."92-earpods-fir-bs2b" = {
       "context.modules" = [
         {
@@ -194,7 +238,7 @@ in
                   name = "left";
 
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/output/earpods_stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/output/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
                     channel = 0;
                   };
                 }
@@ -205,7 +249,7 @@ in
                   name = "right";
 
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/output/earpods_stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/output/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
                     channel = 1;
                   };
                 }
@@ -217,8 +261,8 @@ in
                   name = "crossfeed";
 
                   control = {
-                    fcut = 650.0;
-                    feed = 9.5;
+                    fcut = 700.0;
+                    feed = 4.5;
                   };
                 }
               ];
@@ -278,7 +322,7 @@ in
                   name = "left";
 
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/output/cloud3_stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/output/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
                     channel = 0;
                   };
                 }
@@ -289,7 +333,7 @@ in
                   name = "right";
 
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/output/cloud3_stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/output/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
                     channel = 1;
                   };
                 }
@@ -301,8 +345,8 @@ in
                   name = "crossfeed";
 
                   control = {
-                    fcut = 650.0;
-                    feed = 9.5;
+                    fcut = 700.0;
+                    feed = 4.5;
                   };
                 }
               ];
@@ -336,6 +380,236 @@ in
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+            };
+          };
+        }
+      ];
+    };
+    extraConfig.pipewire."94-sofa" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "SOFA";
+
+            "filter.graph" = {
+              nodes = [
+                {
+                  type = "sofa";
+                  name = "spatial";
+
+                  label = "spatializer";
+
+                  config = {
+                    filename = sofaFile;
+                    gain = -9.0;
+                    normalize = true;
+                  };
+
+                  control = {
+                    "Azimuth" = 30.0;
+                    "Elevation" = 0.0;
+                    "Radius" = 1.0;
+                  };
+                }
+              ];
+
+              inputs = [
+                "spatial:In"
+              ];
+
+              outputs = [
+                "spatial:Out L"
+                "spatial:Out R"
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "sofa";
+              "node.description" = "SOFA";
+              "media.class" = "Audio/Sink";
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+            };
+          };
+        }
+      ];
+    };
+    extraConfig.pipewire."95-earpods-fir-sofa" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "EarPods FIR + SOFA";
+
+            "filter.graph" = {
+              nodes = [
+                {
+                  type = "sofa";
+                  name = "spatial";
+
+                  label = "spatializer";
+
+                  config = {
+                    filename = sofaFile;
+                    gain = -9.0;
+                    normalize = true;
+                  };
+
+                  control = {
+                    "Azimuth" = 30.0;
+                    "Elevation" = 0.0;
+                    "Radius" = 1.0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "left";
+
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/output/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "right";
+
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/output/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
+                    channel = 1;
+                  };
+                }
+              ];
+
+              inputs = [
+                "spatial:In"
+              ];
+
+              outputs = [
+                "left:Out"
+                "right:Out"
+              ];
+
+              links = [
+                {
+                  output = "spatial:Out L";
+                  input = "left:In";
+                }
+
+                {
+                  output = "spatial:Out R";
+                  input = "right:In";
+                }
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "earpods_fir_sofa";
+              "node.description" = "EarPods FIR + SOFA";
+              "media.class" = "Audio/Sink";
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+            };
+          };
+        }
+      ];
+    };
+    extraConfig.pipewire."96-cloud3-fir-sofa" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "Cloud III FIR + SOFA";
+
+            "filter.graph" = {
+              nodes = [
+                {
+                  type = "sofa";
+                  name = "spatial";
+
+                  label = "spatializer";
+
+                  config = {
+                    filename = sofaFile;
+                    gain = -9.0;
+                    normalize = true;
+                  };
+
+                  control = {
+                    "Azimuth" = 30.0;
+                    "Elevation" = 0.0;
+                    "Radius" = 1.0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "left";
+
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/output/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "right";
+
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/output/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
+                    channel = 1;
+                  };
+                }
+              ];
+
+              inputs = [
+                "spatial:In"
+              ];
+
+              outputs = [
+                "left:Out"
+                "right:Out"
+              ];
+
+              links = [
+                {
+                  output = "spatial:Out L";
+                  input = "left:In";
+                }
+
+                {
+                  output = "spatial:Out R";
+                  input = "right:In";
+                }
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "cloud3_fir_sofa";
+              "node.description" = "Cloud III FIR + SOFA";
+              "media.class" = "Audio/Sink";
             };
 
             "playback.props" = {

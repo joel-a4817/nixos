@@ -55,7 +55,7 @@
     qt6.qtwayland #qt apps in home-manager
     usbutils steam-run
     yt-dlp cdrkit dvdplusrwtools
-    ffmpeg p7zip fzf zoxide resvg imagemagick jq #yazi pkgs (jq rotation script too)
+    ffmpeg-full p7zip fzf zoxide resvg imagemagick jq #yazi pkgs (jq rotation script too), ffmpeg-full needed for music convert
     trash-cli lazygit fd ripgrep nushell ripdrag #required by yazi plugins
     libimobiledevice
     opencv
