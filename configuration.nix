@@ -8,6 +8,7 @@
     ./rt4817/packages.nix
     ./rt4817/printing.nix
     ./rt4817/users.nix
+    ./rt4817/pipewire.nix
   ];
 
   security.pki.certificateFiles = [ /home/joel/Documents/prefs/mhs-ca.pem ];

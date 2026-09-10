@@ -39,12 +39,12 @@
 
   # Packages
   environment.systemPackages = with pkgs; [
-    (pkgs.python3.withPackages (ps: with ps; [ evdev ])) procps util-linux
+    (pkgs.python3.withPackages (python-pkgs: with python-pkgs; [ evdev pip ])) 
     (pkgs.bleachbit.overridePythonAttrs (old: {
       propagatedBuildInputs =
         (old.propagatedBuildInputs or [])
         ++ [ pkgs.python3Packages.psutil ];
-    })) xhost
+    })) xhost procps util-linux
     mesa libva libva-utils #graphics
     temurin-jre-bin #java
     wget git gh
