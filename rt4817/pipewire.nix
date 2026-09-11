@@ -616,7 +616,7 @@ in
                   name = "hpcfL";
 
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/Apple_EarPods_Averaged_Measurements.wav";
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/Apple_EarPods_Average.wav";
                     channel = 0;
                   };
                 }
@@ -627,7 +627,7 @@ in
                   name = "hpcfR";
 
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/Apple_EarPods_Averaged_Measurements.wav";
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/Apple_EarPods_Average.wav";
                     channel = 1;
                   };
                 }
@@ -778,7 +778,7 @@ in
                   name = "hpcfL";
 
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/HyperX_Cloud_III_Rtings.wav";
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/HyperX_Cloud_III_Average.wav";
                     channel = 0;
                   };
                 }
@@ -789,7 +789,7 @@ in
                   name = "hpcfR";
 
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/HyperX_Cloud_III_Rtings.wav";
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/HyperX_Cloud_III_Average.wav";
                     channel = 1;
                   };
                 }
