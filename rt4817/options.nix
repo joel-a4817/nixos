@@ -78,9 +78,9 @@
   };
 
   # solaar
-  services.solaar = {
+  programs.solaar = {
     enable = true;
-    window = "show";
+    userService.window = "show";
   };
 
   networking.firewall = {
