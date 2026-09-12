@@ -598,16 +598,59 @@ in
 
             "filter.graph" = {
               nodes = [
+                { type = "builtin"; label = "copy"; name = "splitL"; }
+                { type = "builtin"; label = "copy"; name = "splitR"; }
+
                 {
                   type = "builtin";
-                  label = "copy";
-                  name = "splitL";
+                  label = "convolver";
+                  name = "LL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/BRIR_True_Stereo.wav";
+                    channel = 0;
+                  };
                 }
 
                 {
                   type = "builtin";
-                  label = "copy";
-                  name = "splitR";
+                  label = "convolver";
+                  name = "LR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/BRIR_True_Stereo.wav";
+                    channel = 1;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/BRIR_True_Stereo.wav";
+                    channel = 2;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/BRIR_True_Stereo.wav";
+                    channel = 3;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixL";
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixR";
                 }
 
                 {
@@ -631,94 +674,23 @@ in
                     channel = 1;
                   };
                 }
-
-                {
-                  type = "builtin";
-                  label = "copy";
-                  name = "postL";
-                }
-
-                {
-                  type = "builtin";
-                  label = "copy";
-                  name = "postR";
-                }
-
-                {
-                  type = "builtin";
-                  label = "convolver";
-                  name = "LL";
-
-                  config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/BRIR_True_Stereo.wav";
-                    channel = 0;
-                  };
-                }
-
-                {
-                  type = "builtin";
-                  label = "convolver";
-                  name = "LR";
-
-                  config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/BRIR_True_Stereo.wav";
-                    channel = 1;
-                  };
-                }
-
-                {
-                  type = "builtin";
-                  label = "convolver";
-                  name = "RL";
-
-                  config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/BRIR_True_Stereo.wav";
-                    channel = 2;
-                  };
-                }
-
-                {
-                  type = "builtin";
-                  label = "convolver";
-                  name = "RR";
-
-                  config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/BRIR_True_Stereo.wav";
-                    channel = 3;
-                  };
-                }
-
-                {
-                  type = "builtin";
-                  label = "mixer";
-                  name = "mixL";
-                }
-
-                {
-                  type = "builtin";
-                  label = "mixer";
-                  name = "mixR";
-                }
               ];
 
               links = [
-                { output = "splitL:Out"; input = "hpcfL:In"; }
-                { output = "splitR:Out"; input = "hpcfR:In"; }
+                { output = "splitL:Out"; input = "LL:In"; }
+                { output = "splitL:Out"; input = "LR:In"; }
 
-                { output = "hpcfL:Out"; input = "postL:In"; }
-                { output = "hpcfR:Out"; input = "postR:In"; }
-
-                { output = "postL:Out"; input = "LL:In"; }
-                { output = "postL:Out"; input = "LR:In"; }
-
-                { output = "postR:Out"; input = "RL:In"; }
-                { output = "postR:Out"; input = "RR:In"; }
+                { output = "splitR:Out"; input = "RL:In"; }
+                { output = "splitR:Out"; input = "RR:In"; }
 
                 { output = "LL:Out"; input = "mixL:In 1"; }
                 { output = "RL:Out"; input = "mixL:In 2"; }
 
                 { output = "LR:Out"; input = "mixR:In 1"; }
                 { output = "RR:Out"; input = "mixR:In 2"; }
+
+                { output = "mixL:Out"; input = "hpcfL:In"; }
+                { output = "mixR:Out"; input = "hpcfR:In"; }
               ];
 
               inputs = [
@@ -727,8 +699,8 @@ in
               ];
 
               outputs = [
-                "mixL:Out"
-                "mixR:Out"
+                "hpcfL:Out"
+                "hpcfR:Out"
               ];
             };
 
@@ -760,16 +732,59 @@ in
 
             "filter.graph" = {
               nodes = [
+                { type = "builtin"; label = "copy"; name = "splitL"; }
+                { type = "builtin"; label = "copy"; name = "splitR"; }
+
                 {
                   type = "builtin";
-                  label = "copy";
-                  name = "splitL";
+                  label = "convolver";
+                  name = "LL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/BRIR_True_Stereo.wav";
+                    channel = 0;
+                  };
                 }
 
                 {
                   type = "builtin";
-                  label = "copy";
-                  name = "splitR";
+                  label = "convolver";
+                  name = "LR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/BRIR_True_Stereo.wav";
+                    channel = 1;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/BRIR_True_Stereo.wav";
+                    channel = 2;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/BRIR_True_Stereo.wav";
+                    channel = 3;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixL";
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixR";
                 }
 
                 {
@@ -793,94 +808,23 @@ in
                     channel = 1;
                   };
                 }
-
-                {
-                  type = "builtin";
-                  label = "copy";
-                  name = "postL";
-                }
-
-                {
-                  type = "builtin";
-                  label = "copy";
-                  name = "postR";
-                }
-
-                {
-                  type = "builtin";
-                  label = "convolver";
-                  name = "LL";
-
-                  config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/BRIR_True_Stereo.wav";
-                    channel = 0;
-                  };
-                }
-
-                {
-                  type = "builtin";
-                  label = "convolver";
-                  name = "LR";
-
-                  config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/BRIR_True_Stereo.wav";
-                    channel = 1;
-                  };
-                }
-
-                {
-                  type = "builtin";
-                  label = "convolver";
-                  name = "RL";
-
-                  config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/BRIR_True_Stereo.wav";
-                    channel = 2;
-                  };
-                }
-
-                {
-                  type = "builtin";
-                  label = "convolver";
-                  name = "RR";
-
-                  config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/BRIR_True_Stereo.wav";
-                    channel = 3;
-                  };
-                }
-
-                {
-                  type = "builtin";
-                  label = "mixer";
-                  name = "mixL";
-                }
-
-                {
-                  type = "builtin";
-                  label = "mixer";
-                  name = "mixR";
-                }
               ];
 
               links = [
-                { output = "splitL:Out"; input = "hpcfL:In"; }
-                { output = "splitR:Out"; input = "hpcfR:In"; }
+                { output = "splitL:Out"; input = "LL:In"; }
+                { output = "splitL:Out"; input = "LR:In"; }
 
-                { output = "hpcfL:Out"; input = "postL:In"; }
-                { output = "hpcfR:Out"; input = "postR:In"; }
-
-                { output = "postL:Out"; input = "LL:In"; }
-                { output = "postL:Out"; input = "LR:In"; }
-
-                { output = "postR:Out"; input = "RL:In"; }
-                { output = "postR:Out"; input = "RR:In"; }
+                { output = "splitR:Out"; input = "RL:In"; }
+                { output = "splitR:Out"; input = "RR:In"; }
 
                 { output = "LL:Out"; input = "mixL:In 1"; }
                 { output = "RL:Out"; input = "mixL:In 2"; }
 
                 { output = "LR:Out"; input = "mixR:In 1"; }
                 { output = "RR:Out"; input = "mixR:In 2"; }
+
+                { output = "mixL:Out"; input = "hpcfL:In"; }
+                { output = "mixR:Out"; input = "hpcfR:In"; }
               ];
 
               inputs = [
@@ -889,8 +833,8 @@ in
               ];
 
               outputs = [
-                "mixL:Out"
-                "mixR:Out"
+                "hpcfL:Out"
+                "hpcfR:Out"
               ];
             };
 
