@@ -9,6 +9,7 @@
     collabora-desktop
     discord signal-desktop karere
     prismlauncher kicad bambu-studio
+    socat #play/pause mpv from anywhere
   ];
 
   programs.yazi = {

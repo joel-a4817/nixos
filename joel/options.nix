@@ -13,6 +13,13 @@
     settings.main.font = "JetBrainsMono Nerd Font:size=16";
   };
 
+  programs.mpv = {
+    enable = true;
+    config = {
+      input-ipc-server = "/tmp/mpvsocket";
+    };
+  };
+
   services.syncthing = {
     enable = true;
     guiAddress = "0.0.0.0:8384";
