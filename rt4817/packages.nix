@@ -39,7 +39,7 @@
 
   # Packages
   environment.systemPackages = with pkgs; [
-    (pkgs.python3.withPackages (python-pkgs: with python-pkgs; [ evdev pip ])) 
+    (pkgs.python3.withPackages (python-pkgs: with python-pkgs; [ evdev pip soundfile numpy ])) 
     (pkgs.bleachbit.overridePythonAttrs (old: {
       propagatedBuildInputs =
         (old.propagatedBuildInputs or [])

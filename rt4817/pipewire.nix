@@ -642,12 +642,23 @@ in
                   type = "builtin";
                   label = "mixer";
                   name = "mixL";
+                  
+                  control = {
+                    "Gain 1" = 0.12587900734012808;
+                    "Gain 2" = 0.12587900734012808;
+                  };
+
                 }
 
                 {
                   type = "builtin";
                   label = "mixer";
                   name = "mixR";
+
+                  control = {
+                    "Gain 1" = 0.12587900734012808;
+                    "Gain 2" = 0.12587900734012808;
+                  };
                 }
 
                 {
@@ -776,12 +787,22 @@ in
                   type = "builtin";
                   label = "mixer";
                   name = "mixL";
+
+                  control = {
+                    "Gain 1" = 0.14486239544376789;
+                    "Gain 2" = 0.14486239544376789;
+                  };
                 }
 
                 {
                   type = "builtin";
                   label = "mixer";
                   name = "mixR";
+
+                  control = {
+                    "Gain 1" = 0.14486459154993076;
+                    "Gain 2" = 0.14486459154993076;
+                  };
                 }
 
                 {
