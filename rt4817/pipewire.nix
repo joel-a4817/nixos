@@ -45,7 +45,7 @@ in
                 name = "left";
 
                 config = {
-                  filename = "/home/joel/Documents/prefs/audio/output/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
+                  filename = "/home/joel/Documents/prefs/audio/output1/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
                   channel = 0;
                 };
               }
@@ -56,7 +56,7 @@ in
                 name = "right";
 
                 config = {
-                  filename = "/home/joel/Documents/prefs/audio/output/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
+                  filename = "/home/joel/Documents/prefs/audio/output1/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
                   channel = 1;
                 };
               }
@@ -104,7 +104,7 @@ in
                 name = "left";
 
                 config = {
-                  filename = "/home/joel/Documents/prefs/audio/output/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
+                  filename = "/home/joel/Documents/prefs/audio/output1/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
                   channel = 0;
                 };
               }
@@ -115,7 +115,7 @@ in
                 name = "right";
 
                 config = {
-                  filename = "/home/joel/Documents/prefs/audio/output/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
+                  filename = "/home/joel/Documents/prefs/audio/output1/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
                   channel = 1;
                 };
               }
@@ -206,7 +206,7 @@ in
                   name = "left";
 
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/output/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
+                    filename = "/home/joel/Documents/prefs/audio/output1/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
                     channel = 0;
                   };
                 }
@@ -217,7 +217,7 @@ in
                   name = "right";
 
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/output/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
+                    filename = "/home/joel/Documents/prefs/audio/output1/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
                     channel = 1;
                   };
                 }
@@ -290,7 +290,7 @@ in
                   name = "left";
 
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/output/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
+                    filename = "/home/joel/Documents/prefs/audio/output1/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
                     channel = 0;
                   };
                 }
@@ -301,7 +301,7 @@ in
                   name = "right";
 
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/output/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
+                    filename = "/home/joel/Documents/prefs/audio/output1/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
                     channel = 1;
                   };
                 }
@@ -376,7 +376,6 @@ in
 
                   config = {
                     filename = sofaFile;
-                    gain = -9.0;
                     normalize = true;
                   };
 
@@ -430,7 +429,6 @@ in
 
                   config = {
                     filename = sofaFile;
-                    gain = -9.0;
                     normalize = true;
                   };
 
@@ -447,7 +445,7 @@ in
                   name = "left";
 
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/output/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
+                    filename = "/home/joel/Documents/prefs/audio/output1/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
                     channel = 0;
                   };
                 }
@@ -458,7 +456,7 @@ in
                   name = "right";
 
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/output/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
+                    filename = "/home/joel/Documents/prefs/audio/output1/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
                     channel = 1;
                   };
                 }
@@ -518,7 +516,6 @@ in
 
                   config = {
                     filename = sofaFile;
-                    gain = -9.0;
                     normalize = true;
                   };
 
@@ -535,7 +532,7 @@ in
                   name = "left";
 
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/output/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
+                    filename = "/home/joel/Documents/prefs/audio/output1/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
                     channel = 0;
                   };
                 }
@@ -546,7 +543,7 @@ in
                   name = "right";
 
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/output/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
+                    filename = "/home/joel/Documents/prefs/audio/output1/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
                     channel = 1;
                   };
                 }
