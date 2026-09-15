@@ -14,7 +14,41 @@ let
   };
 in
 {
-  boot.kernelModules = [ "uinput" "snd-aloop" ];
+
+  boot.kernelModules = [
+    "snd-aloop"
+  ];
+
+  environment.etc."asound.conf".text = ''
+    pcm.airplay_shared_capture {
+      type dsnoop
+
+      ipc_key 481700
+      ipc_key_add_uid true
+
+      slave {
+        pcm "hw:Loopback,1,0"
+        channels 2
+        rate 96000
+        format S32_LE
+        period_size 512
+        buffer_size 4096
+      }
+    }
+
+    pcm.airplay_shared_capture_48k {
+      type plug
+
+      slave {
+        pcm "airplay_shared_capture"
+        channels 2
+        rate 96000
+        format S32_LE
+      }
+
+      route_policy copy
+    }
+  '';
 
   # Boot (UEFI)
   boot.loader.systemd-boot.enable = true;
