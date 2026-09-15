@@ -14,7 +14,7 @@ let
   };
 in
 {
-  boot.kernelModules = [ "uinput" ];
+  boot.kernelModules = [ "uinput" "snd-aloop" ];
 
   # Boot (UEFI)
   boot.loader.systemd-boot.enable = true;

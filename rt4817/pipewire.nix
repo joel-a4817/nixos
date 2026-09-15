@@ -644,8 +644,8 @@ in
                   name = "mixL";
                   
                   control = {
-                    "Gain 1" = 0.12587900734012808;
-                    "Gain 2" = 0.12587900734012808;
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
                   };
 
                 }
@@ -656,8 +656,8 @@ in
                   name = "mixR";
 
                   control = {
-                    "Gain 1" = 0.12587900734012808;
-                    "Gain 2" = 0.12587900734012808;
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
                   };
                 }
 
@@ -719,12 +719,14 @@ in
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
+              "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
+              "stream.dont-remix" = true;
             };
           };
         }
@@ -789,8 +791,8 @@ in
                   name = "mixL";
 
                   control = {
-                    "Gain 1" = 0.14486239544376789;
-                    "Gain 2" = 0.14486239544376789;
+                    "Gain 1" = 0.07673614893618190;
+                    "Gain 2" = 0.07673614893618190;
                   };
                 }
 
@@ -800,8 +802,8 @@ in
                   name = "mixR";
 
                   control = {
-                    "Gain 1" = 0.14486459154993076;
-                    "Gain 2" = 0.14486459154993076;
+                    "Gain 1" = 0.07673614893618190;
+                    "Gain 2" = 0.07673614893618190;
                   };
                 }
 
@@ -863,12 +865,14 @@ in
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
+              "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
+              "stream.dont-remix" = true;
             };
           };
         }
