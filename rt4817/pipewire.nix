@@ -29,7 +29,7 @@ in
         ];
       };
     };
-    extraConfig.pipewire."89-earpods-fir" = {
+    extraConfig.pipewire."00-earpods-fir" = {
       "context.modules" = [
         {
           name = "libpipewire-module-filter-chain";
@@ -89,7 +89,7 @@ in
         }
       ];
     };
-    extraConfig.pipewire."90-cloud3-fir" = {
+    extraConfig.pipewire."01-cloud3-fir" = {
       "context.modules" = [
         {
           name = "libpipewire-module-filter-chain";
@@ -147,7 +147,7 @@ in
         }
       ];
     };
-    extraConfig.pipewire."91-bs2b" = {
+    extraConfig.pipewire."02-bs2b" = {
       "context.modules" = [
         {
           name = "libpipewire-module-filter-chain";
@@ -190,7 +190,7 @@ in
         }
       ];
     };
-    extraConfig.pipewire."92-earpods-fir-bs2b" = {
+    extraConfig.pipewire."03-earpods-fir-bs2b" = {
       "context.modules" = [
         {
           name = "libpipewire-module-filter-chain";
@@ -274,7 +274,7 @@ in
         }
       ];
     };
-    extraConfig.pipewire."93-cloud3-fir-bs2b" = {
+    extraConfig.pipewire."04-cloud3-fir-bs2b" = {
       "context.modules" = [
         {
           name = "libpipewire-module-filter-chain";
@@ -358,7 +358,7 @@ in
         }
       ];
     };
-    extraConfig.pipewire."94-sofa" = {
+    extraConfig.pipewire."05-sofa" = {
       "context.modules" = [
         {
           name = "libpipewire-module-filter-chain";
@@ -411,7 +411,7 @@ in
         }
       ];
     };
-    extraConfig.pipewire."95-earpods-fir-sofa" = {
+    extraConfig.pipewire."06-earpods-fir-sofa" = {
       "context.modules" = [
         {
           name = "libpipewire-module-filter-chain";
@@ -498,7 +498,7 @@ in
         }
       ];
     };
-    extraConfig.pipewire."96-cloud3-fir-sofa" = {
+    extraConfig.pipewire."07-cloud3-fir-sofa" = {
       "context.modules" = [
         {
           name = "libpipewire-module-filter-chain";
@@ -585,13 +585,13 @@ in
         }
       ];
     };
-    extraConfig.pipewire."97-earpods-ash" = {
+    extraConfig.pipewire."08-earpods-ash-96khz" = {
       "context.modules" = [
         {
           name = "libpipewire-module-filter-chain";
 
           args = {
-            "node.description" = "EarPods ASH";
+            "node.description" = "EarPods ASH 96khz";
 
             "filter.graph" = {
               nodes = [
@@ -603,7 +603,7 @@ in
                   label = "convolver";
                   name = "LL";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/96khz/BRIR_True_Stereo.wav";
                     channel = 0;
                   };
                 }
@@ -613,7 +613,7 @@ in
                   label = "convolver";
                   name = "LR";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/96khz/BRIR_True_Stereo.wav";
                     channel = 1;
                   };
                 }
@@ -623,7 +623,7 @@ in
                   label = "convolver";
                   name = "RL";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/96khz/BRIR_True_Stereo.wav";
                     channel = 2;
                   };
                 }
@@ -633,7 +633,7 @@ in
                   label = "convolver";
                   name = "RR";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/96khz/BRIR_True_Stereo.wav";
                     channel = 3;
                   };
                 }
@@ -667,7 +667,7 @@ in
                   name = "hpcfL";
 
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/Apple_EarPods_Average.wav";
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/96khz/Apple_EarPods_Average.wav";
                     channel = 0;
                   };
                 }
@@ -678,7 +678,7 @@ in
                   name = "hpcfR";
 
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/Apple_EarPods_Average.wav";
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/96khz/Apple_EarPods_Average.wav";
                     channel = 1;
                   };
                 }
@@ -713,8 +713,8 @@ in
             };
 
             "capture.props" = {
-              "node.name" = "earpods_ash";
-              "node.description" = "EarPods ASH";
+              "node.name" = "earpods_ash_96khz";
+              "node.description" = "EarPods ASH 96khz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
@@ -732,13 +732,13 @@ in
         }
       ];
     };
-    extraConfig.pipewire."98-cloud3-ash" = {
+    extraConfig.pipewire."09-cloud3-ash-96khz" = {
       "context.modules" = [
         {
           name = "libpipewire-module-filter-chain";
 
           args = {
-            "node.description" = "Cloud III ASH";
+            "node.description" = "Cloud III ASH 96khz";
 
             "filter.graph" = {
               nodes = [
@@ -750,7 +750,7 @@ in
                   label = "convolver";
                   name = "LL";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/96khz/BRIR_True_Stereo.wav";
                     channel = 0;
                   };
                 }
@@ -760,7 +760,7 @@ in
                   label = "convolver";
                   name = "LR";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/96khz/BRIR_True_Stereo.wav";
                     channel = 1;
                   };
                 }
@@ -770,7 +770,7 @@ in
                   label = "convolver";
                   name = "RL";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/96khz/BRIR_True_Stereo.wav";
                     channel = 2;
                   };
                 }
@@ -780,7 +780,7 @@ in
                   label = "convolver";
                   name = "RR";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/96khz/BRIR_True_Stereo.wav";
                     channel = 3;
                   };
                 }
@@ -813,7 +813,7 @@ in
                   name = "hpcfL";
 
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/HyperX_Cloud_III_Average.wav";
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/96khz/HyperX_Cloud_III_Average.wav";
                     channel = 0;
                   };
                 }
@@ -824,7 +824,7 @@ in
                   name = "hpcfR";
 
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/HyperX_Cloud_III_Average.wav";
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/96khz/HyperX_Cloud_III_Average.wav";
                     channel = 1;
                   };
                 }
@@ -859,8 +859,8 @@ in
             };
 
             "capture.props" = {
-              "node.name" = "cloud3_ash";
-              "node.description" = "Cloud III ASH";
+              "node.name" = "cloud3_ash_96khz";
+              "node.description" = "Cloud III ASH 96khz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
@@ -872,6 +872,299 @@ in
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+          };
+        }
+      ];
+    };
+    extraConfig.pipewire."10-earpods-ash-48khz" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "EarPods ASH 48khz";
+
+            "filter.graph" = {
+              nodes = [
+                { type = "builtin"; label = "copy"; name = "splitL"; }
+                { type = "builtin"; label = "copy"; name = "splitR"; }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/48khz/BRIR_True_Stereo.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/48khz/BRIR_True_Stereo.wav";
+                    channel = 1;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/48khz/BRIR_True_Stereo.wav";
+                    channel = 2;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/48khz/BRIR_True_Stereo.wav";
+                    channel = 3;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixL";
+                  
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixR";
+
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfL";
+
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/48khz/Apple_EarPods_Average.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfR";
+
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/48khz/Apple_EarPods_Average.wav";
+                    channel = 1;
+                  };
+                }
+              ];
+
+              links = [
+                { output = "splitL:Out"; input = "LL:In"; }
+                { output = "splitL:Out"; input = "LR:In"; }
+
+                { output = "splitR:Out"; input = "RL:In"; }
+                { output = "splitR:Out"; input = "RR:In"; }
+
+                { output = "LL:Out"; input = "mixL:In 1"; }
+                { output = "RL:Out"; input = "mixL:In 2"; }
+
+                { output = "LR:Out"; input = "mixR:In 1"; }
+                { output = "RR:Out"; input = "mixR:In 2"; }
+
+                { output = "mixL:Out"; input = "hpcfL:In"; }
+                { output = "mixR:Out"; input = "hpcfR:In"; }
+              ];
+
+              inputs = [
+                "splitL:In"
+                "splitR:In"
+              ];
+
+              outputs = [
+                "hpcfL:Out"
+                "hpcfR:Out"
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "earpods_ash_48khz";
+              "node.description" = "EarPods ASH 48khz";
+              "media.class" = "Audio/Sink";
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 48000;
+              "stream.dont-remix" = true;
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 48000;
+              "stream.dont-remix" = true;
+            };
+          };
+        }
+      ];
+    };
+    extraConfig.pipewire."11-cloud3-ash-48khz" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "Cloud III ASH 48khz";
+
+            "filter.graph" = {
+              nodes = [
+                { type = "builtin"; label = "copy"; name = "splitL"; }
+                { type = "builtin"; label = "copy"; name = "splitR"; }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/48khz/BRIR_True_Stereo.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/48khz/BRIR_True_Stereo.wav";
+                    channel = 1;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/48khz/BRIR_True_Stereo.wav";
+                    channel = 2;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/48khz/BRIR_True_Stereo.wav";
+                    channel = 3;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixL";
+
+                  control = {
+                    "Gain 1" = 0.07673614893618190;
+                    "Gain 2" = 0.07673614893618190;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixR";
+
+                  control = {
+                    "Gain 1" = 0.07673614893618190;
+                    "Gain 2" = 0.07673614893618190;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfL";
+
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/48khz/HyperX_Cloud_III_Average.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfR";
+
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/48khz/HyperX_Cloud_III_Average.wav";
+                    channel = 1;
+                  };
+                }
+              ];
+
+              links = [
+                { output = "splitL:Out"; input = "LL:In"; }
+                { output = "splitL:Out"; input = "LR:In"; }
+
+                { output = "splitR:Out"; input = "RL:In"; }
+                { output = "splitR:Out"; input = "RR:In"; }
+
+                { output = "LL:Out"; input = "mixL:In 1"; }
+                { output = "RL:Out"; input = "mixL:In 2"; }
+
+                { output = "LR:Out"; input = "mixR:In 1"; }
+                { output = "RR:Out"; input = "mixR:In 2"; }
+
+                { output = "mixL:Out"; input = "hpcfL:In"; }
+                { output = "mixR:Out"; input = "hpcfR:In"; }
+              ];
+
+              inputs = [
+                "splitL:In"
+                "splitR:In"
+              ];
+
+              outputs = [
+                "hpcfL:Out"
+                "hpcfR:Out"
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "cloud3_ash_48khz";
+              "node.description" = "Cloud III ASH 48khz";
+              "media.class" = "Audio/Sink";
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 48000;
+              "stream.dont-remix" = true;
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 48000;
               "stream.dont-remix" = true;
             };
           };
