@@ -13,6 +13,27 @@
     ];
   };
 
+  services.shairport-sync = {
+    enable = true;
+    user = "joel";
+    group = "users";
+    arguments = "-v";
+    openFirewall = true;
+    settings = {
+      general = {
+        name = "Joel Laptop AirPlay";
+        service_type = "airplay2";
+        output_backend = "alsa";
+        volume_range_db = 30.0;
+        default_airplay_volume = -6.0;
+        disable_standby_mode = "always";
+      };
+      diagnostics = {
+        log_verbosity = 2;
+      };
+    };
+  };
+
   security.rtkit.enable = true;
   systemd.timers.audio-fixes = {
     wantedBy = [ "timers.target" ];
@@ -78,9 +99,9 @@
   };
 
   # solaar
-  programs.solaar = {
+  services.solaar = {
     enable = true;
-    userService.window = "show";
+    window = "show";
   };
 
   networking.networkmanager = {

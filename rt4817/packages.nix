@@ -59,6 +59,6 @@
     trash-cli lazygit fd ripgrep nushell ripdrag #required by yazi plugins
     libimobiledevice
     opencv
-    alsa-utils bs2b-lv2 camilladsp shairport-sync-airplay2 nqptp
+    alsa-utils bs2b-lv2 camilladsp nqptp
   ];
 }
