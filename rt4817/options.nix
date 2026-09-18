@@ -13,27 +13,6 @@
     ];
   };
 
-  services.shairport-sync = {
-    enable = true;
-    user = "joel";
-    group = "users";
-    arguments = "-v";
-    openFirewall = true;
-    settings = {
-      general = {
-        name = "Joel Laptop AirPlay";
-        service_type = "airplay2";
-        output_backend = "alsa";
-        volume_range_db = 30.0;
-        default_airplay_volume = -6.0;
-        disable_standby_mode = "always";
-      };
-      diagnostics = {
-        log_verbosity = 2;
-      };
-    };
-  };
-
   security.rtkit.enable = true;
   systemd.timers.audio-fixes = {
     wantedBy = [ "timers.target" ];
@@ -44,7 +23,7 @@
   };
 
   systemd.services.audio-fixes = {
-    description = "Normalize ALSA capture gains";
+    description = "Neutralize ALSA capture gains";
     wantedBy = [ "multi-user.target" ];
     after = [ "sound.target" ];
     serviceConfig.Type = "oneshot";
@@ -99,9 +78,9 @@
   };
 
   # solaar
-  services.solaar = {
+  programs.solaar = {
     enable = true;
-    window = "show";
+    #userService.window = show; -> doesn't work right now, in sway
   };
 
   networking.networkmanager = {
@@ -109,7 +88,7 @@
 
     ensureProfiles = {
       environmentFiles = [
-        "/home/joel/Documents/prefs/audio/airplay/airplay-hotspot.env"
+        "/home/joel/Documents/prefs/audio/airplay-hotspot.env"
       ];
 
       profiles."airplay-direct" = {
@@ -151,15 +130,30 @@
 
   networking.firewall = {
     enable = true;
-    trustedInterfaces = [ "tailscale0" ];
-    allowedTCPPorts = [ 53 7000 8384 22000 ];
+
+    allowedTCPPorts = [
+      3689
+      5000
+      7000
+      8384
+      22000
+    ];
+
     allowedTCPPortRanges = [
       {
         from = 32768;
         to = 60999;
       }
     ];
-    allowedUDPPorts = [ 53 67 68 319 320 5353 22000 21027 ];
+
+    allowedUDPPorts = [
+      319
+      320
+      5353
+      22000
+      21027
+    ];
+
     allowedUDPPortRanges = [
       {
         from = 6000;

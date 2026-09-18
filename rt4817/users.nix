@@ -7,7 +7,9 @@
 
   # Users
   users.users.joel = {
+    home = lib.mkForce "/home/joel";
     isNormalUser = true;
+    isSystemUser = lib.mkForce false;
     extraGroups = [ "wheel" "seat" "networkmanager" "audio" "video" "input" "cdrom" "libvirtd" "kvm" ];
   };
 
@@ -19,19 +21,8 @@ security.sudo.extraRules = [
       { command = "/run/current-system/sw/bin/pkill"; options = [ "NOPASSWD" ]; }
       { command = "/run/current-system/sw/bin/setsid"; options = [ "NOPASSWD" ]; }
       { command = "/home/joel/.config/sway/scripts/rotate-touchpad.py"; options = [ "NOPASSWD" ]; }
-
-      {
-        command = "/run/current-system/sw/bin/sh -c *nqptp*";
-        options = [ "NOPASSWD" ];
-      }
-      {
-        command = "/run/current-system/sw/bin/pkill -TERM -x nqptp";
-        options = [ "NOPASSWD" ];
-      }
-      {
-        command = "/run/current-system/sw/bin/pkill -KILL -x nqptp";
-        options = [ "NOPASSWD" ];
-      }
+      { command = "/run/current-system/sw/bin/systemctl restart nqptp.service"; options = [ "NOPASSWD" ]; }
+      { command = "/run/current-system/sw/bin/systemctl restart shairport-sync.service"; options = [ "NOPASSWD" ]; }
     ];
   }
 ];

@@ -10,14 +10,9 @@
     };
 
     yazi.url = "github:sxyazi/yazi";
-
-    solaar = {
-      url = "github:Svenum/Solaar-Flake/main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = { self, nixpkgs, home-manager, solaar, yazi, glide, ... }:
+  outputs = { self, nixpkgs, home-manager, yazi, glide, ... }:
   let
     system = "x86_64-linux";
 
@@ -29,7 +24,6 @@
     nixosConfigurations.rt4817 = nixpkgs.lib.nixosSystem {
       inherit system;
       modules = [
-        solaar.nixosModules.default
 
         ({ ... }: { nixpkgs.overlays = overlays; })
 
