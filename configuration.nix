@@ -3,7 +3,7 @@
 {
   imports = [
     /etc/nixos/hardware-configuration.nix
-    ./rt4817/airplay.nix
+    ./rt4817/audio-stream.nix
     ./rt4817/hardware.nix
     ./rt4817/options.nix
     ./rt4817/packages.nix

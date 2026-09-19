@@ -1,10 +1,6 @@
 { config, lib, pkgs, ... }:
-let
-  ladspa-bs2b = pkgs.callPackage ./ladspa-bs2b.nix {};
-  sofaFile = "${pkgs.libmysofa}/share/libmysofa/MIT_KEMAR_normal_pinna.sofa";
-in
 {
-# Audio (PipeWire + WirePlumber)
+  # Audio (PipeWire + WirePlumber)
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -12,586 +8,27 @@ in
     pulse.enable = true;
     jack.enable = true;
     wireplumber.enable = true;
-    extraLadspaPackages = [
-      ladspa-bs2b
-    ];
+
     extraConfig.pipewire."10-clock" = {
       "context.properties" = {
-        "default.clock.rate" = 96000; #max for ASH sinks
+        "default.clock.rate" = 96000;
         "default.clock.allowed-rates" = [
           32000
           44100
           48000
           88200
-          96000
-          #176400 -> ASH sinks don't need
-          #192000
+          96000 #hyperx dac supports up to 96khz
         ];
       };
     };
-    extraConfig.pipewire."00-earpods-fir" = {
+
+    extraConfig.pipewire."00-earpods-abies-grandis-forest-wheldrake-wood-96khz" = {
       "context.modules" = [
         {
           name = "libpipewire-module-filter-chain";
 
           args = {
-            "node.description" = "EarPods FIR";
-
-          "filter.graph" = {
-            nodes = [
-              {
-                type = "builtin";
-                label = "convolver";
-                name = "left";
-
-                config = {
-                  filename = "/home/joel/Documents/prefs/audio/output1/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
-                  channel = 0;
-                };
-              }
-
-              {
-                type = "builtin";
-                label = "convolver";
-                name = "right";
-
-                config = {
-                  filename = "/home/joel/Documents/prefs/audio/output1/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
-                  channel = 1;
-                };
-              }
-            ];
-
-            inputs = [
-              "left:In"
-              "right:In"
-            ];
-
-            outputs = [
-              "left:Out"
-              "right:Out"
-            ];
-          };
-
-            "capture.props" = {
-              "node.name" = "earpods_fir";
-              "node.description" = "EarPods FIR";
-              "media.class" = "Audio/Sink";
-              "audio.channels" = 2;
-              "audio.position" = [ "FL" "FR" ];
-            };
-
-            "playback.props" = {
-              "audio.channels" = 2;
-              "audio.position" = [ "FL" "FR" ];
-            };
-          };
-        }
-      ];
-    };
-    extraConfig.pipewire."01-cloud3-fir" = {
-      "context.modules" = [
-        {
-          name = "libpipewire-module-filter-chain";
-
-          args = {
-            "node.description" = "Cloud III FIR";
-          "filter.graph" = {
-            nodes = [
-              {
-                type = "builtin";
-                label = "convolver";
-                name = "left";
-
-                config = {
-                  filename = "/home/joel/Documents/prefs/audio/output1/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
-                  channel = 0;
-                };
-              }
-
-              {
-                type = "builtin";
-                label = "convolver";
-                name = "right";
-
-                config = {
-                  filename = "/home/joel/Documents/prefs/audio/output1/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
-                  channel = 1;
-                };
-              }
-            ];
-
-            inputs = [
-              "left:In"
-              "right:In"
-            ];
-
-            outputs = [
-              "left:Out"
-              "right:Out"
-            ];
-          };
-            "capture.props" = {
-              "node.name" = "cloud3_fir";
-              "node.description" = "Cloud III FIR";
-              "media.class" = "Audio/Sink";
-              "audio.channels" = 2;
-              "audio.position" = [ "FL" "FR" ];
-            };
-
-            "playback.props" = {
-              "audio.channels" = 2;
-              "audio.position" = [ "FL" "FR" ];
-            };
-          };
-        }
-      ];
-    };
-    extraConfig.pipewire."02-bs2b" = {
-      "context.modules" = [
-        {
-          name = "libpipewire-module-filter-chain";
-
-          args = {
-            "node.description" = "BS2B";
-
-            "filter.graph" = {
-              nodes = [
-                {
-                  type = "ladspa";
-                  plugin = "bs2b";
-                  label = "bs2b";
-                  name = "crossfeed";
-
-                  control = {
-                    fcut = 700.0;
-                    feed = 4.5;
-                  };
-                }
-              ];
-
-              inputs = [
-                "crossfeed:Input left"
-                "crossfeed:Input right"
-              ];
-
-              outputs = [
-                "crossfeed:Output left"
-                "crossfeed:Output right"
-              ];
-            };
-
-            "capture.props" = {
-              "node.name" = "bs2b";
-              "node.description" = "BS2B";
-              "media.class" = "Audio/Sink";
-            };
-          };
-        }
-      ];
-    };
-    extraConfig.pipewire."03-earpods-fir-bs2b" = {
-      "context.modules" = [
-        {
-          name = "libpipewire-module-filter-chain";
-
-          args = {
-            "node.description" = "EarPods FIR + BS2B";
-
-            "filter.graph" = {
-              nodes = [
-                {
-                  type = "builtin";
-                  label = "convolver";
-                  name = "left";
-
-                  config = {
-                    filename = "/home/joel/Documents/prefs/audio/output1/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
-                    channel = 0;
-                  };
-                }
-
-                {
-                  type = "builtin";
-                  label = "convolver";
-                  name = "right";
-
-                  config = {
-                    filename = "/home/joel/Documents/prefs/audio/output1/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
-                    channel = 1;
-                  };
-                }
-
-                {
-                  type = "ladspa";
-                  plugin = "bs2b";
-                  label = "bs2b";
-                  name = "crossfeed";
-
-                  control = {
-                    fcut = 700.0;
-                    feed = 4.5;
-                  };
-                }
-              ];
-
-              inputs = [
-                "left:In"
-                "right:In"
-              ];
-
-              outputs = [
-                "crossfeed:Output left"
-                "crossfeed:Output right"
-              ];
-
-              links = [
-                {
-                  output = "left:Out";
-                  input = "crossfeed:Input left";
-                }
-
-                {
-                  output = "right:Out";
-                  input = "crossfeed:Input right";
-                }
-              ];
-            };
-
-            "capture.props" = {
-              "node.name" = "earpods_fir_bs2b";
-              "node.description" = "EarPods FIR + BS2B";
-              "media.class" = "Audio/Sink";
-              "audio.channels" = 2;
-              "audio.position" = [ "FL" "FR" ];
-            };
-
-            "playback.props" = {
-              "audio.channels" = 2;
-              "audio.position" = [ "FL" "FR" ];
-            };
-          };
-        }
-      ];
-    };
-    extraConfig.pipewire."04-cloud3-fir-bs2b" = {
-      "context.modules" = [
-        {
-          name = "libpipewire-module-filter-chain";
-
-          args = {
-            "node.description" = "Cloud III FIR + BS2B";
-
-            "filter.graph" = {
-              nodes = [
-                {
-                  type = "builtin";
-                  label = "convolver";
-                  name = "left";
-
-                  config = {
-                    filename = "/home/joel/Documents/prefs/audio/output1/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
-                    channel = 0;
-                  };
-                }
-
-                {
-                  type = "builtin";
-                  label = "convolver";
-                  name = "right";
-
-                  config = {
-                    filename = "/home/joel/Documents/prefs/audio/output1/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
-                    channel = 1;
-                  };
-                }
-
-                {
-                  type = "ladspa";
-                  plugin = "bs2b";
-                  label = "bs2b";
-                  name = "crossfeed";
-
-                  control = {
-                    fcut = 700.0;
-                    feed = 4.5;
-                  };
-                }
-              ];
-
-              inputs = [
-                "left:In"
-                "right:In"
-              ];
-
-              outputs = [
-                "crossfeed:Output left"
-                "crossfeed:Output right"
-              ];
-
-              links = [
-                {
-                  output = "left:Out";
-                  input = "crossfeed:Input left";
-                }
-
-                {
-                  output = "right:Out";
-                  input = "crossfeed:Input right";
-                }
-              ];
-            };
-
-            "capture.props" = {
-              "node.name" = "cloud3_fir_bs2b";
-              "node.description" = "Cloud III FIR + BS2B";
-              "media.class" = "Audio/Sink";
-              "audio.channels" = 2;
-              "audio.position" = [ "FL" "FR" ];
-            };
-
-            "playback.props" = {
-              "audio.channels" = 2;
-              "audio.position" = [ "FL" "FR" ];
-            };
-          };
-        }
-      ];
-    };
-    extraConfig.pipewire."05-sofa" = {
-      "context.modules" = [
-        {
-          name = "libpipewire-module-filter-chain";
-
-          args = {
-            "node.description" = "SOFA";
-
-            "filter.graph" = {
-              nodes = [
-                {
-                  type = "sofa";
-                  name = "spatial";
-
-                  label = "spatializer";
-
-                  config = {
-                    filename = sofaFile;
-                    normalize = true;
-                  };
-
-                  control = {
-                    "Azimuth" = 30.0;
-                    "Elevation" = 0.0;
-                    "Radius" = 1.0;
-                  };
-                }
-              ];
-
-              inputs = [
-                "spatial:In"
-              ];
-
-              outputs = [
-                "spatial:Out L"
-                "spatial:Out R"
-              ];
-            };
-
-            "capture.props" = {
-              "node.name" = "sofa";
-              "node.description" = "SOFA";
-              "media.class" = "Audio/Sink";
-            };
-
-            "playback.props" = {
-              "audio.channels" = 2;
-              "audio.position" = [ "FL" "FR" ];
-            };
-          };
-        }
-      ];
-    };
-    extraConfig.pipewire."06-earpods-fir-sofa" = {
-      "context.modules" = [
-        {
-          name = "libpipewire-module-filter-chain";
-
-          args = {
-            "node.description" = "EarPods FIR + SOFA";
-
-            "filter.graph" = {
-              nodes = [
-                {
-                  type = "sofa";
-                  name = "spatial";
-
-                  label = "spatializer";
-
-                  config = {
-                    filename = sofaFile;
-                    normalize = true;
-                  };
-
-                  control = {
-                    "Azimuth" = 30.0;
-                    "Elevation" = 0.0;
-                    "Radius" = 1.0;
-                  };
-                }
-
-                {
-                  type = "builtin";
-                  label = "convolver";
-                  name = "left";
-
-                  config = {
-                    filename = "/home/joel/Documents/prefs/audio/output1/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
-                    channel = 0;
-                  };
-                }
-
-                {
-                  type = "builtin";
-                  label = "convolver";
-                  name = "right";
-
-                  config = {
-                    filename = "/home/joel/Documents/prefs/audio/output1/earpods_stereo/earpods_stereo minimum phase 192000Hz.wav";
-                    channel = 1;
-                  };
-                }
-              ];
-
-              inputs = [
-                "spatial:In"
-              ];
-
-              outputs = [
-                "left:Out"
-                "right:Out"
-              ];
-
-              links = [
-                {
-                  output = "spatial:Out L";
-                  input = "left:In";
-                }
-
-                {
-                  output = "spatial:Out R";
-                  input = "right:In";
-                }
-              ];
-            };
-
-            "capture.props" = {
-              "node.name" = "earpods_fir_sofa";
-              "node.description" = "EarPods FIR + SOFA";
-              "media.class" = "Audio/Sink";
-            };
-
-            "playback.props" = {
-              "audio.channels" = 2;
-              "audio.position" = [ "FL" "FR" ];
-            };
-          };
-        }
-      ];
-    };
-    extraConfig.pipewire."07-cloud3-fir-sofa" = {
-      "context.modules" = [
-        {
-          name = "libpipewire-module-filter-chain";
-
-          args = {
-            "node.description" = "Cloud III FIR + SOFA";
-
-            "filter.graph" = {
-              nodes = [
-                {
-                  type = "sofa";
-                  name = "spatial";
-
-                  label = "spatializer";
-
-                  config = {
-                    filename = sofaFile;
-                    normalize = true;
-                  };
-
-                  control = {
-                    "Azimuth" = 30.0;
-                    "Elevation" = 0.0;
-                    "Radius" = 1.0;
-                  };
-                }
-
-                {
-                  type = "builtin";
-                  label = "convolver";
-                  name = "left";
-
-                  config = {
-                    filename = "/home/joel/Documents/prefs/audio/output1/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
-                    channel = 0;
-                  };
-                }
-
-                {
-                  type = "builtin";
-                  label = "convolver";
-                  name = "right";
-
-                  config = {
-                    filename = "/home/joel/Documents/prefs/audio/output1/cloud3_stereo/cloud3_stereo minimum phase 192000Hz.wav";
-                    channel = 1;
-                  };
-                }
-              ];
-
-              inputs = [
-                "spatial:In"
-              ];
-
-              outputs = [
-                "left:Out"
-                "right:Out"
-              ];
-
-              links = [
-                {
-                  output = "spatial:Out L";
-                  input = "left:In";
-                }
-
-                {
-                  output = "spatial:Out R";
-                  input = "right:In";
-                }
-              ];
-            };
-
-            "capture.props" = {
-              "node.name" = "cloud3_fir_sofa";
-              "node.description" = "Cloud III FIR + SOFA";
-              "media.class" = "Audio/Sink";
-            };
-
-            "playback.props" = {
-              "audio.channels" = 2;
-              "audio.position" = [ "FL" "FR" ];
-            };
-          };
-        }
-      ];
-    };
-    extraConfig.pipewire."08-earpods-ash-96khz" = {
-      "context.modules" = [
-        {
-          name = "libpipewire-module-filter-chain";
-
-          args = {
-            "node.description" = "EarPods ASH 96khz";
+            "node.description" = "earpods - Abies Grandis Forest, Wheldrake Wood - 96kHz";
 
             "filter.graph" = {
               nodes = [
@@ -603,7 +40,7 @@ in
                   label = "convolver";
                   name = "LL";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/96khz/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Abies Grandis Forest, Wheldrake Wood/BRIR_True_Stereo.wav";
                     channel = 0;
                   };
                 }
@@ -613,7 +50,7 @@ in
                   label = "convolver";
                   name = "LR";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/96khz/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Abies Grandis Forest, Wheldrake Wood/BRIR_True_Stereo.wav";
                     channel = 1;
                   };
                 }
@@ -623,7 +60,7 @@ in
                   label = "convolver";
                   name = "RL";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/96khz/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Abies Grandis Forest, Wheldrake Wood/BRIR_True_Stereo.wav";
                     channel = 2;
                   };
                 }
@@ -633,7 +70,7 @@ in
                   label = "convolver";
                   name = "RR";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/96khz/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Abies Grandis Forest, Wheldrake Wood/BRIR_True_Stereo.wav";
                     channel = 3;
                   };
                 }
@@ -642,19 +79,16 @@ in
                   type = "builtin";
                   label = "mixer";
                   name = "mixL";
-                  
                   control = {
                     "Gain 1" = 0.05248074602497726;
                     "Gain 2" = 0.05248074602497726;
                   };
-
                 }
 
                 {
                   type = "builtin";
                   label = "mixer";
                   name = "mixR";
-
                   control = {
                     "Gain 1" = 0.05248074602497726;
                     "Gain 2" = 0.05248074602497726;
@@ -665,9 +99,8 @@ in
                   type = "builtin";
                   label = "convolver";
                   name = "hpcfL";
-
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/96khz/Apple_EarPods_Average.wav";
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
                     channel = 0;
                   };
                 }
@@ -676,9 +109,8 @@ in
                   type = "builtin";
                   label = "convolver";
                   name = "hpcfR";
-
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/96khz/Apple_EarPods_Average.wav";
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
                     channel = 1;
                   };
                 }
@@ -687,16 +119,12 @@ in
               links = [
                 { output = "splitL:Out"; input = "LL:In"; }
                 { output = "splitL:Out"; input = "LR:In"; }
-
                 { output = "splitR:Out"; input = "RL:In"; }
                 { output = "splitR:Out"; input = "RR:In"; }
-
                 { output = "LL:Out"; input = "mixL:In 1"; }
                 { output = "RL:Out"; input = "mixL:In 2"; }
-
                 { output = "LR:Out"; input = "mixR:In 1"; }
                 { output = "RR:Out"; input = "mixR:In 2"; }
-
                 { output = "mixL:Out"; input = "hpcfL:In"; }
                 { output = "mixR:Out"; input = "hpcfR:In"; }
               ];
@@ -713,8 +141,8 @@ in
             };
 
             "capture.props" = {
-              "node.name" = "earpods_ash_96khz";
-              "node.description" = "EarPods ASH 96khz";
+              "node.name" = "earpods_abies-grandis-forest-wheldrake-wood_96khz";
+              "node.description" = "earpods - Abies Grandis Forest, Wheldrake Wood - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
@@ -732,13 +160,14 @@ in
         }
       ];
     };
-    extraConfig.pipewire."09-cloud3-ash-96khz" = {
+
+    extraConfig.pipewire."01-earpods-anechoic-ie-96khz" = {
       "context.modules" = [
         {
           name = "libpipewire-module-filter-chain";
 
           args = {
-            "node.description" = "Cloud III ASH 96khz";
+            "node.description" = "earpods - Anechoic (IE) - 96kHz";
 
             "filter.graph" = {
               nodes = [
@@ -750,7 +179,7 @@ in
                   label = "convolver";
                   name = "LL";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/96khz/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Anechoic (IE)/BRIR_True_Stereo.wav";
                     channel = 0;
                   };
                 }
@@ -760,7 +189,7 @@ in
                   label = "convolver";
                   name = "LR";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/96khz/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Anechoic (IE)/BRIR_True_Stereo.wav";
                     channel = 1;
                   };
                 }
@@ -770,7 +199,7 @@ in
                   label = "convolver";
                   name = "RL";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/96khz/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Anechoic (IE)/BRIR_True_Stereo.wav";
                     channel = 2;
                   };
                 }
@@ -780,7 +209,7 @@ in
                   label = "convolver";
                   name = "RR";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/96khz/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Anechoic (IE)/BRIR_True_Stereo.wav";
                     channel = 3;
                   };
                 }
@@ -789,10 +218,9 @@ in
                   type = "builtin";
                   label = "mixer";
                   name = "mixL";
-
                   control = {
-                    "Gain 1" = 0.07673614893618190;
-                    "Gain 2" = 0.07673614893618190;
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
                   };
                 }
 
@@ -800,10 +228,9 @@ in
                   type = "builtin";
                   label = "mixer";
                   name = "mixR";
-
                   control = {
-                    "Gain 1" = 0.07673614893618190;
-                    "Gain 2" = 0.07673614893618190;
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
                   };
                 }
 
@@ -811,9 +238,8 @@ in
                   type = "builtin";
                   label = "convolver";
                   name = "hpcfL";
-
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/96khz/HyperX_Cloud_III_Average.wav";
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
                     channel = 0;
                   };
                 }
@@ -822,9 +248,8 @@ in
                   type = "builtin";
                   label = "convolver";
                   name = "hpcfR";
-
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/96khz/HyperX_Cloud_III_Average.wav";
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
                     channel = 1;
                   };
                 }
@@ -833,16 +258,12 @@ in
               links = [
                 { output = "splitL:Out"; input = "LL:In"; }
                 { output = "splitL:Out"; input = "LR:In"; }
-
                 { output = "splitR:Out"; input = "RL:In"; }
                 { output = "splitR:Out"; input = "RR:In"; }
-
                 { output = "LL:Out"; input = "mixL:In 1"; }
                 { output = "RL:Out"; input = "mixL:In 2"; }
-
                 { output = "LR:Out"; input = "mixR:In 1"; }
                 { output = "RR:Out"; input = "mixR:In 2"; }
-
                 { output = "mixL:Out"; input = "hpcfL:In"; }
                 { output = "mixR:Out"; input = "hpcfR:In"; }
               ];
@@ -859,8 +280,8 @@ in
             };
 
             "capture.props" = {
-              "node.name" = "cloud3_ash_96khz";
-              "node.description" = "Cloud III ASH 96khz";
+              "node.name" = "earpods_anechoic-ie_96khz";
+              "node.description" = "earpods - Anechoic (IE) - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
@@ -878,13 +299,14 @@ in
         }
       ];
     };
-    extraConfig.pipewire."10-earpods-ash-48khz" = {
+
+    extraConfig.pipewire."02-earpods-athenee-theatre-main-hall-96khz" = {
       "context.modules" = [
         {
           name = "libpipewire-module-filter-chain";
 
           args = {
-            "node.description" = "EarPods ASH 48khz";
+            "node.description" = "earpods - Athenee Theatre - Main Hall, v2 - 96kHz";
 
             "filter.graph" = {
               nodes = [
@@ -896,7 +318,7 @@ in
                   label = "convolver";
                   name = "LL";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/48khz/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Athenee Theatre - Main Hall, v2/BRIR_True_Stereo.wav";
                     channel = 0;
                   };
                 }
@@ -906,7 +328,7 @@ in
                   label = "convolver";
                   name = "LR";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/48khz/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Athenee Theatre - Main Hall, v2/BRIR_True_Stereo.wav";
                     channel = 1;
                   };
                 }
@@ -916,7 +338,7 @@ in
                   label = "convolver";
                   name = "RL";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/48khz/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Athenee Theatre - Main Hall, v2/BRIR_True_Stereo.wav";
                     channel = 2;
                   };
                 }
@@ -926,7 +348,7 @@ in
                   label = "convolver";
                   name = "RR";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/48khz/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Athenee Theatre - Main Hall, v2/BRIR_True_Stereo.wav";
                     channel = 3;
                   };
                 }
@@ -935,19 +357,16 @@ in
                   type = "builtin";
                   label = "mixer";
                   name = "mixL";
-                  
                   control = {
                     "Gain 1" = 0.05248074602497726;
                     "Gain 2" = 0.05248074602497726;
                   };
-
                 }
 
                 {
                   type = "builtin";
                   label = "mixer";
                   name = "mixR";
-
                   control = {
                     "Gain 1" = 0.05248074602497726;
                     "Gain 2" = 0.05248074602497726;
@@ -958,9 +377,8 @@ in
                   type = "builtin";
                   label = "convolver";
                   name = "hpcfL";
-
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/48khz/Apple_EarPods_Average.wav";
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
                     channel = 0;
                   };
                 }
@@ -969,9 +387,8 @@ in
                   type = "builtin";
                   label = "convolver";
                   name = "hpcfR";
-
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset earpods/48khz/Apple_EarPods_Average.wav";
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
                     channel = 1;
                   };
                 }
@@ -980,16 +397,12 @@ in
               links = [
                 { output = "splitL:Out"; input = "LL:In"; }
                 { output = "splitL:Out"; input = "LR:In"; }
-
                 { output = "splitR:Out"; input = "RL:In"; }
                 { output = "splitR:Out"; input = "RR:In"; }
-
                 { output = "LL:Out"; input = "mixL:In 1"; }
                 { output = "RL:Out"; input = "mixL:In 2"; }
-
                 { output = "LR:Out"; input = "mixR:In 1"; }
                 { output = "RR:Out"; input = "mixR:In 2"; }
-
                 { output = "mixL:Out"; input = "hpcfL:In"; }
                 { output = "mixR:Out"; input = "hpcfR:In"; }
               ];
@@ -1006,32 +419,33 @@ in
             };
 
             "capture.props" = {
-              "node.name" = "earpods_ash_48khz";
-              "node.description" = "EarPods ASH 48khz";
+              "node.name" = "earpods_athenee-theatre-main-hall-v2_96khz";
+              "node.description" = "earpods - Athenee Theatre - Main Hall, v2 - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
-              "audio.rate" = 48000;
+              "audio.rate" = 96000;
               "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
-              "audio.rate" = 48000;
+              "audio.rate" = 96000;
               "stream.dont-remix" = true;
             };
           };
         }
       ];
     };
-    extraConfig.pipewire."11-cloud3-ash-48khz" = {
+
+    extraConfig.pipewire."03-earpods-detmold-konzerthaus-96khz" = {
       "context.modules" = [
         {
           name = "libpipewire-module-filter-chain";
 
           args = {
-            "node.description" = "Cloud III ASH 48khz";
+            "node.description" = "earpods - Detmold Konzerthaus (medium sized concert hall, ~600 seats). - 96kHz";
 
             "filter.graph" = {
               nodes = [
@@ -1043,7 +457,7 @@ in
                   label = "convolver";
                   name = "LL";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/48khz/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Detmold Konzerthaus (medium sized concert hall, ~600 seats)./BRIR_True_Stereo.wav";
                     channel = 0;
                   };
                 }
@@ -1053,7 +467,7 @@ in
                   label = "convolver";
                   name = "LR";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/48khz/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Detmold Konzerthaus (medium sized concert hall, ~600 seats)./BRIR_True_Stereo.wav";
                     channel = 1;
                   };
                 }
@@ -1063,7 +477,7 @@ in
                   label = "convolver";
                   name = "RL";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/48khz/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Detmold Konzerthaus (medium sized concert hall, ~600 seats)./BRIR_True_Stereo.wav";
                     channel = 2;
                   };
                 }
@@ -1073,7 +487,7 @@ in
                   label = "convolver";
                   name = "RR";
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/48khz/BRIR_True_Stereo.wav";
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Detmold Konzerthaus (medium sized concert hall, ~600 seats)./BRIR_True_Stereo.wav";
                     channel = 3;
                   };
                 }
@@ -1082,10 +496,9 @@ in
                   type = "builtin";
                   label = "mixer";
                   name = "mixL";
-
                   control = {
-                    "Gain 1" = 0.07673614893618190;
-                    "Gain 2" = 0.07673614893618190;
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
                   };
                 }
 
@@ -1093,10 +506,9 @@ in
                   type = "builtin";
                   label = "mixer";
                   name = "mixR";
-
                   control = {
-                    "Gain 1" = 0.07673614893618190;
-                    "Gain 2" = 0.07673614893618190;
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
                   };
                 }
 
@@ -1104,9 +516,8 @@ in
                   type = "builtin";
                   label = "convolver";
                   name = "hpcfL";
-
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/48khz/HyperX_Cloud_III_Average.wav";
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
                     channel = 0;
                   };
                 }
@@ -1115,9 +526,8 @@ in
                   type = "builtin";
                   label = "convolver";
                   name = "hpcfR";
-
                   config = {
-                    filename = "/home/joel/Documents/prefs/audio/ASH-Toolset cloud3/48khz/HyperX_Cloud_III_Average.wav";
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
                     channel = 1;
                   };
                 }
@@ -1126,16 +536,12 @@ in
               links = [
                 { output = "splitL:Out"; input = "LL:In"; }
                 { output = "splitL:Out"; input = "LR:In"; }
-
                 { output = "splitR:Out"; input = "RL:In"; }
                 { output = "splitR:Out"; input = "RR:In"; }
-
                 { output = "LL:Out"; input = "mixL:In 1"; }
                 { output = "RL:Out"; input = "mixL:In 2"; }
-
                 { output = "LR:Out"; input = "mixR:In 1"; }
                 { output = "RR:Out"; input = "mixR:In 2"; }
-
                 { output = "mixL:Out"; input = "hpcfL:In"; }
                 { output = "mixR:Out"; input = "hpcfR:In"; }
               ];
@@ -1152,19 +558,2382 @@ in
             };
 
             "capture.props" = {
-              "node.name" = "cloud3_ash_48khz";
-              "node.description" = "Cloud III ASH 48khz";
+              "node.name" = "earpods_detmold-konzerthaus_96khz";
+              "node.description" = "earpods - Detmold Konzerthaus (medium sized concert hall, ~600 seats). - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
-              "audio.rate" = 48000;
+              "audio.rate" = 96000;
               "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
-              "audio.rate" = 48000;
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+          };
+        }
+      ];
+    };
+
+    extraConfig.pipewire."04-earpods-elveden-hall-96khz" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "earpods - Elveden Hall (Suffolk England) - v2 - 96kHz";
+
+            "filter.graph" = {
+              nodes = [
+                { type = "builtin"; label = "copy"; name = "splitL"; }
+                { type = "builtin"; label = "copy"; name = "splitR"; }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Elveden Hall (Suffolk England) - v2/BRIR_True_Stereo.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Elveden Hall (Suffolk England) - v2/BRIR_True_Stereo.wav";
+                    channel = 1;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Elveden Hall (Suffolk England) - v2/BRIR_True_Stereo.wav";
+                    channel = 2;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Elveden Hall (Suffolk England) - v2/BRIR_True_Stereo.wav";
+                    channel = 3;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixL";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixR";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 1;
+                  };
+                }
+              ];
+
+              links = [
+                { output = "splitL:Out"; input = "LL:In"; }
+                { output = "splitL:Out"; input = "LR:In"; }
+                { output = "splitR:Out"; input = "RL:In"; }
+                { output = "splitR:Out"; input = "RR:In"; }
+                { output = "LL:Out"; input = "mixL:In 1"; }
+                { output = "RL:Out"; input = "mixL:In 2"; }
+                { output = "LR:Out"; input = "mixR:In 1"; }
+                { output = "RR:Out"; input = "mixR:In 2"; }
+                { output = "mixL:Out"; input = "hpcfL:In"; }
+                { output = "mixR:Out"; input = "hpcfR:In"; }
+              ];
+
+              inputs = [
+                "splitL:In"
+                "splitR:In"
+              ];
+
+              outputs = [
+                "hpcfL:Out"
+                "hpcfR:Out"
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "earpods_elveden-hall-v2_96khz";
+              "node.description" = "earpods - Elveden Hall (Suffolk England) - v2 - 96kHz";
+              "media.class" = "Audio/Sink";
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+          };
+        }
+      ];
+    };
+
+    extraConfig.pipewire."05-earpods-falkland-palace-royal-tennis-court-v3-96khz" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "earpods - Falkland Palace Royal Tennis Court - v3 - 96kHz";
+
+            "filter.graph" = {
+              nodes = [
+                { type = "builtin"; label = "copy"; name = "splitL"; }
+                { type = "builtin"; label = "copy"; name = "splitR"; }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Falkland Palace Royal Tennis Court - v3/BRIR_True_Stereo.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Falkland Palace Royal Tennis Court - v3/BRIR_True_Stereo.wav";
+                    channel = 1;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Falkland Palace Royal Tennis Court - v3/BRIR_True_Stereo.wav";
+                    channel = 2;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Falkland Palace Royal Tennis Court - v3/BRIR_True_Stereo.wav";
+                    channel = 3;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixL";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixR";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 1;
+                  };
+                }
+              ];
+
+              links = [
+                { output = "splitL:Out"; input = "LL:In"; }
+                { output = "splitL:Out"; input = "LR:In"; }
+                { output = "splitR:Out"; input = "RL:In"; }
+                { output = "splitR:Out"; input = "RR:In"; }
+                { output = "LL:Out"; input = "mixL:In 1"; }
+                { output = "RL:Out"; input = "mixL:In 2"; }
+                { output = "LR:Out"; input = "mixR:In 1"; }
+                { output = "RR:Out"; input = "mixR:In 2"; }
+                { output = "mixL:Out"; input = "hpcfL:In"; }
+                { output = "mixR:Out"; input = "hpcfR:In"; }
+              ];
+
+              inputs = [
+                "splitL:In"
+                "splitR:In"
+              ];
+
+              outputs = [
+                "hpcfL:Out"
+                "hpcfR:Out"
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "earpods_falkland-palace-royal-tennis-court-v3_96khz";
+              "node.description" = "earpods - Falkland Palace Royal Tennis Court - v3 - 96kHz";
+              "media.class" = "Audio/Sink";
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+          };
+        }
+      ];
+    };
+
+    extraConfig.pipewire."06-earpods-hoffmann-lime-kiln-96khz" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "earpods - Hoffmann Lime Kiln (Langcliffe, UK) - 96kHz";
+
+            "filter.graph" = {
+              nodes = [
+                { type = "builtin"; label = "copy"; name = "splitL"; }
+                { type = "builtin"; label = "copy"; name = "splitR"; }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Hoffmann Lime Kiln (Langcliffe, UK)/BRIR_True_Stereo.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Hoffmann Lime Kiln (Langcliffe, UK)/BRIR_True_Stereo.wav";
+                    channel = 1;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Hoffmann Lime Kiln (Langcliffe, UK)/BRIR_True_Stereo.wav";
+                    channel = 2;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Hoffmann Lime Kiln (Langcliffe, UK)/BRIR_True_Stereo.wav";
+                    channel = 3;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixL";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixR";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 1;
+                  };
+                }
+              ];
+
+              links = [
+                { output = "splitL:Out"; input = "LL:In"; }
+                { output = "splitL:Out"; input = "LR:In"; }
+                { output = "splitR:Out"; input = "RL:In"; }
+                { output = "splitR:Out"; input = "RR:In"; }
+                { output = "LL:Out"; input = "mixL:In 1"; }
+                { output = "RL:Out"; input = "mixL:In 2"; }
+                { output = "LR:Out"; input = "mixR:In 1"; }
+                { output = "RR:Out"; input = "mixR:In 2"; }
+                { output = "mixL:Out"; input = "hpcfL:In"; }
+                { output = "mixR:Out"; input = "hpcfR:In"; }
+              ];
+
+              inputs = [
+                "splitL:In"
+                "splitR:In"
+              ];
+
+              outputs = [
+                "hpcfL:Out"
+                "hpcfR:Out"
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "earpods_hoffmann-lime-kiln_96khz";
+              "node.description" = "earpods - Hoffmann Lime Kiln (Langcliffe, UK) - 96kHz";
+              "media.class" = "Audio/Sink";
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+          };
+        }
+      ];
+    };
+
+    extraConfig.pipewire."07-earpods-karlsruhe-state-theatre-main-hall-96khz" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "earpods - Karlsruhe State Theatre - Main Hall, v2 - 96kHz";
+
+            "filter.graph" = {
+              nodes = [
+                { type = "builtin"; label = "copy"; name = "splitL"; }
+                { type = "builtin"; label = "copy"; name = "splitR"; }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Karlsruhe State Theatre - Main Hall, v2/BRIR_True_Stereo.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Karlsruhe State Theatre - Main Hall, v2/BRIR_True_Stereo.wav";
+                    channel = 1;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Karlsruhe State Theatre - Main Hall, v2/BRIR_True_Stereo.wav";
+                    channel = 2;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Karlsruhe State Theatre - Main Hall, v2/BRIR_True_Stereo.wav";
+                    channel = 3;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixL";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixR";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 1;
+                  };
+                }
+              ];
+
+              links = [
+                { output = "splitL:Out"; input = "LL:In"; }
+                { output = "splitL:Out"; input = "LR:In"; }
+                { output = "splitR:Out"; input = "RL:In"; }
+                { output = "splitR:Out"; input = "RR:In"; }
+                { output = "LL:Out"; input = "mixL:In 1"; }
+                { output = "RL:Out"; input = "mixL:In 2"; }
+                { output = "LR:Out"; input = "mixR:In 1"; }
+                { output = "RR:Out"; input = "mixR:In 2"; }
+                { output = "mixL:Out"; input = "hpcfL:In"; }
+                { output = "mixR:Out"; input = "hpcfR:In"; }
+              ];
+
+              inputs = [
+                "splitL:In"
+                "splitR:In"
+              ];
+
+              outputs = [
+                "hpcfL:Out"
+                "hpcfR:Out"
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "earpods_karlsruhe-state-theatre-main-hall-v2_96khz";
+              "node.description" = "earpods - Karlsruhe State Theatre - Main Hall, v2 - 96kHz";
+              "media.class" = "Audio/Sink";
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+          };
+        }
+      ];
+    };
+
+    extraConfig.pipewire."08-earpods-laubenheim-barn-96khz" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "earpods - Laubenheim - Barn, v2 - 96kHz";
+
+            "filter.graph" = {
+              nodes = [
+                { type = "builtin"; label = "copy"; name = "splitL"; }
+                { type = "builtin"; label = "copy"; name = "splitR"; }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Laubenheim - Barn, v2/BRIR_True_Stereo.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Laubenheim - Barn, v2/BRIR_True_Stereo.wav";
+                    channel = 1;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Laubenheim - Barn, v2/BRIR_True_Stereo.wav";
+                    channel = 2;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Laubenheim - Barn, v2/BRIR_True_Stereo.wav";
+                    channel = 3;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixL";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixR";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 1;
+                  };
+                }
+              ];
+
+              links = [
+                { output = "splitL:Out"; input = "LL:In"; }
+                { output = "splitL:Out"; input = "LR:In"; }
+                { output = "splitR:Out"; input = "RL:In"; }
+                { output = "splitR:Out"; input = "RR:In"; }
+                { output = "LL:Out"; input = "mixL:In 1"; }
+                { output = "RL:Out"; input = "mixL:In 2"; }
+                { output = "LR:Out"; input = "mixR:In 1"; }
+                { output = "RR:Out"; input = "mixR:In 2"; }
+                { output = "mixL:Out"; input = "hpcfL:In"; }
+                { output = "mixR:Out"; input = "hpcfR:In"; }
+              ];
+
+              inputs = [
+                "splitL:In"
+                "splitR:In"
+              ];
+
+              outputs = [
+                "hpcfL:Out"
+                "hpcfR:Out"
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "earpods_laubenheim-barn-v2_96khz";
+              "node.description" = "earpods - Laubenheim - Barn, v2 - 96kHz";
+              "media.class" = "Audio/Sink";
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+          };
+        }
+      ];
+    };
+
+    extraConfig.pipewire."09-earpods-les-dominicains-neo-gothic-chapel-96khz" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "earpods - Les Dominicains de Haute-Alsace - Neo-Gothic Chapel, v2 - 96kHz";
+
+            "filter.graph" = {
+              nodes = [
+                { type = "builtin"; label = "copy"; name = "splitL"; }
+                { type = "builtin"; label = "copy"; name = "splitR"; }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Les Dominicains de Haute-Alsace - Neo-Gothic Chapel, v2/BRIR_True_Stereo.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Les Dominicains de Haute-Alsace - Neo-Gothic Chapel, v2/BRIR_True_Stereo.wav";
+                    channel = 1;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Les Dominicains de Haute-Alsace - Neo-Gothic Chapel, v2/BRIR_True_Stereo.wav";
+                    channel = 2;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Les Dominicains de Haute-Alsace - Neo-Gothic Chapel, v2/BRIR_True_Stereo.wav";
+                    channel = 3;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixL";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixR";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 1;
+                  };
+                }
+              ];
+
+              links = [
+                { output = "splitL:Out"; input = "LL:In"; }
+                { output = "splitL:Out"; input = "LR:In"; }
+                { output = "splitR:Out"; input = "RL:In"; }
+                { output = "splitR:Out"; input = "RR:In"; }
+                { output = "LL:Out"; input = "mixL:In 1"; }
+                { output = "RL:Out"; input = "mixL:In 2"; }
+                { output = "LR:Out"; input = "mixR:In 1"; }
+                { output = "RR:Out"; input = "mixR:In 2"; }
+                { output = "mixL:Out"; input = "hpcfL:In"; }
+                { output = "mixR:Out"; input = "hpcfR:In"; }
+              ];
+
+              inputs = [
+                "splitL:In"
+                "splitR:In"
+              ];
+
+              outputs = [
+                "hpcfL:Out"
+                "hpcfR:Out"
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "earpods_les-dominicains-neo-gothic-chapel-v2_96khz";
+              "node.description" = "earpods - Les Dominicains de Haute-Alsace - Neo-Gothic Chapel, v2 - 96kHz";
+              "media.class" = "Audio/Sink";
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+          };
+        }
+      ];
+    };
+
+    extraConfig.pipewire."10-earpods-finnish-national-opera-main-auditorium-96khz" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "earpods - Main auditorium of the Finnish National Opera and Ballet (FNOB) - 96kHz";
+
+            "filter.graph" = {
+              nodes = [
+                { type = "builtin"; label = "copy"; name = "splitL"; }
+                { type = "builtin"; label = "copy"; name = "splitR"; }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Main auditorium of the Finnish National Opera and Ballet (FNOB)/BRIR_True_Stereo.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Main auditorium of the Finnish National Opera and Ballet (FNOB)/BRIR_True_Stereo.wav";
+                    channel = 1;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Main auditorium of the Finnish National Opera and Ballet (FNOB)/BRIR_True_Stereo.wav";
+                    channel = 2;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Main auditorium of the Finnish National Opera and Ballet (FNOB)/BRIR_True_Stereo.wav";
+                    channel = 3;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixL";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixR";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 1;
+                  };
+                }
+              ];
+
+              links = [
+                { output = "splitL:Out"; input = "LL:In"; }
+                { output = "splitL:Out"; input = "LR:In"; }
+                { output = "splitR:Out"; input = "RL:In"; }
+                { output = "splitR:Out"; input = "RR:In"; }
+                { output = "LL:Out"; input = "mixL:In 1"; }
+                { output = "RL:Out"; input = "mixL:In 2"; }
+                { output = "LR:Out"; input = "mixR:In 1"; }
+                { output = "RR:Out"; input = "mixR:In 2"; }
+                { output = "mixL:Out"; input = "hpcfL:In"; }
+                { output = "mixR:Out"; input = "hpcfR:In"; }
+              ];
+
+              inputs = [
+                "splitL:In"
+                "splitR:In"
+              ];
+
+              outputs = [
+                "hpcfL:Out"
+                "hpcfR:Out"
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "earpods_finnish-national-opera-main-auditorium_96khz";
+              "node.description" = "earpods - Main auditorium of the Finnish National Opera and Ballet (FNOB) - 96kHz";
+              "media.class" = "Audio/Sink";
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+          };
+        }
+      ];
+    };
+
+    extraConfig.pipewire."11-earpods-pori-promenadikeskus-concert-hall-96khz" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "earpods - Promenadikeskus concert hall in Pori, Finland - 96kHz";
+
+            "filter.graph" = {
+              nodes = [
+                { type = "builtin"; label = "copy"; name = "splitL"; }
+                { type = "builtin"; label = "copy"; name = "splitR"; }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Promenadikeskus concert hall in Pori, Finland/BRIR_True_Stereo.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Promenadikeskus concert hall in Pori, Finland/BRIR_True_Stereo.wav";
+                    channel = 1;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Promenadikeskus concert hall in Pori, Finland/BRIR_True_Stereo.wav";
+                    channel = 2;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Promenadikeskus concert hall in Pori, Finland/BRIR_True_Stereo.wav";
+                    channel = 3;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixL";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixR";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 1;
+                  };
+                }
+              ];
+
+              links = [
+                { output = "splitL:Out"; input = "LL:In"; }
+                { output = "splitL:Out"; input = "LR:In"; }
+                { output = "splitR:Out"; input = "RL:In"; }
+                { output = "splitR:Out"; input = "RR:In"; }
+                { output = "LL:Out"; input = "mixL:In 1"; }
+                { output = "RL:Out"; input = "mixL:In 2"; }
+                { output = "LR:Out"; input = "mixR:In 1"; }
+                { output = "RR:Out"; input = "mixR:In 2"; }
+                { output = "mixL:Out"; input = "hpcfL:In"; }
+                { output = "mixR:Out"; input = "hpcfR:In"; }
+              ];
+
+              inputs = [
+                "splitL:In"
+                "splitR:In"
+              ];
+
+              outputs = [
+                "hpcfL:Out"
+                "hpcfR:Out"
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "earpods_pori-promenadikeskus-concert-hall_96khz";
+              "node.description" = "earpods - Promenadikeskus concert hall in Pori, Finland - 96kHz";
+              "media.class" = "Audio/Sink";
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+          };
+        }
+      ];
+    };
+
+    extraConfig.pipewire."12-earpods-singer-polignac-music-salon-96khz" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "earpods - Singer-Polignac Foundation - Music Salon, v2 - 96kHz";
+
+            "filter.graph" = {
+              nodes = [
+                { type = "builtin"; label = "copy"; name = "splitL"; }
+                { type = "builtin"; label = "copy"; name = "splitR"; }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Singer-Polignac Foundation - Music Salon, v2/BRIR_True_Stereo.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Singer-Polignac Foundation - Music Salon, v2/BRIR_True_Stereo.wav";
+                    channel = 1;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Singer-Polignac Foundation - Music Salon, v2/BRIR_True_Stereo.wav";
+                    channel = 2;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Singer-Polignac Foundation - Music Salon, v2/BRIR_True_Stereo.wav";
+                    channel = 3;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixL";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixR";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 1;
+                  };
+                }
+              ];
+
+              links = [
+                { output = "splitL:Out"; input = "LL:In"; }
+                { output = "splitL:Out"; input = "LR:In"; }
+                { output = "splitR:Out"; input = "RL:In"; }
+                { output = "splitR:Out"; input = "RR:In"; }
+                { output = "LL:Out"; input = "mixL:In 1"; }
+                { output = "RL:Out"; input = "mixL:In 2"; }
+                { output = "LR:Out"; input = "mixR:In 1"; }
+                { output = "RR:Out"; input = "mixR:In 2"; }
+                { output = "mixL:Out"; input = "hpcfL:In"; }
+                { output = "mixR:Out"; input = "hpcfR:In"; }
+              ];
+
+              inputs = [
+                "splitL:In"
+                "splitR:In"
+              ];
+
+              outputs = [
+                "hpcfL:Out"
+                "hpcfR:Out"
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "earpods_singer-polignac-music-salon-v2_96khz";
+              "node.description" = "earpods - Singer-Polignac Foundation - Music Salon, v2 - 96kHz";
+              "media.class" = "Audio/Sink";
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+          };
+        }
+      ];
+    };
+
+    extraConfig.pipewire."13-earpods-konzerthaus-berlin-small-hall-96khz" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "earpods - Small hall of the Konzerthaus Berlin - 96kHz";
+
+            "filter.graph" = {
+              nodes = [
+                { type = "builtin"; label = "copy"; name = "splitL"; }
+                { type = "builtin"; label = "copy"; name = "splitR"; }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Small hall of the Konzerthaus Berlin/BRIR_True_Stereo.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Small hall of the Konzerthaus Berlin/BRIR_True_Stereo.wav";
+                    channel = 1;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Small hall of the Konzerthaus Berlin/BRIR_True_Stereo.wav";
+                    channel = 2;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Small hall of the Konzerthaus Berlin/BRIR_True_Stereo.wav";
+                    channel = 3;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixL";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixR";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 1;
+                  };
+                }
+              ];
+
+              links = [
+                { output = "splitL:Out"; input = "LL:In"; }
+                { output = "splitL:Out"; input = "LR:In"; }
+                { output = "splitR:Out"; input = "RL:In"; }
+                { output = "splitR:Out"; input = "RR:In"; }
+                { output = "LL:Out"; input = "mixL:In 1"; }
+                { output = "RL:Out"; input = "mixL:In 2"; }
+                { output = "LR:Out"; input = "mixR:In 1"; }
+                { output = "RR:Out"; input = "mixR:In 2"; }
+                { output = "mixL:Out"; input = "hpcfL:In"; }
+                { output = "mixR:Out"; input = "hpcfR:In"; }
+              ];
+
+              inputs = [
+                "splitL:In"
+                "splitR:In"
+              ];
+
+              outputs = [
+                "hpcfL:Out"
+                "hpcfR:Out"
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "earpods_konzerthaus-berlin-small-hall_96khz";
+              "node.description" = "earpods - Small hall of the Konzerthaus Berlin - 96kHz";
+              "media.class" = "Audio/Sink";
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+          };
+        }
+      ];
+    };
+
+    extraConfig.pipewire."14-earpods-spesbourg-castle-main-building-96khz" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "earpods - Spesbourg Castle - Main Building, v2 - 96kHz";
+
+            "filter.graph" = {
+              nodes = [
+                { type = "builtin"; label = "copy"; name = "splitL"; }
+                { type = "builtin"; label = "copy"; name = "splitR"; }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Spesbourg Castle - Main Building, v2/BRIR_True_Stereo.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Spesbourg Castle - Main Building, v2/BRIR_True_Stereo.wav";
+                    channel = 1;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Spesbourg Castle - Main Building, v2/BRIR_True_Stereo.wav";
+                    channel = 2;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Spesbourg Castle - Main Building, v2/BRIR_True_Stereo.wav";
+                    channel = 3;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixL";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixR";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 1;
+                  };
+                }
+              ];
+
+              links = [
+                { output = "splitL:Out"; input = "LL:In"; }
+                { output = "splitL:Out"; input = "LR:In"; }
+                { output = "splitR:Out"; input = "RL:In"; }
+                { output = "splitR:Out"; input = "RR:In"; }
+                { output = "LL:Out"; input = "mixL:In 1"; }
+                { output = "RL:Out"; input = "mixL:In 2"; }
+                { output = "LR:Out"; input = "mixR:In 1"; }
+                { output = "RR:Out"; input = "mixR:In 2"; }
+                { output = "mixL:Out"; input = "hpcfL:In"; }
+                { output = "mixR:Out"; input = "hpcfR:In"; }
+              ];
+
+              inputs = [
+                "splitL:In"
+                "splitR:In"
+              ];
+
+              outputs = [
+                "hpcfL:Out"
+                "hpcfR:Out"
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "earpods_spesbourg-castle-main-building-v2_96khz";
+              "node.description" = "earpods - Spesbourg Castle - Main Building, v2 - 96kHz";
+              "media.class" = "Audio/Sink";
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+          };
+        }
+      ];
+    };
+
+    extraConfig.pipewire."15-earpods-strasbourg-observatory-96khz" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "earpods - Strasbourg Observatory, v2 - 96kHz";
+
+            "filter.graph" = {
+              nodes = [
+                { type = "builtin"; label = "copy"; name = "splitL"; }
+                { type = "builtin"; label = "copy"; name = "splitR"; }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Strasbourg Observatory, v2/BRIR_True_Stereo.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Strasbourg Observatory, v2/BRIR_True_Stereo.wav";
+                    channel = 1;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Strasbourg Observatory, v2/BRIR_True_Stereo.wav";
+                    channel = 2;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Strasbourg Observatory, v2/BRIR_True_Stereo.wav";
+                    channel = 3;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixL";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixR";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 1;
+                  };
+                }
+              ];
+
+              links = [
+                { output = "splitL:Out"; input = "LL:In"; }
+                { output = "splitL:Out"; input = "LR:In"; }
+                { output = "splitR:Out"; input = "RL:In"; }
+                { output = "splitR:Out"; input = "RR:In"; }
+                { output = "LL:Out"; input = "mixL:In 1"; }
+                { output = "RL:Out"; input = "mixL:In 2"; }
+                { output = "LR:Out"; input = "mixR:In 1"; }
+                { output = "RR:Out"; input = "mixR:In 2"; }
+                { output = "mixL:Out"; input = "hpcfL:In"; }
+                { output = "mixR:Out"; input = "hpcfR:In"; }
+              ];
+
+              inputs = [
+                "splitL:In"
+                "splitR:In"
+              ];
+
+              outputs = [
+                "hpcfL:Out"
+                "hpcfR:Out"
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "earpods_strasbourg-observatory-v2_96khz";
+              "node.description" = "earpods - Strasbourg Observatory, v2 - 96kHz";
+              "media.class" = "Audio/Sink";
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+          };
+        }
+      ];
+    };
+
+    extraConfig.pipewire."16-earpods-tyndall-bruce-monument-96khz" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "earpods - Tyndall Bruce Monument - v2 - 96kHz";
+
+            "filter.graph" = {
+              nodes = [
+                { type = "builtin"; label = "copy"; name = "splitL"; }
+                { type = "builtin"; label = "copy"; name = "splitR"; }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Tyndall Bruce Monument - v2/BRIR_True_Stereo.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Tyndall Bruce Monument - v2/BRIR_True_Stereo.wav";
+                    channel = 1;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Tyndall Bruce Monument - v2/BRIR_True_Stereo.wav";
+                    channel = 2;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Tyndall Bruce Monument - v2/BRIR_True_Stereo.wav";
+                    channel = 3;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixL";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixR";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 1;
+                  };
+                }
+              ];
+
+              links = [
+                { output = "splitL:Out"; input = "LL:In"; }
+                { output = "splitL:Out"; input = "LR:In"; }
+                { output = "splitR:Out"; input = "RL:In"; }
+                { output = "splitR:Out"; input = "RR:In"; }
+                { output = "LL:Out"; input = "mixL:In 1"; }
+                { output = "RL:Out"; input = "mixL:In 2"; }
+                { output = "LR:Out"; input = "mixR:In 1"; }
+                { output = "RR:Out"; input = "mixR:In 2"; }
+                { output = "mixL:Out"; input = "hpcfL:In"; }
+                { output = "mixR:Out"; input = "hpcfR:In"; }
+              ];
+
+              inputs = [
+                "splitL:In"
+                "splitR:In"
+              ];
+
+              outputs = [
+                "hpcfL:Out"
+                "hpcfR:Out"
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "earpods_tyndall-bruce-monument-v2_96khz";
+              "node.description" = "earpods - Tyndall Bruce Monument - v2 - 96kHz";
+              "media.class" = "Audio/Sink";
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+          };
+        }
+      ];
+    };
+
+    extraConfig.pipewire."17-earpods-usina-del-arte-symphony-hall-96khz" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "earpods - Usina del Arte Symphony Hall - v2 - 96kHz";
+
+            "filter.graph" = {
+              nodes = [
+                { type = "builtin"; label = "copy"; name = "splitL"; }
+                { type = "builtin"; label = "copy"; name = "splitR"; }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Usina del Arte Symphony Hall - v2/BRIR_True_Stereo.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Usina del Arte Symphony Hall - v2/BRIR_True_Stereo.wav";
+                    channel = 1;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Usina del Arte Symphony Hall - v2/BRIR_True_Stereo.wav";
+                    channel = 2;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Usina del Arte Symphony Hall - v2/BRIR_True_Stereo.wav";
+                    channel = 3;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixL";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixR";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 1;
+                  };
+                }
+              ];
+
+              links = [
+                { output = "splitL:Out"; input = "LL:In"; }
+                { output = "splitL:Out"; input = "LR:In"; }
+                { output = "splitR:Out"; input = "RL:In"; }
+                { output = "splitR:Out"; input = "RR:In"; }
+                { output = "LL:Out"; input = "mixL:In 1"; }
+                { output = "RL:Out"; input = "mixL:In 2"; }
+                { output = "LR:Out"; input = "mixR:In 1"; }
+                { output = "RR:Out"; input = "mixR:In 2"; }
+                { output = "mixL:Out"; input = "hpcfL:In"; }
+                { output = "mixR:Out"; input = "hpcfR:In"; }
+              ];
+
+              inputs = [
+                "splitL:In"
+                "splitR:In"
+              ];
+
+              outputs = [
+                "hpcfL:Out"
+                "hpcfR:Out"
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "earpods_usina-del-arte-symphony-hall-v2_96khz";
+              "node.description" = "earpods - Usina del Arte Symphony Hall - v2 - 96kHz";
+              "media.class" = "Audio/Sink";
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+          };
+        }
+      ];
+    };
+
+    extraConfig.pipewire."18-earpods-york-minsters-chapter-house-96khz" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "earpods - York Minster's Chapter House - 96kHz";
+
+            "filter.graph" = {
+              nodes = [
+                { type = "builtin"; label = "copy"; name = "splitL"; }
+                { type = "builtin"; label = "copy"; name = "splitR"; }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/York Minster's Chapter House/BRIR_True_Stereo.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/York Minster's Chapter House/BRIR_True_Stereo.wav";
+                    channel = 1;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/York Minster's Chapter House/BRIR_True_Stereo.wav";
+                    channel = 2;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/York Minster's Chapter House/BRIR_True_Stereo.wav";
+                    channel = 3;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixL";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixR";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 1;
+                  };
+                }
+              ];
+
+              links = [
+                { output = "splitL:Out"; input = "LL:In"; }
+                { output = "splitL:Out"; input = "LR:In"; }
+                { output = "splitR:Out"; input = "RL:In"; }
+                { output = "splitR:Out"; input = "RR:In"; }
+                { output = "LL:Out"; input = "mixL:In 1"; }
+                { output = "RL:Out"; input = "mixL:In 2"; }
+                { output = "LR:Out"; input = "mixR:In 1"; }
+                { output = "RR:Out"; input = "mixR:In 2"; }
+                { output = "mixL:Out"; input = "hpcfL:In"; }
+                { output = "mixR:Out"; input = "hpcfR:In"; }
+              ];
+
+              inputs = [
+                "splitL:In"
+                "splitR:In"
+              ];
+
+              outputs = [
+                "hpcfL:Out"
+                "hpcfR:Out"
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "earpods_york-minsters-chapter-house_96khz";
+              "node.description" = "earpods - York Minster's Chapter House - 96kHz";
+              "media.class" = "Audio/Sink";
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+          };
+        }
+      ];
+    };
+
+    extraConfig.pipewire."19-earpods-zkm-karlsruhe-mezzanine-rear-96khz" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "earpods - ZKM Karlsruhe - Mezzanine (Rear), v2 - 96kHz";
+
+            "filter.graph" = {
+              nodes = [
+                { type = "builtin"; label = "copy"; name = "splitL"; }
+                { type = "builtin"; label = "copy"; name = "splitR"; }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/ZKM Karlsruhe - Mezzanine (Rear), v2/BRIR_True_Stereo.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/ZKM Karlsruhe - Mezzanine (Rear), v2/BRIR_True_Stereo.wav";
+                    channel = 1;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/ZKM Karlsruhe - Mezzanine (Rear), v2/BRIR_True_Stereo.wav";
+                    channel = 2;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/ZKM Karlsruhe - Mezzanine (Rear), v2/BRIR_True_Stereo.wav";
+                    channel = 3;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixL";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixR";
+                  control = {
+                    "Gain 1" = 0.05248074602497726;
+                    "Gain 2" = 0.05248074602497726;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/Apple_EarPods_Ahastyle_Covers_Custom_Average_A+B.wav";
+                    channel = 1;
+                  };
+                }
+              ];
+
+              links = [
+                { output = "splitL:Out"; input = "LL:In"; }
+                { output = "splitL:Out"; input = "LR:In"; }
+                { output = "splitR:Out"; input = "RL:In"; }
+                { output = "splitR:Out"; input = "RR:In"; }
+                { output = "LL:Out"; input = "mixL:In 1"; }
+                { output = "RL:Out"; input = "mixL:In 2"; }
+                { output = "LR:Out"; input = "mixR:In 1"; }
+                { output = "RR:Out"; input = "mixR:In 2"; }
+                { output = "mixL:Out"; input = "hpcfL:In"; }
+                { output = "mixR:Out"; input = "hpcfR:In"; }
+              ];
+
+              inputs = [
+                "splitL:In"
+                "splitR:In"
+              ];
+
+              outputs = [
+                "hpcfL:Out"
+                "hpcfR:Out"
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "earpods_zkm-karlsruhe-mezzanine-rear-v2_96khz";
+              "node.description" = "earpods - ZKM Karlsruhe - Mezzanine (Rear), v2 - 96kHz";
+              "media.class" = "Audio/Sink";
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+          };
+        }
+      ];
+    };
+
+    extraConfig.pipewire."20-cloud3-anechoic-oe-96khz" = {
+      "context.modules" = [
+        {
+          name = "libpipewire-module-filter-chain";
+
+          args = {
+            "node.description" = "cloud3 - Anechoic (OE) - 96kHz";
+
+            "filter.graph" = {
+              nodes = [
+                { type = "builtin"; label = "copy"; name = "splitL"; }
+                { type = "builtin"; label = "copy"; name = "splitR"; }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Anechoic (OE)/BRIR_True_Stereo.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "LR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Anechoic (OE)/BRIR_True_Stereo.wav";
+                    channel = 1;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Anechoic (OE)/BRIR_True_Stereo.wav";
+                    channel = 2;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "RR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/BRIRs/Anechoic (OE)/BRIR_True_Stereo.wav";
+                    channel = 3;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixL";
+                  control = {
+                    "Gain 1" = 0.07673614893618190;
+                    "Gain 2" = 0.07673614893618190;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "mixer";
+                  name = "mixR";
+                  control = {
+                    "Gain 1" = 0.07673614893618190;
+                    "Gain 2" = 0.07673614893618190;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfL";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/HyperX_Cloud_III_Average.wav";
+                    channel = 0;
+                  };
+                }
+
+                {
+                  type = "builtin";
+                  label = "convolver";
+                  name = "hpcfR";
+                  config = {
+                    filename = "/home/joel/Documents/prefs/audio/HyperX_Cloud_III_Average.wav";
+                    channel = 1;
+                  };
+                }
+              ];
+
+              links = [
+                { output = "splitL:Out"; input = "LL:In"; }
+                { output = "splitL:Out"; input = "LR:In"; }
+                { output = "splitR:Out"; input = "RL:In"; }
+                { output = "splitR:Out"; input = "RR:In"; }
+                { output = "LL:Out"; input = "mixL:In 1"; }
+                { output = "RL:Out"; input = "mixL:In 2"; }
+                { output = "LR:Out"; input = "mixR:In 1"; }
+                { output = "RR:Out"; input = "mixR:In 2"; }
+                { output = "mixL:Out"; input = "hpcfL:In"; }
+                { output = "mixR:Out"; input = "hpcfR:In"; }
+              ];
+
+              inputs = [
+                "splitL:In"
+                "splitR:In"
+              ];
+
+              outputs = [
+                "hpcfL:Out"
+                "hpcfR:Out"
+              ];
+            };
+
+            "capture.props" = {
+              "node.name" = "cloud3_anechoic-oe_96khz";
+              "node.description" = "cloud3 - Anechoic (OE) - 96kHz";
+              "media.class" = "Audio/Sink";
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
+              "stream.dont-remix" = true;
+            };
+
+            "playback.props" = {
+              "audio.channels" = 2;
+              "audio.position" = [ "FL" "FR" ];
+              "audio.rate" = 96000;
               "stream.dont-remix" = true;
             };
           };

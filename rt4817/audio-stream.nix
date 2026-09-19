@@ -1,6 +1,30 @@
 { config, lib, pkgs, ... }:
 
 {
+  services.snapserver = {
+    enable = true;
+    openFirewall = true;
+
+    settings = {
+      stream = {
+        source = "pipe:///run/snapserver/ash-iphone?name=ASH_iPhone&sampleformat=96000:16:2&codec=flac&chunk_ms=20";
+        buffer = 1000;
+      };
+
+      http = {
+        enabled = true;
+      };
+
+      tcp-control = {
+        enabled = true;
+      };
+
+      tcp-streaming = {
+        enabled = true;
+      };
+    };
+  };
+
   services.shairport-sync = {
     enable = true;
     package = pkgs.shairport-sync-airplay2;
@@ -9,7 +33,7 @@
     #openFirewall = true; -> doesn't work for airplay2
     settings = {
       general = {
-        name = "Joel Laptop AirPlay";
+        name = "rt4817";
         service_type = "airplay2";
         output_backend = "pipewire";
         default_airplay_volume = -12.0;
