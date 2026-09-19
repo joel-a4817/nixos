@@ -80,8 +80,8 @@
                   label = "mixer";
                   name = "mixL";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.16982436524617442;
+                    "Gain 2" = 0.16982436524617442;
                   };
                 }
 
@@ -90,8 +90,8 @@
                   label = "mixer";
                   name = "mixR";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.16982436524617442;
+                    "Gain 2" = 0.16982436524617442;
                   };
                 }
 
@@ -141,7 +141,7 @@
             };
 
             "capture.props" = {
-              "node.name" = "earpods_abies-grandis-forest-wheldrake-wood_96khz";
+              "node.name" = "earpods_abies-grandis-forest-wheldrake-wood";
               "node.description" = "earpods - Abies Grandis Forest, Wheldrake Wood - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
@@ -219,8 +219,8 @@
                   label = "mixer";
                   name = "mixL";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.31988951096913981;
+                    "Gain 2" = 0.31988951096913981;
                   };
                 }
 
@@ -229,8 +229,8 @@
                   label = "mixer";
                   name = "mixR";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.31988951096913981;
+                    "Gain 2" = 0.31988951096913981;
                   };
                 }
 
@@ -280,7 +280,7 @@
             };
 
             "capture.props" = {
-              "node.name" = "earpods_anechoic-ie_96khz";
+              "node.name" = "earpods_anechoic-ie";
               "node.description" = "earpods - Anechoic (IE) - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
@@ -358,8 +358,8 @@
                   label = "mixer";
                   name = "mixL";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.16218100973589297;
+                    "Gain 2" = 0.16218100973589297;
                   };
                 }
 
@@ -368,8 +368,8 @@
                   label = "mixer";
                   name = "mixR";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.16218100973589297;
+                    "Gain 2" = 0.16218100973589297;
                   };
                 }
 
@@ -419,7 +419,7 @@
             };
 
             "capture.props" = {
-              "node.name" = "earpods_athenee-theatre-main-hall-v2_96khz";
+              "node.name" = "earpods_athenee-theatre-main-hall-v2";
               "node.description" = "earpods - Athenee Theatre - Main Hall, v2 - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
@@ -497,8 +497,8 @@
                   label = "mixer";
                   name = "mixL";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.13963683610559374;
+                    "Gain 2" = 0.13963683610559374;
                   };
                 }
 
@@ -507,8 +507,8 @@
                   label = "mixer";
                   name = "mixR";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.13963683610559374;
+                    "Gain 2" = 0.13963683610559374;
                   };
                 }
 
@@ -558,7 +558,7 @@
             };
 
             "capture.props" = {
-              "node.name" = "earpods_detmold-konzerthaus_96khz";
+              "node.name" = "earpods_detmold-konzerthaus";
               "node.description" = "earpods - Detmold Konzerthaus (medium sized concert hall, ~600 seats). - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
@@ -636,8 +636,8 @@
                   label = "mixer";
                   name = "mixL";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.18620871366628675;
+                    "Gain 2" = 0.18620871366628675;
                   };
                 }
 
@@ -646,8 +646,8 @@
                   label = "mixer";
                   name = "mixR";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.18620871366628675;
+                    "Gain 2" = 0.18620871366628675;
                   };
                 }
 
@@ -697,7 +697,7 @@
             };
 
             "capture.props" = {
-              "node.name" = "earpods_elveden-hall-v2_96khz";
+              "node.name" = "earpods_elveden-hall-v2";
               "node.description" = "earpods - Elveden Hall (Suffolk England) - v2 - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
@@ -775,8 +775,8 @@
                   label = "mixer";
                   name = "mixL";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.17782794100389229;
+                    "Gain 2" = 0.17782794100389229;
                   };
                 }
 
@@ -785,8 +785,8 @@
                   label = "mixer";
                   name = "mixR";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.17782794100389229;
+                    "Gain 2" = 0.17782794100389229;
                   };
                 }
 
@@ -836,7 +836,7 @@
             };
 
             "capture.props" = {
-              "node.name" = "earpods_falkland-palace-royal-tennis-court-v3_96khz";
+              "node.name" = "earpods_falkland-palace-royal-tennis-court-v3";
               "node.description" = "earpods - Falkland Palace Royal Tennis Court - v3 - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
@@ -914,8 +914,8 @@
                   label = "mixer";
                   name = "mixL";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.14962356560944334;
+                    "Gain 2" = 0.14962356560944334;
                   };
                 }
 
@@ -924,8 +924,8 @@
                   label = "mixer";
                   name = "mixR";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.14962356560944334;
+                    "Gain 2" = 0.14962356560944334;
                   };
                 }
 
@@ -975,7 +975,7 @@
             };
 
             "capture.props" = {
-              "node.name" = "earpods_hoffmann-lime-kiln_96khz";
+              "node.name" = "earpods_hoffmann-lime-kiln";
               "node.description" = "earpods - Hoffmann Lime Kiln (Langcliffe, UK) - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
@@ -1053,8 +1053,8 @@
                   label = "mixer";
                   name = "mixL";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.16595869074375605;
+                    "Gain 2" = 0.16595869074375605;
                   };
                 }
 
@@ -1063,8 +1063,8 @@
                   label = "mixer";
                   name = "mixR";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.16595869074375605;
+                    "Gain 2" = 0.16595869074375605;
                   };
                 }
 
@@ -1114,7 +1114,7 @@
             };
 
             "capture.props" = {
-              "node.name" = "earpods_karlsruhe-state-theatre-main-hall-v2_96khz";
+              "node.name" = "earpods_karlsruhe-state-theatre-main-hall-v2";
               "node.description" = "earpods - Karlsruhe State Theatre - Main Hall, v2 - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
@@ -1192,8 +1192,8 @@
                   label = "mixer";
                   name = "mixL";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.15488166189124816;
+                    "Gain 2" = 0.15488166189124816;
                   };
                 }
 
@@ -1202,8 +1202,8 @@
                   label = "mixer";
                   name = "mixR";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.15488166189124816;
+                    "Gain 2" = 0.15488166189124816;
                   };
                 }
 
@@ -1253,7 +1253,7 @@
             };
 
             "capture.props" = {
-              "node.name" = "earpods_laubenheim-barn-v2_96khz";
+              "node.name" = "earpods_laubenheim-barn-v2";
               "node.description" = "earpods - Laubenheim - Barn, v2 - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
@@ -1331,8 +1331,8 @@
                   label = "mixer";
                   name = "mixL";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.14288939585111030;
+                    "Gain 2" = 0.14288939585111030;
                   };
                 }
 
@@ -1341,8 +1341,8 @@
                   label = "mixer";
                   name = "mixR";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.14288939585111030;
+                    "Gain 2" = 0.14288939585111030;
                   };
                 }
 
@@ -1392,7 +1392,7 @@
             };
 
             "capture.props" = {
-              "node.name" = "earpods_les-dominicains-neo-gothic-chapel-v2_96khz";
+              "node.name" = "earpods_les-dominicains-neo-gothic-chapel-v2";
               "node.description" = "earpods - Les Dominicains de Haute-Alsace - Neo-Gothic Chapel, v2 - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
@@ -1470,8 +1470,8 @@
                   label = "mixer";
                   name = "mixL";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.11885022274370183;
+                    "Gain 2" = 0.11885022274370183;
                   };
                 }
 
@@ -1480,8 +1480,8 @@
                   label = "mixer";
                   name = "mixR";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.11885022274370183;
+                    "Gain 2" = 0.11885022274370183;
                   };
                 }
 
@@ -1531,7 +1531,7 @@
             };
 
             "capture.props" = {
-              "node.name" = "earpods_finnish-national-opera-main-auditorium_96khz";
+              "node.name" = "earpods_finnish-national-opera-main-auditorium";
               "node.description" = "earpods - Main auditorium of the Finnish National Opera and Ballet (FNOB) - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
@@ -1609,8 +1609,8 @@
                   label = "mixer";
                   name = "mixL";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.12882495516931339;
+                    "Gain 2" = 0.12882495516931339;
                   };
                 }
 
@@ -1619,8 +1619,8 @@
                   label = "mixer";
                   name = "mixR";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.12882495516931339;
+                    "Gain 2" = 0.12882495516931339;
                   };
                 }
 
@@ -1670,7 +1670,7 @@
             };
 
             "capture.props" = {
-              "node.name" = "earpods_pori-promenadikeskus-concert-hall_96khz";
+              "node.name" = "earpods_pori-promenadikeskus-concert-hall";
               "node.description" = "earpods - Promenadikeskus concert hall in Pori, Finland - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
@@ -1748,8 +1748,8 @@
                   label = "mixer";
                   name = "mixL";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.15667510701081488;
+                    "Gain 2" = 0.15667510701081488;
                   };
                 }
 
@@ -1758,8 +1758,8 @@
                   label = "mixer";
                   name = "mixR";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.15667510701081488;
+                    "Gain 2" = 0.15667510701081488;
                   };
                 }
 
@@ -1809,7 +1809,7 @@
             };
 
             "capture.props" = {
-              "node.name" = "earpods_singer-polignac-music-salon-v2_96khz";
+              "node.name" = "earpods_singer-polignac-music-salon-v2";
               "node.description" = "earpods - Singer-Polignac Foundation - Music Salon, v2 - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
@@ -1887,8 +1887,8 @@
                   label = "mixer";
                   name = "mixL";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.13803842646028849;
+                    "Gain 2" = 0.13803842646028849;
                   };
                 }
 
@@ -1897,8 +1897,8 @@
                   label = "mixer";
                   name = "mixR";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.13803842646028849;
+                    "Gain 2" = 0.13803842646028849;
                   };
                 }
 
@@ -1948,7 +1948,7 @@
             };
 
             "capture.props" = {
-              "node.name" = "earpods_konzerthaus-berlin-small-hall_96khz";
+              "node.name" = "earpods_konzerthaus-berlin-small-hall";
               "node.description" = "earpods - Small hall of the Konzerthaus Berlin - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
@@ -2026,8 +2026,8 @@
                   label = "mixer";
                   name = "mixL";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.16032453906900412;
+                    "Gain 2" = 0.16032453906900412;
                   };
                 }
 
@@ -2036,8 +2036,8 @@
                   label = "mixer";
                   name = "mixR";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.16032453906900412;
+                    "Gain 2" = 0.16032453906900412;
                   };
                 }
 
@@ -2087,7 +2087,7 @@
             };
 
             "capture.props" = {
-              "node.name" = "earpods_spesbourg-castle-main-building-v2_96khz";
+              "node.name" = "earpods_spesbourg-castle-main-building-v2";
               "node.description" = "earpods - Spesbourg Castle - Main Building, v2 - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
@@ -2165,8 +2165,8 @@
                   label = "mixer";
                   name = "mixL";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.16595869074375605;
+                    "Gain 2" = 0.16595869074375605;
                   };
                 }
 
@@ -2175,8 +2175,8 @@
                   label = "mixer";
                   name = "mixR";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.16595869074375605;
+                    "Gain 2" = 0.16595869074375605;
                   };
                 }
 
@@ -2226,7 +2226,7 @@
             };
 
             "capture.props" = {
-              "node.name" = "earpods_strasbourg-observatory-v2_96khz";
+              "node.name" = "earpods_strasbourg-observatory-v2";
               "node.description" = "earpods - Strasbourg Observatory, v2 - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
@@ -2304,8 +2304,8 @@
                   label = "mixer";
                   name = "mixL";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.17579236139586926;
+                    "Gain 2" = 0.17579236139586926;
                   };
                 }
 
@@ -2314,8 +2314,8 @@
                   label = "mixer";
                   name = "mixR";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.17579236139586926;
+                    "Gain 2" = 0.17579236139586926;
                   };
                 }
 
@@ -2365,7 +2365,7 @@
             };
 
             "capture.props" = {
-              "node.name" = "earpods_tyndall-bruce-monument-v2_96khz";
+              "node.name" = "earpods_tyndall-bruce-monument-v2";
               "node.description" = "earpods - Tyndall Bruce Monument - v2 - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
@@ -2443,8 +2443,8 @@
                   label = "mixer";
                   name = "mixL";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.15848931924611134;
+                    "Gain 2" = 0.15848931924611134;
                   };
                 }
 
@@ -2453,8 +2453,8 @@
                   label = "mixer";
                   name = "mixR";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.15848931924611134;
+                    "Gain 2" = 0.15848931924611134;
                   };
                 }
 
@@ -2504,7 +2504,7 @@
             };
 
             "capture.props" = {
-              "node.name" = "earpods_usina-del-arte-symphony-hall-v2_96khz";
+              "node.name" = "earpods_usina-del-arte-symphony-hall-v2";
               "node.description" = "earpods - Usina del Arte Symphony Hall - v2 - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
@@ -2582,8 +2582,8 @@
                   label = "mixer";
                   name = "mixL";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.13489628825916539;
+                    "Gain 2" = 0.13489628825916539;
                   };
                 }
 
@@ -2592,8 +2592,8 @@
                   label = "mixer";
                   name = "mixR";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.13489628825916539;
+                    "Gain 2" = 0.13489628825916539;
                   };
                 }
 
@@ -2643,7 +2643,7 @@
             };
 
             "capture.props" = {
-              "node.name" = "earpods_york-minsters-chapter-house_96khz";
+              "node.name" = "earpods_york-minsters-chapter-house";
               "node.description" = "earpods - York Minster's Chapter House - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
@@ -2721,8 +2721,8 @@
                   label = "mixer";
                   name = "mixL";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.15135612484362082;
+                    "Gain 2" = 0.15135612484362082;
                   };
                 }
 
@@ -2731,8 +2731,8 @@
                   label = "mixer";
                   name = "mixR";
                   control = {
-                    "Gain 1" = 0.05248074602497726;
-                    "Gain 2" = 0.05248074602497726;
+                    "Gain 1" = 0.15135612484362082;
+                    "Gain 2" = 0.15135612484362082;
                   };
                 }
 
@@ -2782,7 +2782,7 @@
             };
 
             "capture.props" = {
-              "node.name" = "earpods_zkm-karlsruhe-mezzanine-rear-v2_96khz";
+              "node.name" = "earpods_zkm-karlsruhe-mezzanine-rear-v2";
               "node.description" = "earpods - ZKM Karlsruhe - Mezzanine (Rear), v2 - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
@@ -2860,8 +2860,8 @@
                   label = "mixer";
                   name = "mixL";
                   control = {
-                    "Gain 1" = 0.07673614893618190;
-                    "Gain 2" = 0.07673614893618190;
+                    "Gain 1" = 0.11091748152624009;
+                    "Gain 2" = 0.11091748152624009;
                   };
                 }
 
@@ -2870,8 +2870,8 @@
                   label = "mixer";
                   name = "mixR";
                   control = {
-                    "Gain 1" = 0.07673614893618190;
-                    "Gain 2" = 0.07673614893618190;
+                    "Gain 1" = 0.11091748152624009;
+                    "Gain 2" = 0.11091748152624009;
                   };
                 }
 
@@ -2921,7 +2921,7 @@
             };
 
             "capture.props" = {
-              "node.name" = "cloud3_anechoic-oe_96khz";
+              "node.name" = "cloud3_anechoic-oe";
               "node.description" = "cloud3 - Anechoic (OE) - 96kHz";
               "media.class" = "Audio/Sink";
               "audio.channels" = 2;
