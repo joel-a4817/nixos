@@ -62,10 +62,7 @@
 
   environment.systemPackages = with pkgs; [
     (python3.withPackages (python-pkgs: with python-pkgs; [
-      evdev
-      pip
-      soundfile
-      numpy
+    evdev pip soundfile numpy
     ]))
 
     (bleachbit.overridePythonAttrs (old: {
@@ -73,53 +70,28 @@
         (old.propagatedBuildInputs or [])
         ++ [ python3Packages.psutil ];
     }))
-
-    xhost
-    procps
-    util-linux
+    xhost procps util-linux
 
     # Graphics
-    mesa
-    libva
-    libva-utils
+    mesa libva libva-utils
 
     # Java
     temurin-jre-bin
 
     # Development and Git
-    wget
-    git
-    gh
+    wget git gh
 
     # Sway
-    wmenu
-    swaybg
-    autotiling
-    grim
-    slurp
-    wf-recorder
-    wl-clipboard
+    wmenu swaybg autotiling grim slurp wf-recorder wl-clipboard
 
     # Audio and hardware
-    pulseaudio
-    brightnessctl
-    alsa-utils
-    nqptp
-    usbutils
-    libimobiledevice
+    pulseaudio brightnessctl alsa-utils camilladsp nqptp usbutils libimobiledevice psmisc #for web script
 
     # Media and applications
-    imv
-    mpv
-    ffmpeg
-    opencv
+    imv mpv ffmpeg opencv
 
     # Archives and optical media
-    unzip
-    zip
-    p7zip
-    cdrkit
-    dvdplusrwtools
+    unzip zip p7zip cdrkit dvdplusrwtools
 
     # Qt applications from Home Manager
     qt6.qtwayland
@@ -128,17 +100,7 @@
     steam-run
 
     # Yazi and scripts
-    fzf
-    zoxide
-    resvg
-    imagemagick
-    jq
-    trash-cli
-    lazygit
-    fd
-    ripgrep
-    nushell
-    ripdrag
+    fzf zoxide resvg imagemagick jq trash-cli lazygit fd ripgrep nushell ripdrag
 
     # Theos build dependencies
     bash

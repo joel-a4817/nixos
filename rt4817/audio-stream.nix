@@ -29,40 +29,34 @@
     };
   };
 
-  environment.etc."shairport-sync.conf" = {
-    mode = "0644";
-
-    text = ''
+  services.shairport-sync = {
+    enable = true;
+    package = pkgs.shairport-sync-airplay2;
+    user = "joel";
+    group = "users";
+    # openFirewall = true; # Doesn't currently cover AirPlay 2 correctly.
+    arguments = "-vvv";
+    settings = {
       general = {
         name = "rt4817";
-
-        // Route through pipewire-pulse rather than Shairport's
-        // native PipeWire backend.
-        output_backend = "pa";
-
-        // High-quality correction for clock drift.
-        interpolation = "soxr";
-
-        // Give the desktop audio server more buffering headroom.
-        audio_backend_buffer_desired_length_in_seconds = 0.5;
-        audio_backend_buffer_interpolation_threshold_in_seconds = 0.1;
-
-        // Respect volume changes from the iPad.
-        ignore_volume_control = "no";
-
-        // Disconnect cleanly when the sender disappears.
-        session_timeout = 20;
+        service_type = "airplay2";
+        output_backend = "alsa";
+        default_airplay_volume = -12.0;
       };
+      alsa = {
+        output_device = "hw:Loopback,0,0";
+        output_rate = 96000;
+        output_format = "S32_LE";
+        output_channels = 2;
 
-      metadata = {
-        enabled = "yes";
-        include_cover_art = "yes";
+        use_mmap_if_available = "no";
+        use_precision_timing = "auto";
       };
-    '';
+    };
   };
 
   systemd.services.nqptp = {
-    description = "Not Quite PTP for AirPlay 2";
+    description = "NQPTP AirPlay 2 Timing Daemon";
 
     wantedBy = [
       "multi-user.target"
@@ -93,44 +87,22 @@
   };
 
   systemd.services.shairport-sync = {
-    description = "Shairport Sync AirPlay 2 Receiver";
-
-    wantedBy = [
-      "multi-user.target"
-    ];
-
     after = [
       "nqptp.service"
       "user@1000.service"
     ];
-
     requires = [
       "nqptp.service"
     ];
-
     wants = [
       "user@1000.service"
     ];
-
     environment = {
       HOME = "/home/joel";
       XDG_RUNTIME_DIR = "/run/user/1000";
       PIPEWIRE_RUNTIME_DIR = "/run/user/1000";
-
-      // Ensure the PulseAudio compatibility client reaches
-      // Joel's pipewire-pulse socket.
-      PULSE_SERVER = "unix:/run/user/1000/pulse/native";
     };
-
     serviceConfig = {
-      User = "joel";
-      Group = "users";
-
-      ExecStart = ''
-        ${pkgs.shairport-sync-airplay2}/bin/shairport-sync \
-          -c /etc/shairport-sync.conf
-      '';
-
       Restart = "on-failure";
       RestartSec = 1;
     };
