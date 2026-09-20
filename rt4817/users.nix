@@ -10,7 +10,7 @@
     home = lib.mkForce "/home/joel";
     isNormalUser = true;
     isSystemUser = lib.mkForce false;
-    extraGroups = [ "wheel" "seat" "networkmanager" "audio" "video" "input" "cdrom" "libvirtd" "kvm" ];
+    extraGroups = [ "wheel" "seat" "networkmanager" "audio" "video" "input" "cdrom" ];
   };
 
 security.sudo.extraRules = [

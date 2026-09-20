@@ -32,33 +32,148 @@
   };
 
   programs.xwayland.enable = true;
+
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
   };
 
-  # Packages
+  # Allows externally downloaded Linux binaries, including the
+  # Theos iOS toolchain, to run on NixOS.
+  programs.nix-ld = {
+    enable = true;
+
+    libraries = with pkgs; [
+      stdenv.cc.cc
+      glibc
+      libedit
+      ncurses
+      zlib
+      z3
+      libxml2
+      util-linux
+    ];
+  };
+
+  # System-wide Theos location.
+  environment.sessionVariables = {
+    THEOS = "/opt/theos";
+  };
+
   environment.systemPackages = with pkgs; [
-    (pkgs.python3.withPackages (python-pkgs: with python-pkgs; [ evdev pip soundfile numpy ])) 
-    (pkgs.bleachbit.overridePythonAttrs (old: {
+    (python3.withPackages (python-pkgs: with python-pkgs; [
+      evdev
+      pip
+      soundfile
+      numpy
+    ]))
+
+    (bleachbit.overridePythonAttrs (old: {
       propagatedBuildInputs =
         (old.propagatedBuildInputs or [])
-        ++ [ pkgs.python3Packages.psutil ];
-    })) xhost procps util-linux
-    mesa libva libva-utils #graphics
-    temurin-jre-bin #java
-    wget git gh
-    wmenu swaybg autotiling
-    grim slurp wf-recorder wl-clipboard
-    pulseaudio brightnessctl
-    imv mpv unzip zip
-    qt6.qtwayland #qt apps in home-manager
-    usbutils steam-run
-    yt-dlp cdrkit dvdplusrwtools
-    ffmpeg-full p7zip fzf zoxide resvg imagemagick jq #yazi pkgs (jq rotation script too), ffmpeg-full needed for music convert
-    trash-cli lazygit fd ripgrep nushell ripdrag #required by yazi plugins
+        ++ [ python3Packages.psutil ];
+    }))
+
+    xhost
+    procps
+    util-linux
+
+    # Graphics
+    mesa
+    libva
+    libva-utils
+
+    # Java
+    temurin-jre-bin
+
+    # Development and Git
+    wget
+    git
+    gh
+
+    # Sway
+    wmenu
+    swaybg
+    autotiling
+    grim
+    slurp
+    wf-recorder
+    wl-clipboard
+
+    # Audio and hardware
+    pulseaudio
+    brightnessctl
+    alsa-utils
+    nqptp
+    usbutils
     libimobiledevice
+
+    # Media and applications
+    imv
+    mpv
+    ffmpeg
     opencv
-    alsa-utils nqptp
+
+    # Archives and optical media
+    unzip
+    zip
+    p7zip
+    cdrkit
+    dvdplusrwtools
+
+    # Qt applications from Home Manager
+    qt6.qtwayland
+
+    # Compatibility
+    steam-run
+
+    # Yazi and scripts
+    fzf
+    zoxide
+    resvg
+    imagemagick
+    jq
+    trash-cli
+    lazygit
+    fd
+    ripgrep
+    nushell
+    ripdrag
+
+    # Theos build dependencies
+    bash
+    coreutils
+    curl
+    gnumake
+    gnused
+    gnugrep
+    gawk
+    findutils
+    which
+    file
+    rsync
+    perl
+    python3
+
+    dpkg
+    fakeroot
+
+    libxml2
+    ncurses
+    zlib
+    z3
+    libedit
+
+    clang
+    lld
+    llvm
+
+    xz
+    gzip
+    bzip2
+    gnutar
+
+    openssh
+    ldid
   ];
 }

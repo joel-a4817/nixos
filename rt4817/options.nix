@@ -134,8 +134,8 @@
     allowedTCPPorts = [
       3689
       5000
-      7000
-      8384
+      7000 #airplay
+      8384 #syncthing
       22000
     ];
 
@@ -147,8 +147,8 @@
     ];
 
     allowedUDPPorts = [
-      319
-      320
+      319 #nqptp
+      320 #nqptp
       5353
       22000
       21027
