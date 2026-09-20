@@ -1,5 +1,66 @@
 { config, lib, pkgs, ... }:
 
+let
+  resetHyperXDac = pkgs.writeShellScriptBin "reset-hyperx-dac" ''
+    set -euo pipefail
+
+    device=""
+
+    for productFile in /sys/bus/usb/devices/*/product
+    do
+      if [ ! -r "$productFile" ]; then
+        continue
+      fi
+
+      product="$(
+        cat "$productFile"
+      )"
+
+      case "$product" in
+        *Cloud*III*)
+          device="$(
+            basename "$(
+              dirname "$productFile"
+            )"
+          )"
+          break
+          ;;
+      esac
+    done
+
+    if [ -z "$device" ]; then
+      echo "HyperX Cloud III USB device not found" >&2
+      exit 1
+    fi
+
+    echo "Resetting HyperX USB device $device"
+
+    printf '%s' "$device" \
+      > /sys/bus/usb/drivers/usb/unbind
+
+    sleep 2
+
+    printf '%s' "$device" \
+      > /sys/bus/usb/drivers/usb/bind
+
+    attempt=1
+
+    while [ "$attempt" -le 12 ]
+    do
+      if grep -Fq '[III' /proc/asound/cards
+      then
+        echo "HyperX Cloud III returned as ALSA card III"
+        exit 0
+      fi
+
+      sleep 1
+      attempt="$((attempt + 1))"
+    done
+
+    echo "USB device returned, but ALSA card III did not" >&2
+    exit 1
+  '';
+in
 {
   programs.appimage = {
     enable = true;
@@ -85,7 +146,8 @@
     wmenu swaybg autotiling grim slurp wf-recorder wl-clipboard
 
     # Audio and hardware
-    pulseaudio brightnessctl alsa-utils camilladsp nqptp usbutils libimobiledevice psmisc #for web script
+    pulseaudio brightnessctl alsa-utils camilladsp nqptp usbutils libimobiledevice psmisc # for web script 
+    resetHyperXDac
 
     # Media and applications
     imv mpv ffmpeg opencv

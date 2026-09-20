@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-{ 
+{
   environment.shellAliases = {
     s = "exec sway";
   };
@@ -21,6 +21,7 @@ security.sudo.extraRules = [
       { command = "/run/current-system/sw/bin/pkill"; options = [ "NOPASSWD" ]; }
       { command = "/run/current-system/sw/bin/setsid"; options = [ "NOPASSWD" ]; }
       { command = "/home/joel/.config/sway/scripts/rotate-touchpad.py"; options = [ "NOPASSWD" ]; }
+      { command = "/run/current-system/sw/bin/reset-hyperx-dac"; options = [ "NOPASSWD" ]; }
     ];
   }
 ];
