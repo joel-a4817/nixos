@@ -34,7 +34,7 @@
     package = pkgs.shairport-sync-airplay2;
     user = "joel";
     group = "users";
-    # openFirewall = true; # Doesn't currently cover AirPlay 2 correctly.
+    # openFirewall = true; # Doesn't currently cover AirPlay 2 correctly
     arguments = "-vvv";
     settings = {
       general = {
@@ -48,9 +48,6 @@
         output_rate = 96000;
         output_format = "S32_LE";
         output_channels = 2;
-
-        use_mmap_if_available = "no";
-        use_precision_timing = "auto";
       };
     };
   };
