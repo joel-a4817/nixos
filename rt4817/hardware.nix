@@ -23,10 +23,6 @@ in
     "snd-aloop"
   ];
 
-  boot.extraModprobeConfig = ''
-    options snd-aloop id=Loopback pcm_substreams=8
-  '';
-
   # Boot (BIOS)
   # boot.loader.grub.enable = true;
   # boot.loader.grub.device = "/dev/sda";

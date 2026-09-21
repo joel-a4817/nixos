@@ -1,33 +1,32 @@
 { config, lib, pkgs, ... }:
 
 {
-  services.snapserver = {
-    enable = true;
-    openFirewall = true;
+  environment.etc."asound.conf".text = ''
+    pcm.sonobus_camilladsp {
+      type plug
 
-    settings = {
-      stream.source =
-        "pipe:///run/snapserver/pipe?name=Convolved-Audio&auto_connect=false";
+      slave {
+        pcm "hw:Loopback,1,1"
+        channels 2
+        rate 96000
+        format S32_LE
+      }
 
-      tcp-streaming = {
-        enabled = true;
-        bind_to_address = "0.0.0.0";
-        port = 1704;
-      };
+      hint {
+        show on
+        description "CamillaDSP SonoBus"
+      }
+    }
 
-      tcp-control = {
-        enabled = true;
-        bind_to_address = "0.0.0.0";
-        port = 1705;
-      };
+    pcm.sonobus_silent {
+      type null
 
-      http = {
-        enabled = true;
-        bind_to_address = "0.0.0.0";
-        port = 1780;
-      };
-    };
-  };
+      hint {
+        show on
+        description "SonoBus Silent Output"
+      }
+    }
+  '';
 
   services.shairport-sync = {
     enable = true;

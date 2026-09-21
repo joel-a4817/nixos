@@ -147,7 +147,7 @@ in
 
     # Audio and hardware
     pulseaudio brightnessctl alsa-utils camilladsp nqptp usbutils libimobiledevice psmisc # for web script 
-    resetHyperXDac
+    resetHyperXDac sonobus
 
     # Media and applications
     imv mpv ffmpeg opencv
