@@ -1,9 +1,9 @@
-{ config, pkgs, lib, glide, ... }:
+{ config, pkgs, lib, glideWithCodecs, ... }:
 
 {
   home.packages = with pkgs; [
     clipse
-    glide.packages.${pkgs.stdenv.hostPlatform.system}.default
+    glideWithCodecs
     anki
     kdePackages.kamoso
     collabora-desktop

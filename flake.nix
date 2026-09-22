@@ -31,14 +31,52 @@
 
         home-manager.nixosModules.home-manager
 
-        ({ ... }: {
+        ({ pkgs, lib, ... }:
+
+        let
+          baseGlide =
+            glide.packages.${system}.default;
+
+          compatibleFfmpeg =
+            if pkgs ? ffmpeg_8 then
+              pkgs.ffmpeg_8
+            else
+              pkgs.ffmpeg_7;
+
+          glideWithCodecs = pkgs.symlinkJoin {
+            name = "glide-with-compatible-ffmpeg";
+
+            paths = [
+              baseGlide
+            ];
+
+            nativeBuildInputs = [
+              pkgs.makeWrapper
+            ];
+
+            postBuild = ''
+              rm -f "$out/bin/.glide-wrapped"
+
+              wrapProgram "$out/bin/glide" \
+                --prefix LD_LIBRARY_PATH : "${
+                  lib.makeLibraryPath [
+                    compatibleFfmpeg
+                  ]
+                }"
+            '';
+          };
+        in
+        {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+
           home-manager.extraSpecialArgs = {
-            inherit glide;
+            inherit glideWithCodecs;
           };
+
           home-manager.users.joel = import ./home.nix;
         })
+
       ];
     };
   };
