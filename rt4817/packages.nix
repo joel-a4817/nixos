@@ -65,12 +65,10 @@ in
   programs.appimage = {
     enable = true;
     binfmt = true;
-
     package = pkgs.appimage-run.override {
       extraPkgs = pkgs: [
         pkgs.webkitgtk_4_1
         pkgs.libsoup_3
-
         pkgs.mpv
         pkgs.libepoxy
         pkgs.gtk3
@@ -99,8 +97,6 @@ in
     wrapperFeatures.gtk = true;
   };
 
-  # Allows externally downloaded Linux binaries, including the
-  # Theos iOS toolchain, to run on NixOS.
   programs.nix-ld = {
     enable = true;
 
