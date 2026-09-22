@@ -117,14 +117,12 @@
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
           };
         }
@@ -226,14 +224,12 @@
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
           };
         }
@@ -335,14 +331,12 @@
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
           };
         }
@@ -444,14 +438,12 @@
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
           };
         }
@@ -553,14 +545,12 @@
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
           };
         }
@@ -662,14 +652,12 @@
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
           };
         }
@@ -771,14 +759,12 @@
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
           };
         }
@@ -880,14 +866,12 @@
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
           };
         }
@@ -989,14 +973,12 @@
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
           };
         }
@@ -1098,14 +1080,12 @@
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
           };
         }
@@ -1207,14 +1187,12 @@
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
           };
         }
@@ -1316,14 +1294,12 @@
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
           };
         }
@@ -1425,14 +1401,12 @@
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
           };
         }
@@ -1534,14 +1508,12 @@
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
           };
         }
@@ -1643,14 +1615,12 @@
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
           };
         }
@@ -1752,14 +1722,12 @@
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
           };
         }
@@ -1861,14 +1829,12 @@
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
           };
         }
@@ -1970,14 +1936,12 @@
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
           };
         }
@@ -2079,14 +2043,12 @@
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
           };
         }
@@ -2188,14 +2150,12 @@
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
           };
         }
@@ -2297,14 +2257,12 @@
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
 
             "playback.props" = {
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
-              "stream.dont-remix" = true;
             };
           };
         }
