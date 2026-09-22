@@ -3,13 +3,14 @@
 {
   imports = [
     /etc/nixos/hardware-configuration.nix
-    ./rt4817/audio-stream.nix
+    ./rt4817/audio.nix
     ./rt4817/hardware.nix
+    ./rt4817/networking.nix
     ./rt4817/options.nix
     ./rt4817/packages.nix
     ./rt4817/pipewire.nix
     ./rt4817/printing.nix
-    ./rt4817/users.nix
+    ./rt4817/users-sway.nix
   ];
 
   security.pki.certificateFiles = [ /home/joel/Documents/prefs/mhs-ca.pem ];

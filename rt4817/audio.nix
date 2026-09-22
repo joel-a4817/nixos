@@ -1,6 +1,38 @@
 { config, lib, pkgs, ... }:
 
 {
+  security.rtkit.enable = true;
+  systemd.timers.audio-fixes = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnBootSec = "30s";
+      OnUnitActiveSec = "10s";
+    };
+  };
+
+  systemd.services.audio-fixes = {
+    description = "Neutralize ALSA capture gains";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "sound.target" ];
+    serviceConfig.Type = "oneshot";
+    script = ''
+      sleep 5
+      for card in $(seq 0 20); do
+        ${pkgs.alsa-utils}/bin/amixer -c "$card" \
+          sset 'Auto-Mute Mode' Disabled >/dev/null 2>&1 || true
+        ${pkgs.alsa-utils}/bin/amixer -c "$card" \
+          set Capture cap >/dev/null 2>&1 || true
+        ${pkgs.alsa-utils}/bin/amixer -c "$card" scontrols 2>/dev/null |
+        sed -n "s/^Simple mixer control '\(.*\)',0$/\1/p" |
+        grep -Ei 'capture|mic' |
+        while IFS= read -r ctl; do
+          ${pkgs.alsa-utils}/bin/amixer -c "$card" \
+            set "$ctl" 0dB >/dev/null 2>&1 || true
+        done
+      done
+    '';
+  };
+
   environment.etc."asound.conf".text = ''
     pcm.sonobus_camilladsp {
       type plug
