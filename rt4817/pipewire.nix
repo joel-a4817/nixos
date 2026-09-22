@@ -122,6 +122,7 @@
             "playback.props" = {
               "node.autoconnect" = false;
               "node.dont-fallback" = true;
+              "stream.dont-remix" = true;
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
@@ -231,6 +232,7 @@
             "playback.props" = {
               "node.autoconnect" = false;
               "node.dont-fallback" = true;
+              "stream.dont-remix" = true;
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
@@ -340,6 +342,7 @@
             "playback.props" = {
               "node.autoconnect" = false;
               "node.dont-fallback" = true;
+              "stream.dont-remix" = true;
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
@@ -449,6 +452,7 @@
             "playback.props" = {
               "node.autoconnect" = false;
               "node.dont-fallback" = true;
+              "stream.dont-remix" = true;
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
@@ -558,6 +562,7 @@
             "playback.props" = {
               "node.autoconnect" = false;
               "node.dont-fallback" = true;
+              "stream.dont-remix" = true;
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
@@ -667,6 +672,7 @@
             "playback.props" = {
               "node.autoconnect" = false;
               "node.dont-fallback" = true;
+              "stream.dont-remix" = true;
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
@@ -776,6 +782,7 @@
             "playback.props" = {
               "node.autoconnect" = false;
               "node.dont-fallback" = true;
+              "stream.dont-remix" = true;
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
@@ -885,6 +892,7 @@
             "playback.props" = {
               "node.autoconnect" = false;
               "node.dont-fallback" = true;
+              "stream.dont-remix" = true;
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
@@ -994,6 +1002,7 @@
             "playback.props" = {
               "node.autoconnect" = false;
               "node.dont-fallback" = true;
+              "stream.dont-remix" = true;
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
@@ -1103,6 +1112,7 @@
             "playback.props" = {
               "node.autoconnect" = false;
               "node.dont-fallback" = true;
+              "stream.dont-remix" = true;
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
@@ -1212,6 +1222,7 @@
             "playback.props" = {
               "node.autoconnect" = false;
               "node.dont-fallback" = true;
+              "stream.dont-remix" = true;
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
@@ -1321,6 +1332,7 @@
             "playback.props" = {
               "node.autoconnect" = false;
               "node.dont-fallback" = true;
+              "stream.dont-remix" = true;
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
@@ -1430,6 +1442,7 @@
             "playback.props" = {
               "node.autoconnect" = false;
               "node.dont-fallback" = true;
+              "stream.dont-remix" = true;
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
@@ -1539,6 +1552,7 @@
             "playback.props" = {
               "node.autoconnect" = false;
               "node.dont-fallback" = true;
+              "stream.dont-remix" = true;
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
@@ -1648,6 +1662,7 @@
             "playback.props" = {
               "node.autoconnect" = false;
               "node.dont-fallback" = true;
+              "stream.dont-remix" = true;
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
@@ -1757,6 +1772,7 @@
             "playback.props" = {
               "node.autoconnect" = false;
               "node.dont-fallback" = true;
+              "stream.dont-remix" = true;
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
@@ -1866,6 +1882,7 @@
             "playback.props" = {
               "node.autoconnect" = false;
               "node.dont-fallback" = true;
+              "stream.dont-remix" = true;
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
@@ -1975,6 +1992,7 @@
             "playback.props" = {
               "node.autoconnect" = false;
               "node.dont-fallback" = true;
+              "stream.dont-remix" = true;
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
@@ -2084,6 +2102,7 @@
             "playback.props" = {
               "node.autoconnect" = false;
               "node.dont-fallback" = true;
+              "stream.dont-remix" = true;
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
@@ -2193,6 +2212,7 @@
             "playback.props" = {
               "node.autoconnect" = false;
               "node.dont-fallback" = true;
+              "stream.dont-remix" = true;
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
@@ -2302,6 +2322,7 @@
             "playback.props" = {
               "node.autoconnect" = false;
               "node.dont-fallback" = true;
+              "stream.dont-remix" = true;
               "audio.channels" = 2;
               "audio.position" = [ "FL" "FR" ];
               "audio.rate" = 96000;
