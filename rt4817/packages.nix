@@ -95,6 +95,7 @@ in
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
+    xwayland.enable = true;
   };
 
   programs.nix-ld = {
@@ -144,6 +145,8 @@ in
     # Audio and hardware
     pulseaudio brightnessctl alsa-utils camilladsp nqptp usbutils libimobiledevice psmisc # for web script 
     resetHyperXDac sonobus
+    libplist frida-tools #ipad website stuff
+    socat wayvnc playerctl
 
     # Media and applications
     imv mpv ffmpeg opencv
