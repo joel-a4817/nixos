@@ -72,7 +72,7 @@
         name = "rt4817";
         service_type = "airplay2";
         output_backend = "alsa";
-        default_airplay_volume = -12.0;
+        default_airplay_volume = 0.0;
       };
       alsa = {
         output_device = "hw:Loopback,0,0";
