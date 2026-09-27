@@ -22,6 +22,7 @@
         ];
       };
     };
+  };
 
   security.rtkit.enable = true;
 
