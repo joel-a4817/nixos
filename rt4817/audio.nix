@@ -9,19 +9,6 @@
     pulse.enable = true;
     jack.enable = true;
     wireplumber.enable = true;
-
-    extraConfig.pipewire."10-clock" = {
-      "context.properties" = {
-        "default.clock.rate" = 96000;
-        "default.clock.allowed-rates" = [
-          32000
-          44100
-          48000
-          88200
-          96000 #hyperx dac supports up to 96khz
-        ];
-      };
-    };
   };
 
   security.rtkit.enable = true;
