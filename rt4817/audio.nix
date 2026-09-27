@@ -1,6 +1,28 @@
 { config, lib, pkgs, ... }:
 
 {
+  # Audio (PipeWire + WirePlumber)
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    jack.enable = true;
+    wireplumber.enable = true;
+
+    extraConfig.pipewire."10-clock" = {
+      "context.properties" = {
+        "default.clock.rate" = 96000;
+        "default.clock.allowed-rates" = [
+          32000
+          44100
+          48000
+          88200
+          96000 #hyperx dac supports up to 96khz
+        ];
+      };
+    };
+
   security.rtkit.enable = true;
 
   systemd.timers.audio-fixes = {
@@ -97,11 +119,33 @@
     # SonoBus reads the paired endpoint:
     #   hw:Loopback,1,1
     #
-    pcm.sonobus_camilladsp {
-      type plug
-
+    # Both SonoBus and the laptop monitor read the processed output.
+    # dsnoop is the shared capture side of hw:Loopback,1,1.
+    pcm.camilladsp_output_shared {
+      type dsnoop
+      ipc_key 481701
+      ipc_key_add_uid true
       slave {
         pcm "hw:Loopback,1,1"
+        channels 2
+        rate 96000
+        format S32_LE
+        period_size 1024
+        buffer_size 4096
+      }
+      bindings {
+        0 0
+        1 1
+      }
+      hint {
+        show on
+        description "CamillaDSP Shared Output Capture"
+      }
+    }
+    pcm.sonobus_camilladsp {
+      type plug
+      slave {
+        pcm "camilladsp_output_shared"
         channels 2
         rate 96000
         format S32_LE

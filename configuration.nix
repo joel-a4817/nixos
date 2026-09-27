@@ -8,7 +8,6 @@
     ./rt4817/hardware.nix
     ./rt4817/networking.nix
     ./rt4817/packages.nix
-    ./rt4817/pipewire.nix
     ./rt4817/printing.nix
   ];
 
