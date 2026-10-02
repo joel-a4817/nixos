@@ -400,6 +400,7 @@
         service_type = "airplay2";
         output_backend = "alsa";
         default_airplay_volume = 0.0;
+        volume_control_profile = "dasl_tapered";
       };
 
       alsa = {
