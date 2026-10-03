@@ -23,7 +23,7 @@
   };
 
   systemd.services.audio-fixes = {
-    description = "Neutralize ALSA capture gains";
+    description = "Maintain ALSA audio switches";
     wantedBy = [ "multi-user.target" ];
     after = [ "sound.target" ];
 
@@ -42,21 +42,6 @@
           -c "$card" \
           set Capture cap \
           >/dev/null 2>&1 || true
-
-        ${pkgs.alsa-utils}/bin/amixer \
-          -c "$card" \
-          scontrols \
-          2>/dev/null |
-        sed -n \
-          "s/^Simple mixer control '\(.*\)',0$/\1/p" |
-        grep -Ei \
-          "capture|mic" |
-        while IFS= read -r ctl; do
-          ${pkgs.alsa-utils}/bin/amixer \
-            -c "$card" \
-            set "$ctl" 0dB \
-            >/dev/null 2>&1 || true
-        done
       done
     '';
   };
