@@ -143,7 +143,7 @@ in
     wmenu swaybg autotiling grim slurp wf-recorder wl-clipboard
 
     # Audio and hardware
-    brightnessctl alsa-utils camilladsp nqptp usbutils libimobiledevice psmisc # for web script 
+    pulseaudio brightnessctl alsa-utils camilladsp nqptp usbutils libimobiledevice psmisc # for web script 
     resetHyperXDac sonobus
     libplist frida-tools #ipad website stuff
     socat wayvnc playerctl
