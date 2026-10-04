@@ -9,6 +9,43 @@
     pulse.enable = true;
     jack.enable = true;
     wireplumber.enable = true;
+
+    wireplumber.extraConfig."99-manual-media-routing" = {
+      "wireplumber.settings" = {
+        # Restore profile and route choices explicitly made through Media
+        # Control instead of selecting a new best option after hotplug.
+        "device.restore-profile" = true;
+        "device.restore-routes" = true;
+        # Do not make an application stream follow a default-target change.
+        # Media Control explicitly moves streams as part of a manual change.
+        "linking.follow-default-target" = false;
+        # Do not pause media automatically when its playback sink disappears.
+        "linking.pause-playback" = false;
+        # Recording must not automatically switch a Bluetooth device between
+        # A2DP and its headset profile.
+        "bluetooth.autoswitch-to-headset-profile" = false;
+      };
+      "monitor.alsa.rules" = [
+        {
+          matches = [
+            {
+              # Match every ALSA sound card dynamically:
+              # built-in audio, HDMI, USB DACs, USB headsets and future cards.
+              "device.name" = "~alsa_card.*";
+            }
+          ];
+          actions = {
+            update-props = {
+              # Keep ACP/UCM option discovery, but disable ACP's own automatic
+              # profile and jack-port selection. Media Control performs those
+              # selections explicitly.
+              "api.acp.auto-profile" = false;
+              "api.acp.auto-port" = false;
+            };
+          };
+        }
+      ];
+    };
   };
 
   security.rtkit.enable = true;
