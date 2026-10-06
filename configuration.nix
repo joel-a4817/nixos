@@ -3,9 +3,9 @@
 {
   imports = [
     /etc/nixos/hardware-configuration.nix
-    ./rt4817/audio.nix
     ./rt4817/environment.nix
     ./rt4817/hardware.nix
+    ./rt4817/media.nix
     ./rt4817/networking.nix
     ./rt4817/packages.nix
     ./rt4817/printing.nix
