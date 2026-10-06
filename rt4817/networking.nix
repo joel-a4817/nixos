@@ -8,7 +8,7 @@
 
     ensureProfiles = {
       environmentFiles = [
-        "/home/joel/Documents/prefs/audio/airplay-hotspot.env"
+        "/home/joel/Documents/prefs/airplay-hotspot.env"
       ];
 
       profiles."airplay-direct" = {
