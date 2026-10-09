@@ -59,8 +59,8 @@
 
   environment.systemPackages = with pkgs; [
     (python3.withPackages (python-pkgs: with python-pkgs; [
-    evdev pip soundfile numpy
-    ]))
+      evdev pip numpy soundfile scipy h5py psutil matplotlib pandas
+  ])) #bunch of the audio pkgs
 
     (bleachbit.overridePythonAttrs (old: {
       propagatedBuildInputs =
@@ -68,6 +68,12 @@
         ++ [ python3Packages.psutil ];
     }))
     xhost procps util-linux
+
+    # Mesh2HRTF, SOFA and numerical-acoustics development
+    blender cmake pkg-config gcc gfortran
+
+    # Native numerical and HDF5 libraries
+    hdf5 openblas lapack
 
     # Graphics
     mesa libva libva-utils
@@ -103,39 +109,6 @@
     fzf zoxide resvg imagemagick jq trash-cli lazygit fd ripgrep nushell ripdrag
 
     # Theos build dependencies
-    bash
-    coreutils
-    curl
-    gnumake
-    gnused
-    gnugrep
-    gawk
-    findutils
-    which
-    file
-    rsync
-    perl
-    python3
-
-    dpkg
-    fakeroot
-
-    libxml2
-    ncurses
-    zlib
-    z3
-    libedit
-
-    clang
-    lld
-    llvm
-
-    xz
-    gzip
-    bzip2
-    gnutar
-
-    openssh
-    ldid
+    bash coreutils curl gnumake gnused gnugrep gawk findutils which file rsync perl dpkg fakeroot libxml2 ncurses zlib z3 libedit clang lld llvm xz gzip bzip2 gnutar openssh ldid   
   ];
 }
