@@ -1,6 +1,143 @@
 { config, lib, pkgs, ... }:
+let
+  limiterLibrary = "${pkgs.ladspaPlugins}/lib/ladspa/fast_lookahead_limiter_1913.so";
+  # Controls by ordinal avoid translated/case-dependent control names.
+  # Input gain 0 dB, sample ceiling 0 dBFS, release 0.1 seconds.
+  limiterPCM = slave: ''
+    pcm.camilladsp_peak_limited {
+      type plug
+      slave {
+        pcm "camilladsp_peak_ladspa"
+        format FLOAT_LE
+        channels 2
+        rate 96000
+      }
+    }
 
-{
+    pcm.camilladsp_peak_ladspa {
+      type ladspa
+      channels 2
+      slave.pcm "${slave}"
+      path "${pkgs.ladspaPlugins}/lib/ladspa"
+      playback_plugins {
+        0 {
+          filename "${limiterLibrary}"
+          label "fastLookaheadLimiter"
+          policy none
+          input {
+            bindings {
+              0 "Input 1"
+              1 "Input 2"
+            }
+            controls {
+              0 0.0
+              1 0.0
+              2 0.1
+            }
+          }
+          output {
+            bindings {
+              0 "Output 1"
+              1 "Output 2"
+            }
+          }
+        }
+      }
+    }
+  '';
+  productionPCM = ''
+    # FLOAT input -> stereo-linked lookahead limiter -> integer conversion.
+    pcm.camilladsp_peak_integer {
+      type plug
+      slave {
+        pcm "hw:Loopback,0,1"
+        channels 2
+        rate 96000
+        format S32_LE
+      }
+    }
+  '' + limiterPCM "camilladsp_peak_integer";
+  testConfig = pkgs.writeText "camilladsp-peak-limiter-test.conf" (''
+    pcm.null { type null }
+    pcm.camilladsp_peak_integer {
+      type file
+      slave.pcm "null"
+      file "limited.f32"
+      format "raw"
+    }
+  '' + limiterPCM "camilladsp_peak_integer");
+  python = pkgs.python3.withPackages (ps: [ ps.numpy ]);
+  # Runs against the user's selected nixpkgs at build time, with no sound device.
+  # A failed plugin load or numerical test prevents this module being installed.
+  testScript = pkgs.writeText "camilladsp-peak-limiter-test.py" ''
+    import os, subprocess
+    import numpy as np
+    rate = 96000
+    def process(x):
+        x = np.asarray(x, dtype='<f4')
+        x.tofile('input.f32')
+        try: os.unlink('limited.f32')
+        except FileNotFoundError: pass
+        subprocess.run(['${pkgs.alsa-utils}/bin/aplay', '-q', '-D',
+                        'camilladsp_peak_limited', '-t', 'raw', '-f',
+                        'FLOAT_LE', '-r', str(rate), '-c', '2', 'input.f32'],
+                       check=True)
+        y = np.fromfile('limited.f32', dtype='<f4')
+        assert y.size > 0 and y.size % 2 == 0, 'Invalid output size'
+        y = y.reshape(-1, 2)
+        assert np.isfinite(y).all(), 'Non-finite output'
+        assert np.max(np.abs(y)) <= 1.0, 'Sample ceiling exceeded'
+        return y
+    # Verify CamillaDSP itself does not clamp floating-point output before ALSA.
+    probe = np.zeros((4096,2), dtype='<f4')
+    probe[100:200] = 4.0
+    probe.tofile('engine-input.f32')
+    with open('engine-test.yml','w') as f:
+        f.write("devices:\n  samplerate: 96000\n  chunksize: 1024\n"
+                "  capture:\n    type: RawFile\n    channels: 2\n"
+                "    filename: engine-input.f32\n    format: F32_LE\n"
+                "  playback:\n    type: File\n    channels: 2\n"
+                "    filename: engine-output.f32\n    format: F32_LE\n"
+                "pipeline: []\n")
+    subprocess.run(['${pkgs.camilladsp}/bin/camilladsp','engine-test.yml'],
+                   check=True, timeout=30)
+    engine = np.fromfile('engine-output.f32',dtype='<f4')
+    assert engine.size > 0 and np.max(engine) == 4.0, 'CamillaDSP clamps float output; cannot install this external-limiter design'
+    t = np.arange(rate * 2) / rate
+    low = np.column_stack((0.1*np.sin(2*np.pi*997*t),
+                           0.05*np.sin(2*np.pi*997*t)))
+    y = process(low)
+    # A lookahead delay is expected; verify steady-state unity gain and stereo.
+    assert abs(float(np.max(np.abs(y[:,0]))) - 0.1) < 0.001
+    assert np.max(np.abs(y[:,1] - 0.5*y[:,0])) < 1e-5
+    high = np.column_stack((8*np.sin(2*np.pi*997*t),
+                            4*np.sin(2*np.pi*997*t)))
+    y = process(high)
+    assert np.max(np.abs(y[:,0])) > 0.8, 'Limiter output unexpectedly muted'
+    # Link test during steady-state limiting, excluding startup and end padding.
+    assert np.max(np.abs(y[rate//2:rate,1] - 0.5*y[rate//2:rate,0])) < 1e-4
+    rng = np.random.default_rng(4817)
+    burst = np.zeros((rate*2,2),dtype=np.float32)
+    burst[rate//4:rate//2] = rng.uniform(-128,128,(rate//4,2))
+    burst[rate,0] = 256; burst[rate+1,1] = -256
+    process(burst)
+    print('PASS: native ALSA plugin load, unity below ceiling, stereo linkage, '
+          'over-level sine, random bursts and isolated impulses at 96 kHz.')
+  '';
+  tested = pkgs.runCommand "camilladsp-peak-limiter-v11-tested" {
+    nativeBuildInputs = [ python pkgs.alsa-utils ];
+  } ''
+    test -f "${limiterLibrary}"
+    export ALSA_CONFIG_PATH="${testConfig}"
+    python "${testScript}" > report.txt
+    mkdir -p "$out"
+    cp report.txt "$out/report.txt"
+  '';
+in {
+
+  environment.systemPackages = [ pkgs.ladspaPlugins pkgs.alsa-utils ];
+  environment.etc."camilladsp-peak-limiter-v11".source = "${tested}/report.txt";
+
   # Audio (PipeWire + WirePlumber)
   services.pipewire = {
     enable = true;
@@ -84,6 +221,7 @@
   };
 
   environment.etc."asound.conf".text = ''
+    ${productionPCM}
     #
     # Shared input into CamillaDSP.
     #
