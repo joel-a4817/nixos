@@ -1,5 +1,39 @@
 {
   "nodes": {
+    "artcraft": {
+      "inputs": {
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1791545297,
+        "narHash": "sha256-3ceEmWpYXuInInVoMsYbfue9A+Qq4faYv26uN8aAkG8=",
+        "owner": "ipeglin",
+        "repo": "artcraft-nix",
+        "rev": "af77cd9c94e114ae504996d53f6ae2d2e4a61ba0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ipeglin",
+        "repo": "artcraft-nix",
+        "type": "github"
+      }
+    },
+    "deckcraft-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791594122,
+        "narHash": "sha256-X04rQBsPWyj++fkxKa1lqtAkfnN0uykk2Lsn95P4M8w=",
+        "owner": "storytold",
+        "repo": "deckcraft",
+        "rev": "84acb49895c8190396b686c1eb9f20c730e48633",
+        "type": "github"
+      },
+      "original": {
+        "owner": "storytold",
+        "repo": "deckcraft",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "inputs": {
         "systems": "systems"
@@ -38,6 +72,22 @@
         "type": "github"
       }
     },
+    "gridcraft-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791594134,
+        "narHash": "sha256-fW7nSYdmUUWjVqZnL2/Ctzimqosg678XQGmycKK8U1k=",
+        "owner": "storytold",
+        "repo": "gridcraft",
+        "rev": "13664fe66b952e7abcd68e2371c1d4f34f990dac",
+        "type": "github"
+      },
+      "original": {
+        "owner": "storytold",
+        "repo": "gridcraft",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -60,6 +110,22 @@
     },
     "nixpkgs": {
       "locked": {
+        "lastModified": 1791456040,
+        "narHash": "sha256-H83yz/do+hjOO0uujHyH8RgtIQP2v7Mw+cLwcZK/xKc=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "e7439b6b14ad3cc35d05608ebca9bce01a25f5f8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
         "lastModified": 1789921291,
         "narHash": "sha256-Ft/BRnIqw1MywFoXydKobjjWmDFgDdYtSpJliE8+yUw=",
         "owner": "NixOS",
@@ -74,7 +140,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_2": {
+    "nixpkgs_3": {
       "locked": {
         "lastModified": 1789370336,
         "narHash": "sha256-6RSEDHIWQtesQKWSu5qRai8L2h4KgCgMEfJHstW99G4=",
@@ -92,9 +158,13 @@
     },
     "root": {
       "inputs": {
+        "artcraft": "artcraft",
+        "deckcraft-src": "deckcraft-src",
         "glide": "glide",
+        "gridcraft-src": "gridcraft-src",
         "home-manager": "home-manager",
-        "nixpkgs": "nixpkgs",
+        "nixpkgs": "nixpkgs_2",
+        "wordcraft-src": "wordcraft-src",
         "yazi": "yazi"
       }
     },
@@ -134,10 +204,26 @@
         "type": "github"
       }
     },
+    "wordcraft-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791594152,
+        "narHash": "sha256-IBfOqEMpJy+FkIBVgtVsKYwRIqh86Tx2SUdt7I+2LdQ=",
+        "owner": "storytold",
+        "repo": "wordcraft",
+        "rev": "a1caf22a0b4faa4675a2d6dbcc24e0516b300e30",
+        "type": "github"
+      },
+      "original": {
+        "owner": "storytold",
+        "repo": "wordcraft",
+        "type": "github"
+      }
+    },
     "yazi": {
       "inputs": {
         "flake-utils": "flake-utils",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs_3",
         "rust-overlay": "rust-overlay"
       },
       "locked": {
