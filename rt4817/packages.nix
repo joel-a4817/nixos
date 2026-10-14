@@ -59,7 +59,7 @@
 
   environment.systemPackages = with pkgs; [
     (python3.withPackages (python-pkgs: with python-pkgs; [
-      evdev pip numpy soundfile scipy h5py psutil matplotlib pandas
+      evdev pip numpy soundfile scipy h5py psutil matplotlib pandas pyyaml
   ])) #bunch of the audio pkgs
 
     (bleachbit.overridePythonAttrs (old: {
