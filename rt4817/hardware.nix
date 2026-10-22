@@ -1,18 +1,5 @@
 { config, lib, pkgs, ... }:
 
-let
-  pixy2UdevRules = pkgs.stdenvNoCC.mkDerivation {
-    pname = "pixy2-udev-rules";
-    version = "1";
-    src = ./pixy.rules;
-    dontUnpack = true;
-    installPhase = ''
-      mkdir -p $out/lib/udev/rules.d
-      # name it with a prefix so ordering is sane
-      cp "$src" $out/lib/udev/rules.d/99-pixy.rules
-    '';
-  };
-in
 {
   # Boot (UEFI)
   boot.loader.systemd-boot.enable = true;
@@ -40,7 +27,6 @@ in
   services.tlp.enable = true;
 
   # NixOS will collect rule files from packages under {lib,etc}/udev/rules.d
-  services.udev.packages = [ pixy2UdevRules ];
 
   services.udev.extraRules = ''
   

@@ -1,9 +1,8 @@
-{ config, pkgs, lib, glideWithCodecs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   home.packages = with pkgs; [
     clipse
-    glideWithCodecs
     kdePackages.kamoso
     discord signal-desktop karere
     prismlauncher

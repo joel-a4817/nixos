@@ -88,7 +88,7 @@
     socat wayvnc playerctl
 
     # Media and applications
-    imv mpv ffmpeg opencv
+    imv mpv ffmpeg
 
     # Archives and optical media
     unzip zip p7zip cdrkit dvdplusrwtools
