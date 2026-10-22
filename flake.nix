@@ -2,7 +2,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    glide.url = "github:glide-browser/glide";
+    glide.url = "github:glide-browser/glide.nix";
     glide.inputs.nixpkgs.follows = "nixpkgs";
 
     home-manager = {
@@ -56,7 +56,16 @@
             inherit glide artcraft system;
           };
 
-          home-manager.users.joel = import ./home.nix;
+          home-manager.users.joel = {
+            imports = [
+              ./home.nix
+            ];
+
+            home.packages = [
+              glide.packages.${system}.default
+              artcraft.packages.${system}.default
+            ];
+          };
         })
       ];
     };
