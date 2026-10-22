@@ -2,7 +2,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    # Official Glide Browser upstream. No third-party packaging or codec wrapper.
     glide.url = "github:glide-browser/glide";
     glide.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -13,7 +12,6 @@
 
     yazi.url = "github:sxyazi/yazi";
 
-    # Your separate local ArtCraft packaging flake.
     artcraft = {
       url = "path:/home/joel/nixos/artcraft";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -23,7 +21,21 @@
   outputs = { self, nixpkgs, home-manager, yazi, glide, artcraft, ... }:
   let
     system = "x86_64-linux";
-    overlays = [ yazi.overlays.default ];
+    overlays = [
+      yazi.overlays.default
+      (final: prev: {
+        sonobus = prev.sonobus.overrideAttrs (old: {
+          postPatch = (old.postPatch or "") + ''
+            substituteInPlace Source/VersionInfo.h \
+              --replace-fail 'VersionInfo() = default;' \
+              'VersionInfo (String version, String notes, std::vector<Asset> parsedAssets) : versionString (std::move (version)), releaseNotes (std::move (notes)), assets (std::move (parsedAssets)) {}'
+            substituteInPlace Source/VersionInfo.cpp \
+              --replace-fail 'new VersionInfo ({ versionString, releaseNotes, std::move (parsedAssets) })' \
+              'new VersionInfo (versionString, releaseNotes, std::move (parsedAssets))'
+          '';
+        });
+      })
+    ];
   in {
     nixosConfigurations.rt4817 = nixpkgs.lib.nixosSystem {
       inherit system;
