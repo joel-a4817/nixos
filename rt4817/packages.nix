@@ -59,7 +59,7 @@
 
   environment.systemPackages = with pkgs; [
     (python3.withPackages (python-pkgs: with python-pkgs; [
-      evdev pip numpy soundfile scipy h5py psutil matplotlib pandas pyyaml
+      evdev pip numpy soundfile scipy h5py psutil matplotlib pandas pyyaml netcdf4
   ])) #bunch of the audio pkgs
 
     (bleachbit.overridePythonAttrs (old: {
@@ -68,12 +68,6 @@
         ++ [ python3Packages.psutil ];
     }))
     xhost procps util-linux
-
-    # Mesh2HRTF, SOFA and numerical-acoustics development
-    blender cmake pkg-config gcc gfortran
-
-    # Native numerical and HDF5 libraries
-    hdf5 openblas lapack
 
     # Graphics
     mesa libva libva-utils

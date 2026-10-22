@@ -6,6 +6,19 @@
   networking.networkmanager = {
     enable = true;
 
+    ensureProfiles.profiles.ethernet-direct = {
+      connection = {
+        id = "Ethernet direct";
+        uuid = "c7267f14-5e8b-4a89-96b3-8d24971f0c62";
+        type = "ethernet";
+        autoconnect = true;
+        autoconnect-priority = 999;
+      };
+      ethernet = {};
+      ipv4.method = "auto";
+      ipv6.method = "auto";
+    };
+
     ensureProfiles = {
       environmentFiles = [
         "/home/joel/Documents/prefs/airplay-hotspot.env"

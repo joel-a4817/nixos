@@ -4,11 +4,11 @@
   home.packages = with pkgs; [
     clipse
     glideWithCodecs
-    anki
     kdePackages.kamoso
     discord signal-desktop karere
-    prismlauncher kicad bambu-studio
+    prismlauncher
     socat #play/pause mpv from anywhere
+    blender
   ];
 
   programs.yazi = {
