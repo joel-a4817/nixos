@@ -11,8 +11,6 @@
     ./rt4817/printing.nix
   ];
 
-  security.pki.certificateFiles = [ /home/joel/Documents/prefs/mhs-ca.pem ];
-
   networking.hostName = "rt4817";
   networking.networkmanager.enable = true;
 
