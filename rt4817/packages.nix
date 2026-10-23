@@ -61,6 +61,7 @@
     (python3.withPackages (python-pkgs: with python-pkgs; [
       evdev pip numpy soundfile scipy h5py psutil matplotlib pandas pyyaml netcdf4 requests platformdirs
   ])) #bunch of the audio pkgs
+    web-ext
 
     (bleachbit.overridePythonAttrs (old: {
       propagatedBuildInputs =
