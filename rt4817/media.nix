@@ -295,10 +295,11 @@ in {
   };
 
   systemd.user.services.camilladsp-system-audio = {
+    enable = true;
     description =
       "Route desktop audio into CamillaDSP";
 
-    wantedBy = [ "default.target" ];
+    wantedBy = [ ];
 
     after = [
       "pipewire.service"
@@ -413,6 +414,7 @@ in {
   };
 
   systemd.user.services.camilladsp-wayvnc = {
+    enable = true;
     description =
       "WayVNC for the existing Sway session";
 
@@ -420,13 +422,7 @@ in {
       "graphical-session.target"
     ];
 
-    partOf = [
-      "graphical-session.target"
-    ];
-
-    wantedBy = [
-      "graphical-session.target"
-    ];
+    wantedBy = [ ];
 
     unitConfig.ConditionUser = "joel";
 
