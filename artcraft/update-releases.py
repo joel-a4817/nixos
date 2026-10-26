@@ -1,93 +1,157 @@
 #!/usr/bin/env python3
-"""Discover upstream StoryTold Craft Linux release tarballs and pin their SHA256.
+"""Pin verified official StoryTold Craft x86_64 Linux tarball releases.
 
-Does not execute downloads. Replaces releases.json atomically only if every
-selected asset has an upstream SHA256SUMS.txt entry and a valid tar.gz filename.
-No third-party packaging flake. The source of truth is upstream GitHub releases.
+Only github.com/storytold repositories are considered. A release is accepted
+only when exactly one matching official tar.gz asset exists and its SHA-256 is
+listed in that same release's SHA256SUMS.txt. The manifest is replaced
+atomically only after every previously pinned application is still available.
 """
+
+from __future__ import annotations
+
+import base64
+import hashlib
 import json
 import os
 from pathlib import Path
 import re
 import tempfile
 import urllib.error
+import urllib.parse
 import urllib.request
 
 ROOT = Path(__file__).resolve().parent
-API = 'https://api.github.com'
-HEADERS = {'User-Agent': 'local-artcraft-nix-updater', 'Accept': 'application/vnd.github+json'}
+OUTPUT = ROOT / "releases.json"
+API_ROOT = "https://api.github.com"
+OWNER = "storytold"
+HEADERS = {
+    "Accept": "application/vnd.github+json",
+    "User-Agent": "joel-local-artcraft-nix-updater",
+    "X-GitHub-Api-Version": "2022-11-28",
+}
+
+REPO_NAME = re.compile(r"[a-z][a-z0-9-]*craft")
+ASSET_NAME = re.compile(r"(?P<name>[a-z][a-z0-9-]*craft)-.+-linux-x86_64\.tar\.gz", re.I)
+CHECKSUM_LINE = re.compile(r"([0-9a-fA-F]{64})\s+\*?(.+)")
 
 
-def get(url):
+def get(url: str) -> bytes:
     request = urllib.request.Request(url, headers=HEADERS)
-    with urllib.request.urlopen(request, timeout=35) as response:
+    with urllib.request.urlopen(request, timeout=60) as response:
         return response.read()
 
 
-def api(path):
-    return json.loads(get(API + path))
+def api(path: str):
+    return json.loads(get(API_ROOT + path))
 
 
-def app_repos():
-    # Discover, do not hardcode the list of current Craft applications.
-    # The upstream owner is fixed to prevent unrelated third-party sources.
-    page = 1
-    while True:
-        rows = api(f'/users/storytold/repos?per_page=100&page={page}')
-        if not isinstance(rows, list): raise RuntimeError('Unexpected GitHub API response')
+def existing_manifest() -> dict:
+    if not OUTPUT.exists():
+        return {}
+    data = json.loads(OUTPUT.read_text(encoding="utf-8"))
+    if not isinstance(data, dict):
+        raise RuntimeError("releases.json must contain an object")
+    return data
+
+
+def discover_repositories() -> list[str]:
+    result: list[str] = []
+    for page in range(1, 21):
+        rows = api(f"/users/{OWNER}/repos?per_page=100&page={page}&type=public")
+        if not isinstance(rows, list):
+            raise RuntimeError("Unexpected GitHub repository response")
         for repo in rows:
-            name = repo.get('name', '')
-            if re.fullmatch(r'[a-z][a-z0-9-]*craft', name) and not repo.get('fork', False):
-                yield name
-        if len(rows) < 100: break
-        page += 1
-        if page > 20: raise RuntimeError('GitHub repo pagination safety guard')
+            name = repo.get("name", "")
+            if REPO_NAME.fullmatch(name) and not repo.get("fork", False) and not repo.get("archived", False):
+                result.append(name)
+        if len(rows) < 100:
+            break
+    return sorted(set(result))
 
 
-def find_release(name):
+def latest_verified_release(name: str) -> dict | None:
     try:
-        release = api(f'/repos/storytold/{name}/releases/latest')
+        release = api(f"/repos/{OWNER}/{name}/releases/latest")
     except urllib.error.HTTPError as error:
-        if error.code == 404: return None
+        if error.code == 404:
+            return None
         raise
-    assets = release.get('assets', [])
-    matches = [a for a in assets if re.fullmatch(
-        rf'{re.escape(name)}-.*-linux-x86_64\.tar\.gz', a.get('name', ''), re.I)]
-    if len(matches) != 1:
-        # No reliable archive format; do not invent one.
+
+    if release.get("draft") or release.get("prerelease"):
         return None
-    checksum_assets = [a for a in assets if a.get('name') == 'SHA256SUMS.txt']
-    if len(checksum_assets) != 1: return None
-    sums = get(checksum_assets[0]['browser_download_url']).decode('utf-8')
-    expected = {}
-    for line in sums.splitlines():
-        match = re.fullmatch(r'([0-9a-fA-F]{64})\s+\*?(.+)', line.strip())
-        if match: expected[Path(match.group(2)).name] = match.group(1).lower()
-    asset = matches[0]
-    if asset['name'] not in expected: return None
-    digest = expected[asset['name']]
-    return {'version': release['tag_name'], 'url': asset['browser_download_url'], 'hash': 'sha256-' + __import__('base64').b64encode(bytes.fromhex(digest)).decode('ascii')}
+
+    assets = release.get("assets", [])
+    archives = [
+        asset for asset in assets
+        if ASSET_NAME.fullmatch(asset.get("name", ""))
+        and ASSET_NAME.fullmatch(asset["name"]).group("name").lower() == name.lower()
+    ]
+    checksum_assets = [asset for asset in assets if asset.get("name") == "SHA256SUMS.txt"]
+    if len(archives) != 1 or len(checksum_assets) != 1:
+        return None
+
+    checksums: dict[str, str] = {}
+    checksum_text = get(checksum_assets[0]["browser_download_url"]).decode("utf-8", errors="strict")
+    for raw_line in checksum_text.splitlines():
+        match = CHECKSUM_LINE.fullmatch(raw_line.strip())
+        if match:
+            checksums[Path(match.group(2)).name] = match.group(1).lower()
+
+    asset = archives[0]
+    filename = asset["name"]
+    digest = checksums.get(filename)
+    if digest is None:
+        return None
+
+    sri = "sha256-" + base64.b64encode(bytes.fromhex(digest)).decode("ascii")
+    return {
+        "version": release["tag_name"],
+        "url": asset["browser_download_url"],
+        "hash": sri,
+    }
 
 
-def main():
-    found = {}
-    names = sorted(set(app_repos()))
-    if not names: raise RuntimeError('No upstream Craft repositories discovered; keeping existing manifest')
-    for name in names:
-        item = find_release(name)
-        if item:
-            found[name] = item
-            print('PIN', name, item['version'])
-        else:
-            print('SKIP (no verified x86_64 Linux tar.gz)', name)
-    if not found: raise RuntimeError('No verified release archives; keeping existing manifest')
-    output = ROOT / 'releases.json'
-    text = json.dumps(found, indent=2, sort_keys=True) + '\n'
-    with tempfile.NamedTemporaryFile('w', dir=ROOT, prefix='.artcraft-', delete=False) as f:
-        f.write(text)
-        temporary = Path(f.name)
-    os.replace(temporary, output)
-    print('Pinned', len(found), 'upstream apps:', output)
+def atomic_write(data: dict) -> None:
+    text = json.dumps(data, indent=2, sort_keys=True) + "\n"
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=ROOT, prefix=".releases-", delete=False
+    ) as handle:
+        handle.write(text)
+        temporary = Path(handle.name)
+    os.replace(temporary, OUTPUT)
 
-if __name__ == '__main__':
+
+def main() -> None:
+    previous = existing_manifest()
+    repositories = discover_repositories()
+    if not repositories:
+        raise RuntimeError("No official StoryTold Craft repositories discovered")
+
+    updated: dict[str, dict] = {}
+    skipped: list[str] = []
+    for name in repositories:
+        item = latest_verified_release(name)
+        if item is None:
+            skipped.append(name)
+            print(f"SKIP {name}: no unique verified stable x86_64 Linux tarball")
+            continue
+        updated[name] = item
+        print(f"PIN  {name} {item['version']}")
+
+    missing_previous = sorted(set(previous) - set(updated))
+    if missing_previous:
+        raise RuntimeError(
+            "Refusing partial manifest; previously pinned apps missing verified releases: "
+            + ", ".join(missing_previous)
+        )
+    if not updated:
+        raise RuntimeError("No verified official release archives found")
+
+    atomic_write(updated)
+    print(f"Pinned {len(updated)} official upstream apps in {OUTPUT}")
+    if skipped:
+        print("Repositories skipped safely: " + ", ".join(skipped))
+
+
+if __name__ == "__main__":
     main()
