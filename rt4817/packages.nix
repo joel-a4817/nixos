@@ -104,6 +104,8 @@
     # Yazi and scripts
     fzf zoxide resvg imagemagick jq trash-cli lazygit fd ripgrep nushell ripdrag
 
+    gnome-themes-extra #dark theme
+
     # Theos build dependencies
     bash coreutils curl gnumake gnused gnugrep gawk findutils which file rsync perl dpkg fakeroot libxml2 ncurses zlib z3 libedit clang lld llvm xz gzip bzip2 gnutar openssh ldid   
   ];
