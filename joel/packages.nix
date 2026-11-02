@@ -4,7 +4,7 @@
   home.packages = with pkgs; [
     clipse
     kdePackages.kamoso
-    discord signal-desktop karere
+    vesktop signal-desktop karere
     prismlauncher
     socat #play/pause mpv from anywhere
     blender
