@@ -4,7 +4,7 @@
   home.packages = with pkgs; [
     clipse
     kdePackages.kamoso
-    vesktop signal-desktop karere
+    signal-desktop karere
     prismlauncher
     socat #play/pause mpv from anywhere
     blender
@@ -23,4 +23,13 @@
   };
 
   programs.fastfetch.enable = true;
+
+  programs.vesktop = {
+    enable = true;
+
+    settings = {
+      minimizeToTray = false;
+    };
+  };
+
 }
