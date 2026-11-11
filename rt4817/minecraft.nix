@@ -40,7 +40,7 @@ in {
   systemd.services.minecraft-server-main = {
     wants = [ "network-online.target" ];
     after = [ "network-online.target" "NetworkManager.service" ];
-    serviceConfig.TimeoutStopSec = "180s";
+    serviceConfig.TimeoutStopSec = lib.mkForce "180s";
   };
 
   environment.systemPackages = with pkgs; [ rsync openssh curl jq networkmanager tmux ];
