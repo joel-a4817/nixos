@@ -73,8 +73,14 @@ let
   mkServer = server: lib.nameValuePair server.name {
     enable = true;
     autoStart = false;
-    restart = "always";
-    package = pkgs.fabricServers.${"fabric-${server.version}"};
+    restart = "no";
+    package =
+      (pkgs.fabricServers.${"fabric-${server.version}"}).override {
+        jre_headless =
+          if server.version == "26_3"
+          then pkgs.jdk25_headless
+          else pkgs.jdk21_headless;
+      };
     jvmOpts = lib.concatStringsSep " " [
       "-Xms1G"
       "-Xmx${server.memory}"
