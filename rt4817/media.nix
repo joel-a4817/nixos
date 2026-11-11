@@ -274,6 +274,23 @@ in {
       }
     }
 
+    # Signed both-output synchronization uses subdevice 2 only when the
+    # external/iPad branch must be delayed.  The feeder writes hw:Loopback,0,2
+    # and SonoBus captures the paired endpoint below.
+    pcm.sonobus_camilladsp_delayed {
+      type plug
+      slave {
+        pcm "hw:Loopback,1,2"
+        channels 2
+        rate 96000
+        format S32_LE
+      }
+      hint {
+        show on
+        description "CamillaDSP SonoBus Delayed"
+      }
+    }
+
     pcm.sonobus_silent {
       type null
 
