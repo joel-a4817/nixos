@@ -73,7 +73,7 @@ let
   mkServer = server: lib.nameValuePair server.name {
     enable = true;
     autoStart = false;
-    restart = "no";
+    restart = "always";
     package = pkgs.fabricServers.${"fabric-${server.version}"};
     jvmOpts = lib.concatStringsSep " " [
       "-Xms1G"
