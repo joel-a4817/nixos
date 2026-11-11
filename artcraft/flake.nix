@@ -28,6 +28,15 @@
             pulseaudio
             dbus
             glib
+            # Required by the GTK3/WebKitGTK 4.1 binaries now shipped by
+            # StoryTold, including the top-level artcraft application.
+            gtk3
+            gdk-pixbuf
+            cairo
+            pango
+            atk
+            webkitgtk_4_1
+            libsoup_3
             fontconfig
             freetype
             expat
