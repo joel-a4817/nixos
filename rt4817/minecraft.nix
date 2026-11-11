@@ -132,6 +132,7 @@ assert lib.assertMsg (noDuplicates ports) "Minecraft server ports must be unique
   systemd.tmpfiles.rules = [
     "d ${syncState} 0750 joel users -"
     "d ${runtimeRoot} 2770 minecraft minecraft -"
+    "Z ${runtimeRoot} 2770 minecraft minecraft -"
     "d ${syncState}/servers 0750 joel users -"
     "d ${syncState}/backups 0750 joel users -"
     "d ${syncState}/coordination 0750 joel users -"
