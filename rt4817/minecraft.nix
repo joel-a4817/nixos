@@ -123,6 +123,17 @@ assert lib.assertMsg (noDuplicates ports) "Minecraft server ports must be unique
   systemd.services = builtins.listToAttrs (map (server:
     lib.nameValuePair "minecraft-server-${server.name}" {
       serviceConfig.UMask = "0007";
+
+      # Minecraft sometimes explicitly creates world files without group-read
+      # permission. Repair the complete stopped state before the management
+      # script creates its backup and Syncthing snapshot.
+      postStop = lib.mkAfter ${pkgs.writeShellScript "minecraft-permissions-${server.name}" ''
+        if [ -d "/srv/minecraft/${server.name}" ]; then
+          chown -R minecraft:minecraft "/srv/minecraft/${server.name}"
+          chmod -R u+rwX,g+rwX,o-rwx "/srv/minecraft/${server.name}"
+          find "/srv/minecraft/${server.name}" -type d -exec chmod g+s {} +
+        fi
+      ''};
     }) checked);
 
   environment.systemPackages = with pkgs; [
