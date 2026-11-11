@@ -4,8 +4,8 @@
 # Printing
   services.avahi = {
     enable = true;
-    settings.publish."disable-publishing" = false; #airplay
-    settings.publish.disable-user-service-publishing = false; #airplay
+    publish."disable-publishing" = false; #airplay
+    publish.disable-user-service-publishing = false; #airplay
     nssmdns4 = true;
   };
 
