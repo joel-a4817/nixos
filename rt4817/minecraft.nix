@@ -36,7 +36,7 @@ let
       name = "modded-server";
       version = "1_21_1";
       port = 25565;
-      memory = "6G";
+      memory = "4G";
       motd = "monkeyterralith";
       maxPlayers = 12;
       viewDistance = 10;
