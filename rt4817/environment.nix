@@ -73,6 +73,8 @@
 
   environment.shellAliases = {
     s = "exec sway";
+    S = "/home/joel/.config/sway/scripts/network/start-services.sh";
+    minecraft-server = "/home/joel/.config/sway/scripts/network/minecraft-server.py";
   };
 
   # Users

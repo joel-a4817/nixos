@@ -3,6 +3,11 @@
   services.resolved.enable = true;
   services.usbmuxd.enable = true;
 
+  services.openssh = {
+    enable = true;
+    openFirewall = true;
+  };
+
   networking.networkmanager = {
     enable = true;
 
