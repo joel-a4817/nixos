@@ -3,7 +3,7 @@ let
   home = "/home/joel";
   scripts = "${home}/.config/sway/scripts/network";
   syncState = "${home}/minecraft-server";
-  runtimeRoot = "${home}/.local/state/minecraft-server/runtime";
+  runtimeRoot = "/srv/minecraft";
 
   moddedMods = {
     lithium = pkgs.fetchurl {
@@ -37,7 +37,7 @@ let
       version = "1_21_1";
       port = 25565;
       memory = "6G";
-      motd = "moddedmonkeys";
+      motd = "Joel's Modded Server - Terralith";
       maxPlayers = 12;
       viewDistance = 10;
       simulationDistance = 8;
@@ -48,7 +48,7 @@ let
       version = "26_3";
       port = 25566;
       memory = "4G";
-      motd = "latestmonkeys";
+      motd = "Joel's Latest Minecraft 26.3 Server";
       maxPlayers = 12;
       viewDistance = 12;
       simulationDistance = 8;
@@ -73,11 +73,9 @@ let
   mkServer = server: lib.nameValuePair server.name {
     enable = true;
     autoStart = false;
-    restart = "no";
     package =
       (pkgs.fabricServers.${"fabric-${server.version}"}).override {
-        jre_headless =
-          if server.version == "26_3"
+        jre_headless = if server.version == "26_3"
           then pkgs.jdk25_headless
           else pkgs.jdk21_headless;
       };
@@ -109,17 +107,6 @@ let
       (builtins.attrValues server.mods);
   };
 
-  mkService = server: lib.nameValuePair "minecraft-server-${server.name}" {
-    wants = [ "network-online.target" ];
-    after = [ "network-online.target" "NetworkManager.service" ];
-    serviceConfig = {
-      User = lib.mkForce "joel";
-      Group = lib.mkForce "users";
-      ProtectHome = lib.mkForce false;
-      ReadWritePaths = lib.mkForce [ runtimeRoot ];
-      TimeoutStopSec = lib.mkForce "180s";
-    };
-  };
 in
 assert lib.assertMsg (noDuplicates names) "Minecraft server names must be unique";
 assert lib.assertMsg (noDuplicates ports) "Minecraft server ports must be unique";
@@ -132,7 +119,11 @@ assert lib.assertMsg (noDuplicates ports) "Minecraft server ports must be unique
     servers = builtins.listToAttrs (map mkServer checked);
   };
 
-  systemd.services = builtins.listToAttrs (map mkService checked);
+  users.users.joel.extraGroups = [ "minecraft" ];
+  systemd.services = builtins.listToAttrs (map (server:
+    lib.nameValuePair "minecraft-server-${server.name}" {
+      serviceConfig.UMask = "0007";
+    }) checked);
 
   environment.systemPackages = with pkgs; [
     rsync openssh curl jq networkmanager tmux
@@ -140,9 +131,7 @@ assert lib.assertMsg (noDuplicates ports) "Minecraft server ports must be unique
 
   systemd.tmpfiles.rules = [
     "d ${syncState} 0750 joel users -"
-    "d ${home}/.local/state/minecraft-server 0750 joel users -"
-    "d ${runtimeRoot} 0750 joel users -"
-    "Z ${home}/.local/state/minecraft-server 0750 joel users -"
+    "d ${runtimeRoot} 2770 minecraft minecraft -"
     "d ${syncState}/servers 0750 joel users -"
     "d ${syncState}/backups 0750 joel users -"
     "d ${syncState}/coordination 0750 joel users -"
