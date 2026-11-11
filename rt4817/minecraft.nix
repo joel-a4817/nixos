@@ -90,8 +90,8 @@ let
       server-port = server.port;
       server-ip = "";
       online-mode = true;
-      white-list = true;
-      enforce-whitelist = true;
+      white-list = false;
+      enforce-whitelist = false;
       max-players = server.maxPlayers;
       motd = server.motd;
       difficulty = "normal";
