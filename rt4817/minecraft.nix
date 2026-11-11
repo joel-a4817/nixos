@@ -144,6 +144,14 @@ assert lib.assertMsg (noDuplicates ports) "Minecraft server ports must be unique
     (server: "d ${syncState}/servers/${server.name}/snapshot 0750 joel users -")
     checked;
 
+  system.activationScripts.minecraftRuntimePermissions = lib.stringAfter [ "users" "groups" ] ''
+    install -d -m 2770 -o joel -g users ${runtimeRoot}
+    chown -R joel:users ${runtimeRoot}
+    chmod -R u+rwX,g+rwX,o-rwx ${runtimeRoot}
+    find ${runtimeRoot} -type d -exec chmod 2770 {} +
+    find ${runtimeRoot} -type f -exec chmod 0660 {} +
+  '';
+
   security.sudo.extraRules = [{
     users = [ "joel" ];
     commands = lib.concatMap (server: [
@@ -157,6 +165,10 @@ assert lib.assertMsg (noDuplicates ports) "Minecraft server ports must be unique
       }
       {
         command = "/run/current-system/sw/bin/systemctl is-active minecraft-server-${server.name}.service";
+        options = [ "NOPASSWD" ];
+      }
+      {
+        command = "/run/current-system/sw/bin/systemctl reset-failed minecraft-server-${server.name}.service";
         options = [ "NOPASSWD" ];
       }
     ]) checked;
