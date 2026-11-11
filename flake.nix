@@ -2,6 +2,11 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
+    nix-minecraft = {
+      url = "github:Infinidoge/nix-minecraft";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     glide.url = "github:glide-browser/glide.nix";
     glide.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -18,11 +23,12 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, yazi, glide, artcraft, ... }:
+  outputs = { self, nixpkgs, nix-minecraft, home-manager, yazi, glide, artcraft, ... }:
   let
     system = "x86_64-linux";
     overlays = [
       yazi.overlays.default
+      nix-minecraft.overlay
       (final: prev: {
         sonobus = prev.sonobus.overrideAttrs (old: {
           postPatch = (old.postPatch or "") + ''
@@ -45,6 +51,7 @@
         })
 
         ./configuration.nix
+        nix-minecraft.nixosModules.minecraft-servers
 
         home-manager.nixosModules.home-manager
 
