@@ -5,6 +5,8 @@
     /etc/nixos/hardware-configuration.nix
     ./rt4817/environment.nix
     ./rt4817/hardware.nix
+    ./rt4817/minecraft.nix
+    ./rt4817/minecraft-mods.nix
     ./rt4817/media.nix
     ./rt4817/networking.nix
     ./rt4817/packages.nix
