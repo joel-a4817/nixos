@@ -37,7 +37,7 @@ let
       version = "1_21_1";
       port = 25565;
       memory = "6G";
-      motd = "Joel's Modded Server - Terralith";
+      motd = "monkeyterralith";
       maxPlayers = 12;
       viewDistance = 10;
       simulationDistance = 8;
@@ -48,7 +48,7 @@ let
       version = "26_3";
       port = 25566;
       memory = "4G";
-      motd = "Joel's Latest Minecraft 26.3 Server";
+      motd = "latestmonkey";
       maxPlayers = 12;
       viewDistance = 12;
       simulationDistance = 8;
