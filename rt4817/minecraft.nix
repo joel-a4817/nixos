@@ -71,6 +71,8 @@ assert lib.assertMsg (noDuplicates ports) "Minecraft server ports must be unique
       serviceConfig = {
         User = lib.mkForce "joel";
         Group = lib.mkForce "users";
+        ProtectHome = lib.mkForce false;
+        ReadWritePaths = lib.mkForce [ runtimeRoot ];
         TimeoutStopSec = lib.mkForce "180s";
       };
     };
