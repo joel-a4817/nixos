@@ -121,10 +121,19 @@ assert lib.assertMsg (noDuplicates ports) "Minecraft server ports must be unique
 
   systemd.services = builtins.listToAttrs (map (server:
     lib.nameValuePair "minecraft-server-${server.name}" {
+      # nix-minecraft generates pre-start, stop and post-stop helpers that all
+      # inherit WorkingDirectory.  Create that directory before systemd tries
+      # to chdir, and run the whole lifecycle under the same stable account.
+      unitConfig.RequiresMountsFor = [ "${runtimeRoot}/${server.name}" ];
       serviceConfig = {
         User = lib.mkForce "joel";
         Group = lib.mkForce "users";
         UMask = "0007";
+        WorkingDirectory = lib.mkForce "${runtimeRoot}/${server.name}";
+        # These units are intentionally user-selected (autoStart=false).  Let
+        # minecraft-server.py report the first real failure instead of hiding
+        # it behind a rapid restart loop and start-limit-hit.
+        Restart = lib.mkForce "no";
       };
     }) checked);
 
@@ -140,9 +149,11 @@ assert lib.assertMsg (noDuplicates ports) "Minecraft server ports must be unique
     "d ${syncState}/backups 0750 joel users -"
     "d ${syncState}/coordination 0750 joel users -"
     "d ${scripts} 0755 joel users -"
-  ] ++ map
-    (server: "d ${syncState}/servers/${server.name}/snapshot 0750 joel users -")
-    checked;
+  ] ++ lib.concatMap (server: [
+    "d ${runtimeRoot}/${server.name} 2770 joel users -"
+    "Z ${runtimeRoot}/${server.name} 2770 joel users -"
+    "d ${syncState}/servers/${server.name}/snapshot 0750 joel users -"
+  ]) checked;
 
   system.activationScripts.minecraftRuntimePermissions = lib.stringAfter [ "users" "groups" ] ''
     install -d -m 2770 -o joel -g users ${runtimeRoot}

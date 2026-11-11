@@ -11,7 +11,12 @@
   networking.networkmanager = {
     enable = true;
 
-    ensureProfiles.profiles.ethernet-direct = {
+    ensureProfiles = {
+      environmentFiles = [
+        "/home/joel/Documents/prefs/airplay-hotspot.env"
+      ];
+
+      profiles.ethernet-direct = {
       connection = {
         id = "Ethernet direct";
         uuid = "c7267f14-5e8b-4a89-96b3-8d24971f0c62";
@@ -24,10 +29,6 @@
       ipv6.method = "auto";
     };
 
-    ensureProfiles = {
-      environmentFiles = [
-        "/home/joel/Documents/prefs/airplay-hotspot.env"
-      ];
 
       profiles."airplay-direct" = {
         connection = {
