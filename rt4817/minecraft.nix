@@ -142,7 +142,7 @@ assert lib.assertMsg (noDuplicates ports) "Minecraft server ports must be unique
     }) checked);
 
   environment.systemPackages = with pkgs; [
-    rsync openssh curl jq networkmanager tmux
+    rsync openssh curl jq networkmanager tmux miniupnpc
   ];
 
   systemd.tmpfiles.rules = [

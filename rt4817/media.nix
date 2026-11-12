@@ -259,6 +259,7 @@ in {
         description "CamillaDSP Shared Output Capture"
       }
     }
+    # Full stereo capture remains for normal external-only modes.
     pcm.sonobus_camilladsp {
       type plug
       slave {
@@ -267,30 +268,46 @@ in {
         rate 96000
         format S32_LE
       }
-
-      hint {
-        show on
-        description "CamillaDSP SonoBus"
-      }
+      hint { show on; description "CamillaDSP SonoBus"; }
     }
 
-    # Signed both-output synchronization uses subdevice 2 only when the
-    # external/iPad branch must be delayed.  The feeder writes hw:Loopback,0,2
-    # and SonoBus captures the paired endpoint below.
-    pcm.sonobus_camilladsp_delayed {
-      type plug
+    # SonoBus/JUCE may ignore ALSA input-channel masks.  These genuinely
+    # mono dsnoop PCMs ensure SonoBus can never see or fold in the PC branch.
+    # They share the exact slave parameters and IPC key used by the stereo
+    # local-monitor capture, allowing both readers to run concurrently.
+    pcm.sonobus_camilladsp_left {
+      type dsnoop
+      ipc_key 481701
+      ipc_key_add_uid true
       slave {
-        pcm "hw:Loopback,1,2"
+        pcm "hw:Loopback,1,1"
         channels 2
         rate 96000
         format S32_LE
+        period_size 1024
+        buffer_size 4096
       }
-      hint {
-        show on
-        description "CamillaDSP SonoBus Delayed"
+      bindings { 0 0 }
+      hint { show on; description "CamillaDSP SonoBus Left"; }
+    }
+    pcm.sonobus_camilladsp_right {
+      type dsnoop
+      ipc_key 481701
+      ipc_key_add_uid true
+      slave {
+        pcm "hw:Loopback,1,1"
+        channels 2
+        rate 96000
+        format S32_LE
+        period_size 1024
+        buffer_size 4096
       }
+      bindings { 0 1 }
+      hint { show on; description "CamillaDSP SonoBus Right"; }
     }
 
+    # Both-output synchronization is applied per channel in CamillaDSP's
+    # 00-filterless.yml before these capture endpoints split the channels.
     pcm.sonobus_silent {
       type null
 
