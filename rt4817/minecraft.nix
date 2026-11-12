@@ -4,6 +4,7 @@ let
   scripts = "${home}/.config/sway/scripts/network";
   syncState = "${home}/minecraft-server";
   runtimeRoot = "/srv/minecraft";
+  floatingAddress = "192.168.0.240";
 
   moddedMods = {
     fabric-api = pkgs.fetchurl {
@@ -138,11 +139,45 @@ assert lib.assertMsg (noDuplicates ports) "Minecraft server ports must be unique
         # minecraft-server.py report the first real failure instead of hiding
         # it behind a rapid restart loop and start-limit-hit.
         Restart = lib.mkForce "no";
+        ExecStopPost = pkgs.writeShellScript "minecraft-release-floating-address" ''
+          if ! ${pkgs.systemd}/bin/systemctl --quiet is-active 'minecraft-server-*.service'; then
+            ${pkgs.iproute2}/bin/ip -o -4 addr show | ${pkgs.gawk}/bin/awk '$4 ~ /^${floatingAddress}\// {print $2}' | while read -r dev; do
+              ${pkgs.iproute2}/bin/ip addr del ${floatingAddress}/32 dev "$dev" || true
+            done
+          fi
+        '';
       };
     }) checked);
 
+  environment.etc."minecraft-port-forwarding.txt".text = ''
+    MINECRAFT PORT FORWARDING
+
+    Floating LAN address: ${floatingAddress}
+
+    Router rules (External host blank):
+      TCP 25565 -> ${floatingAddress}:25565  modded-server
+      TCP 25566 -> ${floatingAddress}:25566  latest-server
+
+    Router DHCP:
+      Exclude ${floatingAddress} from the DHCP allocation pool.
+      Do not reserve it to either laptop MAC address.
+
+    Peers files:
+      On rt4817: lt4817 joel@lt4817
+      On lt4817: rt4817 joel@rt4817
+
+    Optional permanent friend hostname:
+      Create ~/.config/minecraft-server/ddns.env (mode 600):
+        DUCKDNS_DOMAIN=your-subdomain
+        DUCKDNS_TOKEN=your-token
+      Friends then use your-subdomain.duckdns.org:25565 or :25566.
+  '';
+
   environment.systemPackages = with pkgs; [
-    rsync openssh curl jq networkmanager tmux miniupnpc
+    (writeShellScriptBin "minecraft-port-forwarding" ''
+      cat /etc/minecraft-port-forwarding.txt
+    '')
+    rsync openssh curl jq networkmanager tmux iproute2 iputils
   ];
 
   systemd.tmpfiles.rules = [
@@ -169,7 +204,10 @@ assert lib.assertMsg (noDuplicates ports) "Minecraft server ports must be unique
 
   security.sudo.extraRules = [{
     users = [ "joel" ];
-    commands = lib.concatMap (server: [
+    commands = [
+      { command = "/run/current-system/sw/bin/ip"; options = [ "NOPASSWD" ]; }
+      { command = "/run/current-system/sw/bin/arping"; options = [ "NOPASSWD" ]; }
+    ] ++ lib.concatMap (server: [
       {
         command = "/run/current-system/sw/bin/systemctl start minecraft-server-${server.name}.service";
         options = [ "NOPASSWD" ];
