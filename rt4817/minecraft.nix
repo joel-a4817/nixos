@@ -139,13 +139,6 @@ assert lib.assertMsg (noDuplicates ports) "Minecraft server ports must be unique
         # minecraft-server.py report the first real failure instead of hiding
         # it behind a rapid restart loop and start-limit-hit.
         Restart = lib.mkForce "no";
-        ExecStopPost = pkgs.writeShellScript "minecraft-release-floating-address" ''
-          if ! ${pkgs.systemd}/bin/systemctl --quiet is-active 'minecraft-server-*.service'; then
-            ${pkgs.iproute2}/bin/ip -o -4 addr show | ${pkgs.gawk}/bin/awk '$4 ~ /^${floatingAddress}\// {print $2}' | while read -r dev; do
-              ${pkgs.iproute2}/bin/ip addr del ${floatingAddress}/32 dev "$dev" || true
-            done
-          fi
-        '';
       };
     }) checked);
 
