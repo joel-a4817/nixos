@@ -306,11 +306,10 @@ in {
       hint { show on; description "CamillaDSP SonoBus Right"; }
     }
 
-    # Both-output synchronization is applied per channel in CamillaDSP's
-    # 00-filterless.yml before these capture endpoints split the channels.
-    # Dedicated one-channel delayed external branch. The relay writes to
-    # Loopback subdevice 2; SonoBus alone reads its paired capture endpoint.
-    pcm.sonobus_external_delayed {
+    # Dedicated both-output endpoints. A single distributor reads the
+    # processed stereo stream once, then writes physically separate mono PCM
+    # streams to Loopback subdevices 2 (external/SonoBus) and 3 (local PC).
+    pcm.camilladsp_external_mono {
       type dsnoop
       ipc_key 481702
       ipc_key_add_uid true
@@ -323,9 +322,26 @@ in {
         buffer_size 4096
       }
       bindings { 0 0 }
-      hint { show on; description "CamillaDSP SonoBus External Delayed"; }
+      hint { show on; description "CamillaDSP External Mono"; }
+    }
+    pcm.camilladsp_pc_mono {
+      type dsnoop
+      ipc_key 481703
+      ipc_key_add_uid true
+      slave {
+        pcm "hw:Loopback,1,3"
+        channels 1
+        rate 96000
+        format S32_LE
+        period_size 1024
+        buffer_size 4096
+      }
+      bindings { 0 0 }
+      hint { show on; description "CamillaDSP PC Mono"; }
     }
 
+    # Both-output synchronization is applied per channel in CamillaDSP's
+    # 00-filterless.yml before these capture endpoints split the channels.
     pcm.sonobus_silent {
       type null
 

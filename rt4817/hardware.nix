@@ -13,8 +13,7 @@
   boot.kernelModules = [
     "snd-aloop"
   ];
-  # 0=input, 1=processed output, 2=negative-offset external relay.
-  # Pin four substreams so every configured hw:Loopback endpoint exists.
+  # Dedicated both-output distributor uses subdevices 2 and 3.
   boot.extraModprobeConfig = ''
     options snd-aloop pcm_substreams=4
   '';
