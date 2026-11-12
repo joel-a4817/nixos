@@ -308,6 +308,24 @@ in {
 
     # Both-output synchronization is applied per channel in CamillaDSP's
     # 00-filterless.yml before these capture endpoints split the channels.
+    # Dedicated one-channel delayed external branch. The relay writes to
+    # Loopback subdevice 2; SonoBus alone reads its paired capture endpoint.
+    pcm.sonobus_external_delayed {
+      type dsnoop
+      ipc_key 481702
+      ipc_key_add_uid true
+      slave {
+        pcm "hw:Loopback,1,2"
+        channels 1
+        rate 96000
+        format S32_LE
+        period_size 1024
+        buffer_size 4096
+      }
+      bindings { 0 0 }
+      hint { show on; description "CamillaDSP SonoBus External Delayed"; }
+    }
+
     pcm.sonobus_silent {
       type null
 

@@ -13,6 +13,11 @@
   boot.kernelModules = [
     "snd-aloop"
   ];
+  # 0=input, 1=processed output, 2=negative-offset external relay.
+  # Pin four substreams so every configured hw:Loopback endpoint exists.
+  boot.extraModprobeConfig = ''
+    options snd-aloop pcm_substreams=4
+  '';
 
   services.logind.settings.Login = {
     HandleLidSwitchDocked = "ignore";
