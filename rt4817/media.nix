@@ -260,7 +260,21 @@ in {
       }
     }
     # Full stereo capture remains for normal external-only modes.
+    # Stable known SonoBus device name, now backed by the isolated external
+    # mono distributor endpoint. JUCE already recognizes this label and no
+    # longer falls back to the old shared stereo capture.
     pcm.sonobus_camilladsp {
+      type plug
+      slave {
+        pcm "camilladsp_external_mono"
+        channels 1
+        rate 96000
+        format S32_LE
+      }
+      hint { show on; description "CamillaDSP SonoBus"; }
+    }
+    # Full stereo remains separately available for non-split external modes.
+    pcm.sonobus_camilladsp_stereo {
       type plug
       slave {
         pcm "camilladsp_output_shared"
@@ -268,7 +282,7 @@ in {
         rate 96000
         format S32_LE
       }
-      hint { show on; description "CamillaDSP SonoBus"; }
+      hint { show on; description "CamillaDSP SonoBus Stereo"; }
     }
 
     # SonoBus/JUCE may ignore ALSA input-channel masks.  These genuinely
