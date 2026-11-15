@@ -73,8 +73,8 @@
 
   environment.shellAliases = {
     s = "exec sway";
-    S = "/home/joel/.config/sway/scripts/network/start-services.sh";
-    minecraft-server = "/home/joel/.config/sway/scripts/network/minecraft-server.py";
+    S = "/home/joel/.config/sway/scripts/servers/start-servers.sh";
+    minecraft-server = "/home/joel/.config/sway/scripts/servers/minecraft-server.py";
     iphone4817 = "ssh iphone4817";
     rt4817 = "ssh joel@rt4817";
     lt4817 = "ssh joel@lt4817";
