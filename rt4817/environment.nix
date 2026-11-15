@@ -1,63 +1,15 @@
 { config, lib, pkgs, ... }:
 let
-  swayRemote = pkgs.writeShellScriptBin "sway-remote" ''
-    set -euo pipefail
-
-    uid="$(${pkgs.coreutils}/bin/id -u)"
-    runtime="/run/user/$uid"
-    export XDG_RUNTIME_DIR="$runtime"
-    export DBUS_SESSION_BUS_ADDRESS="unix:path=$runtime/bus"
-    export XDG_SESSION_TYPE=wayland
-    export XDG_SESSION_DESKTOP=sway
-    export XDG_CURRENT_DESKTOP=sway
-
-    if [ ! -d "$runtime" ] || [ ! -S "$runtime/bus" ]; then
-      echo "The user systemd/DBus session is unavailable at $runtime." >&2
-      echo "Check: loginctl user-status $USER" >&2
-      exit 1
-    fi
-
-    if ${pkgs.procps}/bin/pgrep -xu "$USER" -x sway >/dev/null; then
-      echo "Sway is already running on $(${pkgs.nettools}/bin/hostname)."
-      exit 0
-    fi
-
-    ${pkgs.systemd}/bin/systemctl --user stop sway-remote.service 2>/dev/null || true
-    ${pkgs.systemd}/bin/systemctl --user reset-failed sway-remote.service 2>/dev/null || true
-
-    ${pkgs.systemd}/bin/systemd-run --user \
-      --unit=sway-remote \
-      --collect \
-      --property=Type=exec \
-      --property=Restart=no \
-      --property=StandardInput=null \
-      --property=StandardOutput=journal \
-      --property=StandardError=journal \
-      --setenv=XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" \
-      --setenv=DBUS_SESSION_BUS_ADDRESS="$DBUS_SESSION_BUS_ADDRESS" \
-      --setenv=XDG_SESSION_TYPE=wayland \
-      --setenv=XDG_SESSION_DESKTOP=sway \
-      --setenv=XDG_CURRENT_DESKTOP=sway \
-      ${pkgs.sway}/bin/sway
-
-    for attempt in $(${pkgs.coreutils}/bin/seq 1 30); do
-      if ${pkgs.procps}/bin/pgrep -xu "$USER" -x sway >/dev/null; then
-        echo "Sway started on $(${pkgs.nettools}/bin/hostname)."
-        exit 0
-      fi
-      state="$(${pkgs.systemd}/bin/systemctl --user show sway-remote.service -p ActiveState --value 2>/dev/null || true)"
-      if [ "$state" = failed ] || [ "$state" = inactive ]; then
-        echo "Sway failed to start. Recent log:" >&2
-        ${pkgs.systemd}/bin/journalctl --user -u sway-remote.service -n 40 --no-pager >&2
-        exit 1
-      fi
-      ${pkgs.coreutils}/bin/sleep 0.2
-    done
-
-    echo "Sway launch timed out. Recent log:" >&2
-    ${pkgs.systemd}/bin/journalctl --user -u sway-remote.service -n 40 --no-pager >&2
-    exit 1
-  '';
+  swayRemote = pkgs.writeShellApplication {
+    name = "sway-remote";
+    runtimeInputs = with pkgs; [
+      coreutils
+      procps
+      systemd
+      sway
+    ];
+    text = builtins.readFile ./sway-remote.sh;
+  };
 in
 {
   environment.systemPackages = [ swayRemote ];
@@ -105,8 +57,8 @@ in
   };
 
   programs.solaar.enable = true;
-
   services.fprintd.enable = true;
+
   security.pam.services = {
     system-local-login.fprintAuth = true;
     su.fprintAuth = true;
@@ -122,6 +74,7 @@ in
   };
 
   environment.shellAliases = {
+    # Laptop-local launcher. From iSH, use the SSH alias shown separately.
     s = "sway-remote";
     S = "/home/joel/.config/sway/scripts/servers/start-servers.sh";
     minecraft-server = "/home/joel/.config/sway/scripts/servers/minecraft-server.py";
