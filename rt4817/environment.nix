@@ -1,47 +1,28 @@
 { config, lib, pkgs, ... }:
 let
-  swayOnVt = pkgs.writeShellScript "sway-on-vt" ''
-    set -Eeuo pipefail
-
-    uid="$(${pkgs.coreutils}/bin/id -u joel)"
-    runtime="/run/user/$uid"
-
-    exec ${pkgs.util-linux}/bin/runuser -u joel -- \
-      ${pkgs.coreutils}/bin/env \
-        HOME=/home/joel \
-        USER=joel \
-        LOGNAME=joel \
-        SHELL=${pkgs.bashInteractive}/bin/bash \
-        PATH=/home/joel/.nix-profile/bin:/etc/profiles/per-user/joel/bin:/run/wrappers/bin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin \
-        XDG_RUNTIME_DIR="$runtime" \
-        XDG_CONFIG_HOME=/home/joel/.config \
-        XDG_DATA_HOME=/home/joel/.local/share \
-        XDG_STATE_HOME=/home/joel/.local/state \
-        XDG_CACHE_HOME=/home/joel/.cache \
-        DBUS_SESSION_BUS_ADDRESS="unix:path=$runtime/bus" \
-        XDG_SESSION_TYPE=wayland \
-        XDG_SESSION_DESKTOP=sway \
-        XDG_CURRENT_DESKTOP=sway \
-        LIBSEAT_BACKEND=seatd \
-        ${pkgs.bashInteractive}/bin/bash --login -c '
-          systemctl --user import-environment \
-            DISPLAY WAYLAND_DISPLAY SWAYSOCK \
-            XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP \
-            PATH XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME XDG_CACHE_HOME 2>/dev/null || true
-          dbus-update-activation-environment --systemd \
-            DISPLAY WAYLAND_DISPLAY SWAYSOCK \
-            XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP \
-            PATH XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME XDG_CACHE_HOME 2>/dev/null || true
-          exec /run/current-system/sw/bin/sway
-        '
-  '';
-
   swayRemote = pkgs.writeShellApplication {
     name = "sway-remote";
     runtimeInputs = [ pkgs.coreutils pkgs.kbd pkgs.procps ];
     text = ''
-      export SWAY_ON_VT=${swayOnVt}
-      ${builtins.readFile ./sway-remote.sh}
+      uid="$(id -u)"
+
+      if pgrep -u "$uid" -x sway >/dev/null 2>&1; then
+        printf 'Sway is already running on %s.\n' "$(hostname)"
+        exit 0
+      fi
+
+      # Reproduce the normal local workflow on a newly allocated real VT:
+      # login as joel, let the login shell/PAM establish the session, then run
+      # exactly the same command Joel runs locally: exec sway.
+      exec /run/wrappers/bin/sudo \
+        /run/current-system/sw/bin/openvt \
+        --switch \
+        --force \
+        --wait \
+        -- \
+        ${pkgs.util-linux}/bin/su \
+        --login joel \
+        --command 'exec sway'
     '';
   };
 in
