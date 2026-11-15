@@ -98,6 +98,8 @@
     # Qt applications from Home Manager
     qt6.qtwayland
 
+    btrfs-progs mcrcon
+
     # Compatibility
     steam-run
 

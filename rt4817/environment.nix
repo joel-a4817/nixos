@@ -82,6 +82,7 @@
 
   # Users
   users.users.joel = {
+    linger = true;
     home = lib.mkForce "/home/joel";
     isNormalUser = true;
     isSystemUser = lib.mkForce false;
