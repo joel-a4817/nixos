@@ -75,7 +75,7 @@
     s = "exec sway";
     S = "/home/joel/.config/sway/scripts/network/start-services.sh";
     minecraft-server = "/home/joel/.config/sway/scripts/network/minecraft-server.py";
-    iphone4817 = "ssh root@100.100.181.73";
+    iphone4817 = "ssh iphone4817";
     rt4817 = "ssh joel@rt4817";
     lt4817 = "ssh joel@lt4817";
   };
