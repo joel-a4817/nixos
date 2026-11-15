@@ -1,22 +1,9 @@
 { config, lib, pkgs, ... }:
 let
-  swayVtSession = pkgs.writeShellScript "sway-vt-session" ''
-    set -Eeuo pipefail
-    uid="$(${pkgs.coreutils}/bin/id -u joel)"
-    runtime="/run/user/$uid"
-
-    exec /run/wrappers/bin/su \
-      --login joel \
-      --command "export XDG_RUNTIME_DIR='$runtime'; export DBUS_SESSION_BUS_ADDRESS='unix:path=$runtime/bus'; exec sway"
-  '';
-
   swayRemote = pkgs.writeShellApplication {
     name = "sway-remote";
     runtimeInputs = [ pkgs.coreutils pkgs.kbd pkgs.procps ];
-    text = ''
-      export SWAY_VT_SESSION=${swayVtSession}
-      ${builtins.readFile ./sway-remote-launcher.sh}
-    '';
+    text = builtins.readFile ./sway-remote-vt.sh;
   };
 in
 {
@@ -106,8 +93,7 @@ in
         { command = "/run/current-system/sw/bin/pkill"; options = [ "NOPASSWD" ]; }
         { command = "/run/current-system/sw/bin/setsid"; options = [ "NOPASSWD" ]; }
         { command = "/run/current-system/sw/bin/openvt"; options = [ "NOPASSWD" ]; }
-        { command = "/run/current-system/sw/bin/fgconsole"; options = [ "NOPASSWD" ]; }
-        { command = "/run/current-system/sw/bin/chvt"; options = [ "NOPASSWD" ]; }
+        { command = "/run/wrappers/bin/sudo"; options = [ "NOPASSWD" ]; }
         { command = "/home/joel/.config/sway/scripts/rotate-touchpad.py"; options = [ "NOPASSWD" ]; }
         { command = "/run/current-system/sw/bin/reset-hyperx-dac"; options = [ "NOPASSWD" ]; }
       ];
