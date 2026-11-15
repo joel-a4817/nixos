@@ -7,7 +7,7 @@ let
   floatingAddress = "192.168.0.240";
 
   moddedMods = {
-    fabric-api = pkgs.runCommandNoCC "fabric-api-0.165.0+26.3.jar" {} ''
+    fabric-api = pkgs.runCommand "fabric-api-0.165.0+26.3.jar" {} ''
       cp ${builtins.fetchurl "https://www.curseforge.com/api/v1/mods/306612/files/9295874/download"} "$out"
     '';
     lithium = pkgs.fetchurl {
@@ -18,10 +18,10 @@ let
       url = "https://cdn.modrinth.com/data/uXXizFIs/versions/d5ddUdiB/ferritecore-9.0.0-fabric.jar";
       sha512 = "d81fa97e11784c19d42f89c2f433831d007603dd7193cee45fa177e4a6a9c52b384b198586e04a0f7f63cd996fed713322578bde9a8db57e1188854ae5cbe584";
     };
-    lithostitched = pkgs.runCommandNoCC "lithostitched-2.0.6-fabric-26.3.jar" {} ''
+    lithostitched = pkgs.runCommand "lithostitched-2.0.6-fabric-26.3.jar" {} ''
       cp ${builtins.fetchurl "https://www.curseforge.com/api/v1/mods/936015/files/9154966/download"} "$out"
     '';
-    terralith = pkgs.runCommandNoCC "Terralith_26.3_v2.6.5+26.3.jar" {} ''
+    terralith = pkgs.runCommand "Terralith_26.3_v2.6.5+26.3.jar" {} ''
       cp ${builtins.fetchurl "https://www.curseforge.com/api/v1/mods/513688/files/8994208/download"} "$out"
     '';
   };
