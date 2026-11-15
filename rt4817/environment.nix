@@ -1,19 +1,39 @@
 { config, lib, pkgs, ... }:
 let
+  swayOnVt = pkgs.writeShellScript "sway-on-vt" ''
+    set -Eeuo pipefail
+
+    exec ${pkgs.util-linux}/bin/runuser -u joel -- \
+      ${pkgs.coreutils}/bin/env \
+        HOME=/home/joel \
+        USER=joel \
+        LOGNAME=joel \
+        SHELL=${pkgs.bashInteractive}/bin/bash \
+        PATH=/run/current-system/sw/bin \
+        XDG_RUNTIME_DIR=/run/user/$(${pkgs.coreutils}/bin/id -u joel) \
+        DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(${pkgs.coreutils}/bin/id -u joel)/bus \
+        XDG_SESSION_TYPE=wayland \
+        XDG_SESSION_DESKTOP=sway \
+        XDG_CURRENT_DESKTOP=sway \
+        LIBSEAT_BACKEND=seatd \
+        ${pkgs.sway}/bin/sway
+  '';
+
   swayRemote = pkgs.writeShellApplication {
     name = "sway-remote";
     runtimeInputs = with pkgs; [
       coreutils
+      kbd
       procps
-      systemd
-      sway
+      sudo
     ];
-    text = builtins.readFile ./sway-remote.sh;
+    text = ''
+      export SWAY_ON_VT=${swayOnVt}
+      ${builtins.readFile ./sway-remote.sh}
+    '';
   };
 in
 {
-  environment.systemPackages = [ swayRemote ];
-
   fonts = {
     enableDefaultPackages = true;
     fontconfig = {
@@ -74,7 +94,6 @@ in
   };
 
   environment.shellAliases = {
-    # Laptop-local launcher. From iSH, use the SSH alias shown separately.
     s = "sway-remote";
     S = "/home/joel/.config/sway/scripts/servers/start-servers.sh";
     minecraft-server = "/home/joel/.config/sway/scripts/servers/minecraft-server.py";
@@ -98,6 +117,7 @@ in
         { command = "/run/current-system/sw/bin/timedatectl"; options = [ "NOPASSWD" ]; }
         { command = "/run/current-system/sw/bin/pkill"; options = [ "NOPASSWD" ]; }
         { command = "/run/current-system/sw/bin/setsid"; options = [ "NOPASSWD" ]; }
+        { command = "/run/current-system/sw/bin/openvt"; options = [ "NOPASSWD" ]; }
         { command = "/home/joel/.config/sway/scripts/rotate-touchpad.py"; options = [ "NOPASSWD" ]; }
         { command = "/run/current-system/sw/bin/reset-hyperx-dac"; options = [ "NOPASSWD" ]; }
       ];

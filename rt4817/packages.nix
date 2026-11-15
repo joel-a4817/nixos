@@ -110,5 +110,7 @@
 
     # Theos build dependencies
     bash coreutils curl gnumake gnused gnugrep gawk findutils which file rsync perl dpkg fakeroot libxml2 ncurses zlib z3 libedit clang lld llvm xz gzip bzip2 gnutar ldid
+
+    kbd swayRemote #sway shell
   ];
 }
