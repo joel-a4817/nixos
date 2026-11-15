@@ -3,30 +3,42 @@ let
   swayOnVt = pkgs.writeShellScript "sway-on-vt" ''
     set -Eeuo pipefail
 
+    uid="$(${pkgs.coreutils}/bin/id -u joel)"
+    runtime="/run/user/$uid"
+
     exec ${pkgs.util-linux}/bin/runuser -u joel -- \
       ${pkgs.coreutils}/bin/env \
         HOME=/home/joel \
         USER=joel \
         LOGNAME=joel \
         SHELL=${pkgs.bashInteractive}/bin/bash \
-        PATH=/run/current-system/sw/bin \
-        XDG_RUNTIME_DIR=/run/user/$(${pkgs.coreutils}/bin/id -u joel) \
-        DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(${pkgs.coreutils}/bin/id -u joel)/bus \
+        PATH=/home/joel/.nix-profile/bin:/etc/profiles/per-user/joel/bin:/run/wrappers/bin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin \
+        XDG_RUNTIME_DIR="$runtime" \
+        XDG_CONFIG_HOME=/home/joel/.config \
+        XDG_DATA_HOME=/home/joel/.local/share \
+        XDG_STATE_HOME=/home/joel/.local/state \
+        XDG_CACHE_HOME=/home/joel/.cache \
+        DBUS_SESSION_BUS_ADDRESS="unix:path=$runtime/bus" \
         XDG_SESSION_TYPE=wayland \
         XDG_SESSION_DESKTOP=sway \
         XDG_CURRENT_DESKTOP=sway \
         LIBSEAT_BACKEND=seatd \
-        ${pkgs.sway}/bin/sway
+        ${pkgs.bashInteractive}/bin/bash --login -c '
+          systemctl --user import-environment \
+            DISPLAY WAYLAND_DISPLAY SWAYSOCK \
+            XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP \
+            PATH XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME XDG_CACHE_HOME 2>/dev/null || true
+          dbus-update-activation-environment --systemd \
+            DISPLAY WAYLAND_DISPLAY SWAYSOCK \
+            XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP \
+            PATH XDG_CONFIG_HOME XDG_DATA_HOME XDG_STATE_HOME XDG_CACHE_HOME 2>/dev/null || true
+          exec /run/current-system/sw/bin/sway
+        '
   '';
 
   swayRemote = pkgs.writeShellApplication {
     name = "sway-remote";
-    runtimeInputs = with pkgs; [
-      coreutils
-      kbd
-      procps
-      sudo
-    ];
+    runtimeInputs = [ pkgs.coreutils pkgs.kbd pkgs.procps ];
     text = ''
       export SWAY_ON_VT=${swayOnVt}
       ${builtins.readFile ./sway-remote.sh}
@@ -34,9 +46,7 @@ let
   };
 in
 {
-  environment.systemPackages = [
-    swayRemote
-  ];
+  environment.systemPackages = [ swayRemote ];
 
   fonts = {
     enableDefaultPackages = true;
