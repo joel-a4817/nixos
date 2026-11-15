@@ -18,11 +18,10 @@ let
     fi
 
     if ${pkgs.procps}/bin/pgrep -xu "$USER" -x sway >/dev/null; then
-      echo "Sway is already running on $(hostname)."
+      echo "Sway is already running on $(${pkgs.nettools}/bin/hostname)."
       exit 0
     fi
 
-    # Remove a completed/failed transient unit left by an earlier remote launch.
     ${pkgs.systemd}/bin/systemctl --user stop sway-remote.service 2>/dev/null || true
     ${pkgs.systemd}/bin/systemctl --user reset-failed sway-remote.service 2>/dev/null || true
 
@@ -39,13 +38,11 @@ let
       --setenv=XDG_SESSION_TYPE=wayland \
       --setenv=XDG_SESSION_DESKTOP=sway \
       --setenv=XDG_CURRENT_DESKTOP=sway \
-      ${pkgs.dbus}/bin/dbus-run-session -- ${pkgs.sway}/bin/sway
+      ${pkgs.sway}/bin/sway
 
-    # systemd-run returning only means the request was accepted. Confirm that
-    # Sway survives initialization before reporting success to the SSH client.
     for attempt in $(${pkgs.coreutils}/bin/seq 1 30); do
       if ${pkgs.procps}/bin/pgrep -xu "$USER" -x sway >/dev/null; then
-        echo "Sway started on $(hostname)."
+        echo "Sway started on $(${pkgs.nettools}/bin/hostname)."
         exit 0
       fi
       state="$(${pkgs.systemd}/bin/systemctl --user show sway-remote.service -p ActiveState --value 2>/dev/null || true)"
@@ -64,23 +61,19 @@ let
 in
 {
   environment.systemPackages = [ swayRemote ];
+
   fonts = {
     enableDefaultPackages = true;
     fontconfig = {
       enable = true;
-      defaultFonts = {
-        monospace = [ "JetBrainsMono Nerd Font" ];
-      };
+      defaultFonts.monospace = [ "JetBrainsMono Nerd Font" ];
     };
-    packages = with pkgs; [
-      nerd-fonts.jetbrains-mono
-    ];
+    packages = with pkgs; [ nerd-fonts.jetbrains-mono ];
   };
 
-  # Seatd for wlroots compositors (sway)
   services.dbus.enable = true;
   services.seatd.enable = true;
-  services.libinput.enable = true; #input driver stack (mice, touchpads, etc.)
+  services.libinput.enable = true;
 
   xdg.portal = {
     enable = true;
@@ -99,10 +92,9 @@ in
     };
   };
 
-  #security
   security.polkit = {
     enable = true;
-    enablePkexecWrapper = true;    
+    enablePkexecWrapper = true;
     extraConfig = ''
       polkit.addRule(function(action, subject) {
         if (subject.user == "joel") {
@@ -112,13 +104,8 @@ in
     '';
   };
 
-  # solaar
-  programs.solaar = {
-    enable = true;
-    #userService.window = show; -> doesn't work right now, in sway
-  };
+  programs.solaar.enable = true;
 
-  # Fprintd
   services.fprintd.enable = true;
   security.pam.services = {
     system-local-login.fprintAuth = true;
@@ -143,7 +130,6 @@ in
     lt4817 = "ssh joel@lt4817";
   };
 
-  # Users
   users.users.joel = {
     linger = true;
     home = lib.mkForce "/home/joel";
