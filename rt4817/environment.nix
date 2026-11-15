@@ -34,6 +34,10 @@ let
   };
 in
 {
+  environment.systemPackages = [
+    swayRemote
+  ];
+
   fonts = {
     enableDefaultPackages = true;
     fontconfig = {
