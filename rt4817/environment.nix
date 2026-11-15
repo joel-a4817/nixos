@@ -20,7 +20,7 @@ let
         --force \
         --wait \
         -- \
-        ${pkgs.util-linux}/bin/su \
+        /run/wrappers/bin/su \
         --login joel \
         --command 'exec sway'
     '';
