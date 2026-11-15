@@ -101,7 +101,12 @@ let
       motd = server.motd;
       difficulty = "normal";
       gamemode = "survival";
-      enable-rcon = false;
+      # The lifecycle manager uses authenticated local RCON to execute
+      # save-off/save-all flush/save-on around every live backup.
+      enable-rcon = true;
+      "rcon.password" = "minecraft-backup-${server.name}-4817";
+      "rcon.port" = server.port + 1000;
+      broadcast-rcon-to-ops = false;
       enable-query = false;
       sync-chunk-writes = true;
       view-distance = server.viewDistance;
@@ -178,7 +183,7 @@ assert lib.assertMsg (noDuplicates ports) "Minecraft server ports must be unique
     "d ${runtimeRoot} 2770 joel users -"
     "Z ${runtimeRoot} 2770 joel users -"
     "d ${syncState}/servers 0750 joel users -"
-    "d ${syncState}/backups 0750 joel users -"
+    "d ${home}/minecraft-backups 0750 joel users -"
     "d ${syncState}/coordination 0750 joel users -"
     "d ${scripts} 0755 joel users -"
   ] ++ lib.concatMap (server: [
