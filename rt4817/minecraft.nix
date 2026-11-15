@@ -101,7 +101,13 @@ let
       motd = server.motd;
       difficulty = "normal";
       gamemode = "survival";
-      enable-rcon = false;
+      # Required by minecraft-server.py for save-off/save-all flush/save-on
+      # while taking consistent online backups. Keep this declarative because
+      # nix-minecraft regenerates server.properties during service startup.
+      enable-rcon = true;
+      "rcon.password" = "minecraft-backup-${server.name}-4817";
+      "rcon.port" = server.port + 1000;
+      broadcast-rcon-to-ops = false;
       enable-query = false;
       sync-chunk-writes = true;
       view-distance = server.viewDistance;
