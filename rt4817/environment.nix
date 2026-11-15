@@ -1,6 +1,23 @@
 { config, lib, pkgs, ... }:
-
+let
+  swayRemote = pkgs.writeShellScriptBin "sway-remote" ''
+    set -euo pipefail
+    uid="$(id -u)"
+    export XDG_RUNTIME_DIR="/run/user/$uid"
+    if pgrep -xu "$USER" sway >/dev/null; then
+      echo "Sway is already running."
+      exit 0
+    fi
+    systemctl --user reset-failed sway-remote.service 2>/dev/null || true
+    systemd-run --user --unit=sway-remote --collect \
+      --property=Type=exec --property=Restart=no \
+      --setenv=XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" \
+      ${pkgs.sway}/bin/sway
+    echo "Sway launch requested on $(hostname)."
+  '';
+in
 {
+  environment.systemPackages = [ swayRemote ];
   fonts = {
     enableDefaultPackages = true;
     fontconfig = {
@@ -72,7 +89,7 @@
   };
 
   environment.shellAliases = {
-    s = "exec sway";
+    s = "sway-remote";
     S = "/home/joel/.config/sway/scripts/servers/start-servers.sh";
     minecraft-server = "/home/joel/.config/sway/scripts/servers/minecraft-server.py";
     iphone4817 = "ssh iphone4817";

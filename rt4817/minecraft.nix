@@ -7,24 +7,24 @@ let
   floatingAddress = "192.168.0.240";
 
   moddedMods = {
-    fabric-api = pkgs.fetchurl {
-      url = "https://cdn.modrinth.com/data/P7dR8mSH/versions/Mys3P7lK/fabric-api-0.116.17%2B1.21.1.jar";
-      sha512 = "98c478217da19181f0e4df3ea6c2da6bdbda271c7544a4aea048513a49b444f1ff5b71dc0df6303017c48e8ff69b7bb6af6179bdf0d0e09ab3c1ee08411857a8";
-    };
+    fabric-api = pkgs.runCommandNoCC "fabric-api-0.165.0+26.3.jar" {} ''
+      cp ${builtins.fetchurl "https://www.curseforge.com/api/v1/mods/306612/files/9295874/download"} "$out"
+    '';
     lithium = pkgs.fetchurl {
-      url = "https://cdn.modrinth.com/data/gvQqBUqZ/versions/2mbrKlX3/lithium-fabric-0.14.0-snapshot%2Bmc1.21.1-build.88.jar";
-      sha512 = "e7ff451152caa994521736b3144e7b3edc98ffee0e04bb8ce4381eb777d64fac2d4e9edf6928303c2228c02c5d09147d369e71c12b45c39b324daf6916e6d0a1";
+      url = "https://cdn.modrinth.com/data/gvQqBUqZ/versions/xS0Q8LSi/lithium-fabric-0.26.2%2Bmc26.3.jar";
+      sha512 = "4d7fee66132eedc71feab9390b92c95d7058edbdad0fecfac1d836a2950b97a7ca463afbede61c7ef361ce65e1f927ab9e89dde5bf2e0e0ce486afb5c5dbee40";
     };
     ferrite-core = pkgs.fetchurl {
-      url = "https://cdn.modrinth.com/data/uXXizFIs/versions/bwKMSBhn/ferritecore-7.0.2-hotfix-fabric.jar";
-      sha512 = "ca975bd3708cd96d30cf1447ac8883572113562eb2dd697e60c1cf382d6b70d0b1a511fcbfd042c51b2cf5d5ffc718b847f845e4c8a3e421e8c9ee741119a421";
+      url = "https://cdn.modrinth.com/data/uXXizFIs/versions/d5ddUdiB/ferritecore-9.0.0-fabric.jar";
+      sha512 = "d81fa97e11784c19d42f89c2f433831d007603dd7193cee45fa177e4a6a9c52b384b198586e04a0f7f63cd996fed713322578bde9a8db57e1188854ae5cbe584";
     };
-    terralith = pkgs.fetchurl {
-      url = "https://cdn.modrinth.com/data/8oi3bsk5/versions/MuJMtPGQ/Terralith_1.21.x_v2.5.8.jar";
-      sha512 = "f862ed5435ce4c11a97d2ea5c40eee9f817c908f3223b5fd3e3fff0562a55111d7429dc73a2f1ca0b1af7b1ff6fa0470ed6efebb5de13336c40bb70fb357dd60";
-    };
+    lithostitched = pkgs.runCommandNoCC "lithostitched-2.0.6-fabric-26.3.jar" {} ''
+      cp ${builtins.fetchurl "https://www.curseforge.com/api/v1/mods/936015/files/9154966/download"} "$out"
+    '';
+    terralith = pkgs.runCommandNoCC "Terralith_26.3_v2.6.5+26.3.jar" {} ''
+      cp ${builtins.fetchurl "https://www.curseforge.com/api/v1/mods/513688/files/8994208/download"} "$out"
+    '';
   };
-
   latestMods = {
     lithium = pkgs.fetchurl {
       url = "https://cdn.modrinth.com/data/gvQqBUqZ/versions/xS0Q8LSi/lithium-fabric-0.26.2%2Bmc26.3.jar";
@@ -39,12 +39,12 @@ let
   definitions = [
     {
       name = "modded-server";
-      version = "1_21_1";
+      version = "26_3";
       port = 25565;
       memory = "4G";
       motd = "monkeyterralith";
       maxPlayers = 12;
-      viewDistance = 10;
+      viewDistance = 12;
       simulationDistance = 8;
       mods = moddedMods;
     }
@@ -101,12 +101,7 @@ let
       motd = server.motd;
       difficulty = "normal";
       gamemode = "survival";
-      # The lifecycle manager uses authenticated local RCON to execute
-      # save-off/save-all flush/save-on around every live backup.
-      enable-rcon = true;
-      "rcon.password" = "minecraft-backup-${server.name}-4817";
-      "rcon.port" = server.port + 1000;
-      broadcast-rcon-to-ops = false;
+      enable-rcon = false;
       enable-query = false;
       sync-chunk-writes = true;
       view-distance = server.viewDistance;
@@ -183,7 +178,7 @@ assert lib.assertMsg (noDuplicates ports) "Minecraft server ports must be unique
     "d ${runtimeRoot} 2770 joel users -"
     "Z ${runtimeRoot} 2770 joel users -"
     "d ${syncState}/servers 0750 joel users -"
-    "d ${home}/minecraft-backups 0750 joel users -"
+    "d ${syncState}/backups 0750 joel users -"
     "d ${syncState}/coordination 0750 joel users -"
     "d ${scripts} 0755 joel users -"
   ] ++ lib.concatMap (server: [
