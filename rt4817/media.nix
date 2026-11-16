@@ -538,7 +538,7 @@ in {
         export XDG_RUNTIME_DIR="/run/user/$(id -u)"
         export PIPEWIRE_RUNTIME_DIR="$XDG_RUNTIME_DIR"
 
-        if [[ -z "${WAYLAND_DISPLAY:-}" ]]; then
+        if [[ -z "''${WAYLAND_DISPLAY:-}" ]]; then
           echo "WAYLAND_DISPLAY is not present in the user manager environment" >&2
           exit 1
         fi
