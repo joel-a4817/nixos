@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 let
   home = "/home/joel";
-  scripts = "${home}/.config/sway/scripts/network";
+  scripts = "${home}/.config/sway/scripts/servers";
   syncState = "${home}/minecraft-server";
   runtimeRoot = "/srv/minecraft";
   floatingAddress = "192.168.0.240";
@@ -176,7 +176,7 @@ assert lib.assertMsg (noDuplicates ports) "Minecraft server ports must be unique
     (writeShellScriptBin "minecraft-port-forwarding" ''
       cat /etc/minecraft-port-forwarding.txt
     '')
-    rsync openssh curl jq networkmanager tmux iproute2 iputils
+    rsync openssh curl jq networkmanager tmux iproute2 iputils mcrcon
   ];
 
   systemd.tmpfiles.rules = [
