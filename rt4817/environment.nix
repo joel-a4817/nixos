@@ -122,7 +122,7 @@ in
     after = [ "systemd-user-sessions.service" "getty@tty1.service" ];
     wants = [ "systemd-user-sessions.service" ];
 
-    path = with pkgs; [ systemd coreutils sudo ];
+    path = with pkgs; [ systemd coreutils sudo dbus sway ];
     environment = {
       HOME = "/home/joel";
       USER = "joel";
@@ -152,6 +152,10 @@ in
         export XDG_RUNTIME_DIR="/run/user/$(id -u)"
         export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
         export WAYLAND_DISPLAY=wayland-sway-session
+        # WAYLAND_DISPLAY is the socket name for this compositor. Without an
+        # explicit backend, wlroots also interprets it as a parent compositor
+        # and selects the nested Wayland backend. Force the physical backends.
+        export WLR_BACKENDS=drm,libinput
         rm -f -- \
           "$XDG_RUNTIME_DIR/$WAYLAND_DISPLAY" \
           "$XDG_RUNTIME_DIR/$WAYLAND_DISPLAY.lock"
