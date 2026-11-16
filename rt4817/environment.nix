@@ -8,6 +8,11 @@ let
       action="''${1:-start}"
       case "$action" in
         start)
+          current_tty="$(tty 2>/dev/null || true)"
+          if [[ -z "''${SSH_CONNECTION:-}" && "$current_tty" == /dev/tty* ]]; then
+            exec sway
+          fi
+
           if ! /run/wrappers/bin/sudo /run/current-system/sw/bin/systemctl start sway-session.service; then
             systemctl status sway-session.service --no-pager >&2 || true
             exit 1
@@ -16,7 +21,7 @@ let
             systemctl status sway-session.service --no-pager >&2 || true
             exit 1
           }
-          exec /run/wrappers/bin/sudo /run/current-system/sw/bin/chvt 2
+          exec /run/wrappers/bin/sudo /run/current-system/sw/bin/chvt 7
           ;;
         stop)
           exec /run/wrappers/bin/sudo /run/current-system/sw/bin/systemctl stop sway-session.service
@@ -112,8 +117,8 @@ in
   };
 
   systemd.services.sway-session = {
-    description = "Joel Sway login session on tty2";
-    conflicts = [ "getty@tty2.service" ];
+    description = "Joel Sway remote login session on tty7";
+    conflicts = [ "getty@tty7.service" ];
     after = [ "systemd-user-sessions.service" "getty@tty1.service" ];
     wants = [ "systemd-user-sessions.service" ];
 
@@ -133,13 +138,13 @@ in
       User = "joel";
       Group = "users";
       PAMName = "login";
-      TTYPath = "/dev/tty2";
+      TTYPath = "/dev/tty7";
       TTYReset = true;
       TTYVTDisallocate = true;
       StandardInput = "tty-force";
       StandardOutput = "journal+console";
       StandardError = "journal+console";
-      UtmpIdentifier = "tty2";
+      UtmpIdentifier = "tty7";
       UtmpMode = "user";
       WorkingDirectory = "/home/joel";
       ExecStart = "${pkgs.writeShellScript "sway-login-session" ''
@@ -183,7 +188,7 @@ in
         sudo -u joel env XDG_RUNTIME_DIR="$runtime" DBUS_SESSION_BUS_ADDRESS="unix:path=$runtime/bus" \
           systemctl --user unset-environment SWAYSOCK WAYLAND_DISPLAY || true
         rm -f -- "$runtime/wayland-sway-session" "$runtime/wayland-sway-session.lock"
-        systemctl start getty@tty2.service
+        systemctl start getty@tty7.service
       ''}";
       KillMode = "mixed";
       TimeoutStartSec = "15s";
