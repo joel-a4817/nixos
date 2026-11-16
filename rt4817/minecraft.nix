@@ -53,7 +53,7 @@ let
       version = "26_3";
       port = 25566;
       memory = "4G";
-      motd = "latestmonkey";
+      motd = "monkeyvanilla";
       maxPlayers = 12;
       viewDistance = 12;
       simulationDistance = 8;
