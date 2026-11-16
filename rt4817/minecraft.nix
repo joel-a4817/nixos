@@ -38,7 +38,8 @@ let
 
   definitions = [
     {
-      name = "modded-server";
+      name = "terralith-server";
+        # minecraft-rename-intent: ddc70bbd-a571-4a76-a7ed-b952f026937d terralith-server terralith-server
       version = "26_3";
       port = 25565;
       memory = "4G";
@@ -154,7 +155,7 @@ assert lib.assertMsg (noDuplicates ports) "Minecraft server ports must be unique
     Floating LAN address: ${floatingAddress}
 
     Router rules (External host blank):
-      TCP 25565 -> ${floatingAddress}:25565  modded-server
+      TCP 25565 -> ${floatingAddress}:25565  terralith-server
       TCP 25566 -> ${floatingAddress}:25566  vanilla-server
 
     Router DHCP:
