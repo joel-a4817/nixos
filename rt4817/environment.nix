@@ -135,7 +135,6 @@ in
       PAMName = "login";
       TTYPath = "/dev/tty2";
       TTYReset = true;
-      TTYVHangup = true;
       TTYVTDisallocate = true;
       StandardInput = "tty-force";
       StandardOutput = "journal+console";
