@@ -155,7 +155,7 @@ assert lib.assertMsg (noDuplicates ports) "Minecraft server ports must be unique
 
     Router rules (External host blank):
       TCP 25565 -> ${floatingAddress}:25565  modded-server
-      TCP 25566 -> ${floatingAddress}:25566  latest-server
+      TCP 25566 -> ${floatingAddress}:25566  vanilla-server
 
     Router DHCP:
       Exclude ${floatingAddress} from the DHCP allocation pool.
