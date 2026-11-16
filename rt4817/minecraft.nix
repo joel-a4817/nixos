@@ -49,7 +49,7 @@ let
       mods = moddedMods;
     }
     {
-      name = "latest-server";
+      name = "vanilla-server";
       version = "26_3";
       port = 25566;
       memory = "4G";
