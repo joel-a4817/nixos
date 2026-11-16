@@ -1,5 +1,6 @@
 { config, pkgs, lib, ... }:
 {
+
   home.pointerCursor = {
     enable = true;
     name = "Bibata-Modern-Amber";

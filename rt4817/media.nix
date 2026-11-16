@@ -510,7 +510,13 @@ in {
       "graphical-session.target"
     ];
 
-    wantedBy = [ ];
+    partOf = [
+      "graphical-session.target"
+    ];
+
+    wantedBy = [
+      "graphical-session.target"
+    ];
 
     unitConfig.ConditionUser = "joel";
 
@@ -530,36 +536,19 @@ in {
         set -euo pipefail
 
         export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+        export PIPEWIRE_RUNTIME_DIR="$XDG_RUNTIME_DIR"
 
-        WAYLAND_SOCKET=""
-
-        for _ in $(seq 1 50); do
-          for socket in \
-            "$XDG_RUNTIME_DIR"/wayland-*;
-          do
-            [[ -S "$socket" ]] || continue
-
-            WAYLAND_SOCKET="$socket"
-            break
-          done
-
-          [[ -n "$WAYLAND_SOCKET" ]] &&
-            break
-
-          sleep 0.2
-        done
-
-        if [[ -z "$WAYLAND_SOCKET" ]]; then
-          echo \
-            "No running Sway Wayland socket found" \
-            >&2
-
+        if [[ -z "${WAYLAND_DISPLAY:-}" ]]; then
+          echo "WAYLAND_DISPLAY is not present in the user manager environment" >&2
           exit 1
         fi
 
-        export WAYLAND_DISPLAY="$(
-          basename "$WAYLAND_SOCKET"
-        )"
+        WAYLAND_SOCKET="$XDG_RUNTIME_DIR/$WAYLAND_DISPLAY"
+
+        if [[ ! -S "$WAYLAND_SOCKET" ]]; then
+          echo "Sway Wayland socket is unavailable: $WAYLAND_SOCKET" >&2
+          exit 1
+        fi
 
         VNC_ADDRESS=""
 
@@ -666,8 +655,6 @@ in {
 
     environment = {
       HOME = "/home/joel";
-      XDG_RUNTIME_DIR = "/run/user/1000";
-      PIPEWIRE_RUNTIME_DIR = "/run/user/1000";
     };
 
     serviceConfig = {
