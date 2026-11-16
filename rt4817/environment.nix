@@ -1,44 +1,28 @@
 { config, lib, pkgs, ... }:
 let
-  swaySession = pkgs.writeShellApplication {
-    name = "sway-session";
-    runtimeInputs = with pkgs; [ systemd ];
+  swayLaunch = pkgs.writeShellApplication {
+    name = "sway-launch";
+    runtimeInputs = with pkgs; [ coreutils sway systemd ];
     text = ''
       set -Eeuo pipefail
-      action="''${1:-start}"
-      case "$action" in
-        start)
-          current_tty="$(tty 2>/dev/null || true)"
-          if [[ -z "''${SSH_CONNECTION:-}" && "$current_tty" == /dev/tty* ]]; then
-            exec sway
-          fi
+      current_tty="$(tty 2>/dev/null || true)"
 
-          if ! /run/wrappers/bin/sudo /run/current-system/sw/bin/systemctl start sway-session.service; then
-            systemctl status sway-session.service --no-pager >&2 || true
-            exit 1
-          fi
-          systemctl is-active --quiet sway-session.service || {
-            systemctl status sway-session.service --no-pager >&2 || true
-            exit 1
-          }
-          exec /run/wrappers/bin/sudo /run/current-system/sw/bin/chvt 7
-          ;;
-        stop)
-          exec /run/wrappers/bin/sudo /run/current-system/sw/bin/systemctl stop sway-session.service
-          ;;
-        status)
-          exec systemctl status sway-session.service --no-pager
-          ;;
-        *)
-          echo "Usage: sway-session [start|stop|status]" >&2
-          exit 2
-          ;;
-      esac
+      # A physical TTY login already owns seat0, so preserve the original,
+      # direct launch path.
+      if [[ -z "''${SSH_CONNECTION:-}" && "$current_tty" == /dev/tty* ]]; then
+        exec sway
+      fi
+
+      # SSH/iSH sessions do not own seat0. Ask systemd to create a real
+      # PAM/login session on tty7; that session then execs Sway below.
+      exec /run/wrappers/bin/sudo -n \
+        /run/current-system/sw/bin/systemctl start --no-block sway-tty-session.service
     '';
   };
 in
 {
-  environment.systemPackages = [ swaySession ];
+  environment.systemPackages = [ swayLaunch ];
+
 
   fonts = {
     enableDefaultPackages = true;
@@ -99,8 +83,16 @@ in
     };
   };
 
+  environment.loginShellInit = ''
+    if [ "$(tty 2>/dev/null || true)" = /dev/tty7 ] \
+      && [ -O /run/sway-tty-session-joel ]; then
+      rm -f /run/sway-tty-session-joel
+      exec sway
+    fi
+  '';
+
   environment.shellAliases = {
-    s = "sway-session";
+    s = "sway-launch";
     S = "/home/joel/.config/sway/scripts/servers/start-servers.sh";
     minecraft-server = "/home/joel/.config/sway/scripts/servers/minecraft-server.py";
     iphone4817 = "ssh iphone4817";
@@ -116,83 +108,27 @@ in
     extraGroups = [ "wheel" "seat" "networkmanager" "audio" "video" "input" "cdrom" ];
   };
 
-  systemd.services.sway-session = {
-    description = "Joel Sway remote login session on tty7";
+  # SSH/iSH launch path: open a genuine local login session on tty7.
+  # login(1) runs the normal PAM stack, so logind assigns seat0 and applies
+  # local-session ACLs used by backlight, fingerprint, polkit and input access.
+  systemd.services.sway-tty-session = {
+    description = "Local Sway login session requested over SSH";
     conflicts = [ "getty@tty7.service" ];
-    after = [ "systemd-user-sessions.service" "getty@tty1.service" ];
-    wants = [ "systemd-user-sessions.service" ];
+    after = [ "systemd-user-sessions.service" "seatd.service" ];
 
-    path = with pkgs; [ systemd coreutils sudo dbus sway ];
-    environment = {
-      HOME = "/home/joel";
-      USER = "joel";
-      LOGNAME = "joel";
-      XDG_SESSION_TYPE = "wayland";
-      XDG_CURRENT_DESKTOP = "sway";
-      XDG_SESSION_DESKTOP = "sway";
-      WAYLAND_DISPLAY = "wayland-sway-session";
-    };
+    path = with pkgs; [ coreutils kbd shadow systemd util-linux ];
 
     serviceConfig = {
-      Type = "exec";
-      User = "joel";
-      Group = "users";
-      # Reuse the lingering joel user manager; do not ask pam_systemd to claim tty7.
-      TTYPath = "/dev/tty7";
-      TTYReset = true;
-      TTYVTDisallocate = true;
-      StandardInput = "tty-force";
-      StandardOutput = "journal+console";
-      StandardError = "journal+console";
-      UtmpIdentifier = "tty7";
-      UtmpMode = "user";
-      WorkingDirectory = "/home/joel";
-      ExecStart = "${pkgs.writeShellScript "sway-login-session" ''
-        set -Eeuo pipefail
-        export XDG_RUNTIME_DIR="/run/user/$(id -u)"
-        export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
-        export WAYLAND_DISPLAY=wayland-sway-session
-        # WAYLAND_DISPLAY is the socket name for this compositor. Without an
-        # explicit backend, wlroots also interprets it as a parent compositor
-        # and selects the nested Wayland backend. Force the physical backends.
-        export WLR_BACKENDS=drm,libinput
-        rm -f -- \
-          "$XDG_RUNTIME_DIR/$WAYLAND_DISPLAY" \
-          "$XDG_RUNTIME_DIR/$WAYLAND_DISPLAY.lock"
-        dbus-update-activation-environment --systemd \
-          HOME USER LOGNAME PATH \
-          XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS \
-          XDG_SESSION_TYPE XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP
-        exec sway
+      Type = "simple";
+      ExecStartPre = "+${pkgs.writeShellScript "prepare-sway-tty-session" ''
+        install -o joel -g users -m 600 /dev/null /run/sway-tty-session-joel
       ''}";
-      ExecStartPost = "${pkgs.writeShellScript "sway-session-ready" ''
-        set -Eeuo pipefail
-        uid=$(${pkgs.coreutils}/bin/id -u joel)
-        mainpid=$(systemctl show --property MainPID --value sway-session.service)
-        case "$mainpid" in
-          ""|0|*[!0-9]*) echo "Invalid Sway MainPID: $mainpid" >&2; exit 1 ;;
-        esac
-        runtime="/run/user/$uid"
-        socket="$runtime/wayland-sway-session"
-        for _ in $(${pkgs.coreutils}/bin/seq 1 240); do
-          ipc_socket="$runtime/sway-ipc.$uid.$mainpid.sock"
-          if [ -S "$socket" ] && [ -S "$ipc_socket" ]; then
-            exit 0
-          fi
-          ${pkgs.coreutils}/bin/sleep 0.05
-        done
-        echo "Sway sockets did not become ready: $socket and $ipc_socket" >&2
-        exit 1
+      ExecStart = "${pkgs.writeShellScript "run-sway-tty-login" ''
+        exec openvt -c 7 -f -s -w -- login -f joel
       ''}";
-      ExecStopPost = "+${pkgs.writeShellScript "sway-session-cleanup" ''
-        uid=$(${pkgs.coreutils}/bin/id -u joel)
-        runtime="/run/user/$uid"
-        sudo -u joel env XDG_RUNTIME_DIR="$runtime" DBUS_SESSION_BUS_ADDRESS="unix:path=$runtime/bus" \
-          systemctl --user stop graphical-session.target || true
-        sudo -u joel env XDG_RUNTIME_DIR="$runtime" DBUS_SESSION_BUS_ADDRESS="unix:path=$runtime/bus" \
-          systemctl --user unset-environment SWAYSOCK WAYLAND_DISPLAY || true
-        rm -f -- "$runtime/wayland-sway-session" "$runtime/wayland-sway-session.lock"
-        systemctl start getty@tty7.service
+      ExecStopPost = "+${pkgs.writeShellScript "cleanup-sway-tty-session" ''
+        rm -f /run/sway-tty-session-joel
+        systemctl start getty@tty7.service || true
       ''}";
       KillMode = "mixed";
       TimeoutStartSec = "15s";
@@ -207,9 +143,7 @@ in
       commands = [
         { command = "/run/current-system/sw/bin/timedatectl"; options = [ "NOPASSWD" ]; }
         { command = "/run/current-system/sw/bin/pkill"; options = [ "NOPASSWD" ]; }
-        { command = "/run/current-system/sw/bin/chvt"; options = [ "NOPASSWD" ]; }
-        { command = "/run/current-system/sw/bin/systemctl start sway-session.service"; options = [ "NOPASSWD" ]; }
-        { command = "/run/current-system/sw/bin/systemctl stop sway-session.service"; options = [ "NOPASSWD" ]; }
+        { command = "/run/current-system/sw/bin/systemctl start --no-block sway-tty-session.service"; options = [ "NOPASSWD" ]; }
         { command = "/home/joel/.config/sway/scripts/rotate-touchpad.py"; options = [ "NOPASSWD" ]; }
         { command = "/run/current-system/sw/bin/reset-hyperx-dac"; options = [ "NOPASSWD" ]; }
       ];
