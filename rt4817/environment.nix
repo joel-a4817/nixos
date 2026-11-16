@@ -144,7 +144,7 @@ in
         { command = "/run/current-system/sw/bin/timedatectl"; options = [ "NOPASSWD" ]; }
         { command = "/run/current-system/sw/bin/pkill"; options = [ "NOPASSWD" ]; }
         { command = "/run/current-system/sw/bin/systemctl start --no-block sway-tty-session.service"; options = [ "NOPASSWD" ]; }
-        { command = "/home/joel/.config/sway/scripts/rotate-touchpad.py"; options = [ "NOPASSWD" ]; }
+        { command = "/home/joel/.config/sway/scripts/rotation/rotate-touchpad.py"; options = [ "NOPASSWD" ]; }
         { command = "/run/current-system/sw/bin/reset-hyperx-dac"; options = [ "NOPASSWD" ]; }
       ];
     }
