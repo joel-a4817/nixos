@@ -104,7 +104,8 @@
     steam-run
 
     # Yazi and scripts
-    fzf zoxide resvg imagemagick jq trash-cli lazygit fd ripgrep nushell ripdrag
+    fzf zoxide resvg imagemagick jq trash-cli lazygit fd ripgrep nushell
+    ripdrag
 
     gnome-themes-extra #dark theme
 

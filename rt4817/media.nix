@@ -161,13 +161,12 @@ in {
 
     timerConfig = {
       OnBootSec = "30s";
-      OnUnitActiveSec = "10s";
+      OnUnitActiveSec = "5min";
     };
   };
 
   systemd.services.audio-fixes = {
     description = "Maintain ALSA audio switches";
-    wantedBy = [ "multi-user.target" ];
     after = [ "sound.target" ];
 
     serviceConfig.Type = "oneshot";
@@ -366,21 +365,7 @@ in {
     }
   '';
 
-  systemd.user.services.playerctld = {
-    description = "Track the most recently active MPRIS player";
-    wantedBy = [ "default.target" ];
-
-    unitConfig.ConditionUser = "joel";
-
-    serviceConfig = {
-      Type = "simple";
-      ExecStart =
-        "${pkgs.playerctl}/bin/playerctld daemon";
-
-      Restart = "on-failure";
-      RestartSec = "2s";
-    };
-  };
+  # playerctld is provided by playerctl D-Bus activation; do not start a competing daemon.
 
   systemd.user.services.camilladsp-system-audio = {
     enable = true;

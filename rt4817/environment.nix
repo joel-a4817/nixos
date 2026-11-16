@@ -137,7 +137,7 @@ in
       Type = "exec";
       User = "joel";
       Group = "users";
-      PAMName = "login";
+      # Reuse the lingering joel user manager; do not ask pam_systemd to claim tty7.
       TTYPath = "/dev/tty7";
       TTYReset = true;
       TTYVTDisallocate = true;
