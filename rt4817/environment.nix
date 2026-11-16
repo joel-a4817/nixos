@@ -128,6 +128,7 @@ in
         "XDG_SESSION_DESKTOP=sway"
       ];
       ExecStart = "/run/current-system/sw/bin/sway";
+      ExecStopPost = "+/run/current-system/sw/bin/systemctl start getty@tty2.service";
       Restart = "no";
     };
   };
