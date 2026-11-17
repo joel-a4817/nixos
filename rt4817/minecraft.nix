@@ -39,7 +39,6 @@ let
   definitions = [
     {
       name = "terralith-server";
-        # minecraft-rename-intent: ddc70bbd-a571-4a76-a7ed-b952f026937d terralith-server terralith-server
       version = "26_3";
       port = 25565;
       memory = "4G";
