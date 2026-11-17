@@ -10,7 +10,7 @@ let
       # A physical TTY login already owns seat0, so preserve the original,
       # direct launch path.
       if [[ -z "''${SSH_CONNECTION:-}" && "$current_tty" == /dev/tty* ]]; then
-        exec sway
+        exec sway > >(${pkgs.systemd}/bin/systemd-cat --identifier=sway-local) 2>&1
       fi
 
       # SSH/iSH sessions do not own seat0. Ask systemd to create a real
@@ -66,7 +66,12 @@ in
     '';
   };
 
-  programs.solaar.enable = true;
+  programs.solaar = {
+    userService.enable = true;
+    userService.window = "show";
+    enable = true;
+  };
+
   services.fprintd.enable = true;
 
   security.pam.services = {
@@ -124,7 +129,12 @@ in
         install -o joel -g users -m 600 /dev/null /run/sway-tty-session-joel
       ''}";
       ExecStart = "${pkgs.writeShellScript "run-sway-tty-login" ''
-        exec openvt -c 7 -f -s -w -- login -f joel
+        status=0
+        openvt -c 7 -f -s -w -- login -f joel || status=$?
+        if [ "$status" -eq 8 ]; then
+          exit 0
+        fi
+        exit "$status"
       ''}";
       ExecStopPost = "+${pkgs.writeShellScript "cleanup-sway-tty-session" ''
         rm -f /run/sway-tty-session-joel
