@@ -486,86 +486,9 @@ in {
     };
   };
 
-  systemd.user.services.camilladsp-wayvnc = {
-    enable = true;
-    description =
-      "WayVNC for the existing Sway session";
-
-    after = [
-      "graphical-session.target"
-    ];
-
-    partOf = [
-      "graphical-session.target"
-    ];
-
-    wantedBy = [
-      "graphical-session.target"
-    ];
-
-    unitConfig.ConditionUser = "joel";
-
-    path = with pkgs; [
-      bash
-      coreutils
-      tailscale
-      wayvnc
-    ];
-
-    serviceConfig = {
-      Type = "simple";
-      Restart = "on-failure";
-      RestartSec = "2s";
-
-      ExecStart = "${pkgs.writeShellScript "camilladsp-wayvnc" ''
-        set -euo pipefail
-
-        export XDG_RUNTIME_DIR="/run/user/$(id -u)"
-        export PIPEWIRE_RUNTIME_DIR="$XDG_RUNTIME_DIR"
-
-        if [[ -z "''${WAYLAND_DISPLAY:-}" ]]; then
-          echo "WAYLAND_DISPLAY is not present in the user manager environment" >&2
-          exit 1
-        fi
-
-        WAYLAND_SOCKET="$XDG_RUNTIME_DIR/$WAYLAND_DISPLAY"
-
-        if [[ ! -S "$WAYLAND_SOCKET" ]]; then
-          echo "Sway Wayland socket is unavailable: $WAYLAND_SOCKET" >&2
-          exit 1
-        fi
-
-        VNC_ADDRESS=""
-
-        for _ in $(seq 1 30); do
-          VNC_ADDRESS="$(
-            tailscale ip -4 \
-              2>/dev/null |
-            head -n 1
-          )"
-
-          [[ -n "$VNC_ADDRESS" ]] &&
-            break
-
-          sleep 1
-        done
-
-        if [[ -z "$VNC_ADDRESS" ]]; then
-          echo \
-            "No Tailscale IPv4 address available" \
-            >&2
-
-          exit 1
-        fi
-
-        exec wayvnc \
-          --max-fps=30 \
-          "$VNC_ADDRESS" \
-          5901
-      ''}";
-    };
-  };
-
+  # VNC is toggled by ~/.config/sway/scripts/network/toggle-wayvnc-headless.sh.
+  # Do not auto-start a second wayvnc instance here: the toggle creates its
+  # own transient user unit and targets a dedicated Sway HEADLESS-* output.
   services.shairport-sync = {
     enable = true;
     package = pkgs.shairport-sync-airplay2;
