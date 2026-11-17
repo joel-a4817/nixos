@@ -109,9 +109,6 @@
     ];
   };
 
-  # VNC is reachable only through Tailscale. The Sway toggle binds wayvnc
-  # to the tailscale0 IPv4 address on TCP 5900, while this interface-scoped
-  # rule permits that traffic without exposing VNC on LAN/Wi-Fi interfaces.
-  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 5900 ];
+  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 5900 ]; #vnc
   services.tailscale.enable = true;
 }

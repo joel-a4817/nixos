@@ -154,6 +154,11 @@ in
         { command = "/run/current-system/sw/bin/timedatectl"; options = [ "NOPASSWD" ]; }
         { command = "/run/current-system/sw/bin/pkill"; options = [ "NOPASSWD" ]; }
         { command = "/run/current-system/sw/bin/systemctl start --no-block sway-tty-session.service"; options = [ "NOPASSWD" ]; }
+        { command = "/run/current-system/sw/bin/systemctl start nqptp.service"; options = [ "NOPASSWD" ]; }
+        { command = "/run/current-system/sw/bin/systemctl stop nqptp.service"; options = [ "NOPASSWD" ]; }
+        { command = "/run/current-system/sw/bin/systemctl start shairport-sync.service"; options = [ "NOPASSWD" ]; }
+        { command = "/run/current-system/sw/bin/systemctl stop shairport-sync.service"; options = [ "NOPASSWD" ]; }
+        { command = "/run/current-system/sw/bin/systemctl reset-failed nqptp.service shairport-sync.service"; options = [ "NOPASSWD" ]; }
         { command = "/home/joel/.config/sway/scripts/rotation/rotate-touchpad.py"; options = [ "NOPASSWD" ]; }
         { command = "/run/current-system/sw/bin/reset-hyperx-dac"; options = [ "NOPASSWD" ]; }
       ];

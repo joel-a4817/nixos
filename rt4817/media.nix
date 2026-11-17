@@ -486,9 +486,6 @@ in {
     };
   };
 
-  # VNC is toggled by ~/.config/sway/scripts/network/toggle-wayvnc-headless.sh.
-  # Do not auto-start a second wayvnc instance here: the toggle creates its
-  # own transient user unit and targets a dedicated Sway HEADLESS-* output.
   services.shairport-sync = {
     enable = true;
     package = pkgs.shairport-sync-airplay2;
@@ -516,13 +513,13 @@ in {
     };
   };
 
+  # Sway owns the on-demand AirPlay lifecycle. NixOS still owns the
+  # unit definitions, executables, capabilities and Shairport configuration.
   systemd.services.nqptp = {
     description =
       "NQPTP AirPlay 2 Timing Daemon";
 
-    wantedBy = [
-      "multi-user.target"
-    ];
+    wantedBy = lib.mkForce [ ];
 
     before = [
       "shairport-sync.service"
@@ -548,6 +545,8 @@ in {
   };
 
   systemd.services.shairport-sync = {
+    wantedBy = lib.mkForce [ ];
+
     after = [
       "nqptp.service"
       "user@1000.service"
