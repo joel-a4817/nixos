@@ -58,6 +58,10 @@
         ({ ... }: {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+          # Preserve pre-existing files instead of aborting activation. This is
+          # the Home Manager NixOS-module mechanism, unlike declaring a second
+          # xdg.configFile entry without a source.
+          home-manager.backupFileExtension = "hm-backup";
 
           home-manager.extraSpecialArgs = {
             inherit glide artcraft system;

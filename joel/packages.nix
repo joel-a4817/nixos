@@ -24,9 +24,6 @@
 
   programs.fastfetch.enable = true;
 
-  # Vesktop may create this before the first Home Manager activation.
-  # Keep the declarative settings authoritative instead of failing activation.
-  xdg.configFile."vesktop/settings.json".force = true;
   programs.vesktop = {
     enable = true;
 
