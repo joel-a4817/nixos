@@ -46,6 +46,8 @@ let
       maxPlayers = 12;
       viewDistance = 12;
       simulationDistance = 8;
+      difficulty = "hard";
+      playersSleepingPercentage = 25;
       mods = moddedMods;
     }
     {
@@ -57,6 +59,8 @@ let
       maxPlayers = 12;
       viewDistance = 12;
       simulationDistance = 8;
+      difficulty = "hard";
+      playersSleepingPercentage = 25;
       mods = latestMods;
     }
   ];
@@ -99,8 +103,9 @@ let
       enforce-whitelist = false;
       max-players = server.maxPlayers;
       motd = server.motd;
-      difficulty = "normal";
+      difficulty = server.difficulty;
       gamemode = "survival";
+      players-sleeping-percentage = server.playersSleepingPercentage;
       # Required by minecraft-server.py for save-off/save-all flush/save-on
       # while taking consistent online backups. Keep this declarative because
       # nix-minecraft regenerates server.properties during service startup.
