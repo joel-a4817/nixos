@@ -105,10 +105,6 @@ let
       motd = server.motd;
       difficulty = server.difficulty;
       gamemode = "survival";
-      players-sleeping-percentage = server.playersSleepingPercentage;
-      # Required by minecraft-server.py for save-off/save-all flush/save-on
-      # while taking consistent online backups. Keep this declarative because
-      # nix-minecraft regenerates server.properties during service startup.
       enable-rcon = true;
       "rcon.password" = "minecraft-backup-${server.name}-4817";
       "rcon.port" = server.port + 1000;
@@ -150,6 +146,36 @@ assert lib.assertMsg (noDuplicates ports) "Minecraft server ports must be unique
         # minecraft-server.py report the first real failure instead of hiding
         # it behind a rapid restart loop and start-limit-hit.
         Restart = lib.mkForce "no";
+        ExecStartPost = lib.mkAfter [
+          (pkgs.writeShellScript "minecraft-set-sleep-percentage-${server.name}" ''
+            set -euo pipefail
+
+            host=127.0.0.1
+            port=${toString (server.port + 1000)}
+            password='minecraft-backup-${server.name}-4817'
+            percentage=${toString server.playersSleepingPercentage}
+
+            for attempt in $(${pkgs.coreutils}/bin/seq 1 300); do
+              if ${pkgs.mcrcon}/bin/mcrcon \
+                -H "$host" -P "$port" -p "$password" \
+                "gamerule players_sleeping_percentage $percentage"; then
+                current="$(${pkgs.mcrcon}/bin/mcrcon \
+                  -H "$host" -P "$port" -p "$password" \
+                  "gamerule players_sleeping_percentage")"
+                printf '%s\n' "$current"
+                case "$current" in
+                  *"$percentage"*) exit 0 ;;
+                esac
+                echo "Gamerule verification did not report $percentage" >&2
+                exit 1
+              fi
+              ${pkgs.coreutils}/bin/sleep 1
+            done
+
+            echo "Timed out waiting for ${server.name} RCON" >&2
+            exit 1
+          '')
+        ];
       };
     }) checked);
 
@@ -189,7 +215,6 @@ assert lib.assertMsg (noDuplicates ports) "Minecraft server ports must be unique
     "d ${runtimeRoot} 2770 joel users -"
     "Z ${runtimeRoot} 2770 joel users -"
     "d ${syncState}/servers 0750 joel users -"
-    "d ${syncState}/backups 0750 joel users -"
     "d ${syncState}/coordination 0750 joel users -"
     "d ${scripts} 0755 joel users -"
   ] ++ lib.concatMap (server: [
