@@ -69,7 +69,8 @@
         (old.propagatedBuildInputs or [])
         ++ [ python3Packages.psutil ];
     }))
-    xhost procps util-linux
+    xhost procps 
+    util-linux exfatprogs dosfstools ntfs3g e2fsprogs parted
 
     # Graphics
     mesa libva libva-utils
