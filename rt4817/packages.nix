@@ -17,27 +17,16 @@ let
     '';
   });
 
-  # Keep Sway as an overridable package, as required by the NixOS Sway module.
-  # Only Sway ELF files directly linked to libjson-c receive the private patched
-  # json-c path. The rest of the system keeps the original json-c derivation.
-  swayWithJsonCFix = pkgs.sway.overrideAttrs (old: {
-    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.patchelf ];
-    postFixup = (old.postFixup or "") + ''
-      patched=0
-      while IFS= read -r file; do
-        if patchelf --print-needed "$file" 2>/dev/null | grep -Fxq libjson-c.so.5; then
-          old_rpath="$(patchelf --print-rpath "$file")"
-          patchelf --set-rpath "${swayJsonC}/lib:$old_rpath" "$file"
-          patched=$((patched + 1))
-        fi
-      done < <(find "$out" -type f)
+  # Use the supported package arguments exposed by this pinned nixpkgs:
+  # sway-unwrapped accepts json_c, and sway accepts sway-unwrapped.
+  swayUnwrappedWithJsonCFix = pkgs.sway-unwrapped.override {
+    json_c = swayJsonC;
+  };
 
-      test "$patched" -gt 0 || {
-        echo "No Sway ELF file linked to libjson-c.so.5 was found" >&2
-        exit 1
-      }
-    '';
-  });
+  swayWithJsonCFix = pkgs.sway.override {
+    sway-unwrapped = swayUnwrappedWithJsonCFix;
+  };
+
 in
 {
   programs.appimage = {
