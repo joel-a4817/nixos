@@ -13,7 +13,7 @@ let
 
       substituteInPlace "$target" \
         --replace-fail "$broken" \
-        'int json_c_put_result_f291fa81c = _json_object_put_maybe_free(jso, 1); assert(json_c_put_result_f291fa81c == 0);'
+        'int json_c_put_result_f291fa81c = _json_object_put_maybe_free(jso, 1); assert(json_c_put_result_f291fa81c == 0); (void)json_c_put_result_f291fa81c;'
     '';
   });
 
