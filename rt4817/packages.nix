@@ -1,18 +1,15 @@
 { config, lib, pkgs, ... }:
 
 let
-  # Temporary narrow fix for json-c 0.19: json_object_put() placed the free
-  # operation inside assert(), so -DNDEBUG builds leaked non-empty JSON trees.
-  # This derivation patches only the json-c copy loaded by Sway.
   swayJsonC = pkgs.json_c.overrideAttrs (old: {
     postPatch = (old.postPatch or "") + ''
       target=json_object.c
       broken='assert(_json_object_put_maybe_free(jso, 1) == 0);'
 
-      if ! grep -Fq "$broken" "$target"; then
-        echo "json-c workaround expected the vulnerable 0.19 source line, but it was not found" >&2
+      grep -Fq "$broken" "$target" || {
+        echo "Expected vulnerable json-c 0.19 source line was not found" >&2
         exit 1
-      fi
+      }
 
       substituteInPlace "$target" \
         --replace-fail "$broken" \
@@ -20,29 +17,27 @@ let
     '';
   });
 
-  # Sway's package function does not accept a json_c argument. Copy the existing
-  # Sway output and modify only ELF files that directly need libjson-c.so.5,
-  # placing the patched library first in their runtime search path.
-  swayWithJsonCFix = pkgs.runCommand "${pkgs.sway.name}-json-c-f291fa81c" {
-    nativeBuildInputs = [ pkgs.patchelf pkgs.findutils pkgs.coreutils ];
-  } ''
-    cp -a ${pkgs.sway} "$out"
-    chmod -R u+w "$out"
+  # Keep Sway as an overridable package, as required by the NixOS Sway module.
+  # Only Sway ELF files directly linked to libjson-c receive the private patched
+  # json-c path. The rest of the system keeps the original json-c derivation.
+  swayWithJsonCFix = pkgs.sway.overrideAttrs (old: {
+    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.patchelf ];
+    postFixup = (old.postFixup or "") + ''
+      patched=0
+      while IFS= read -r file; do
+        if patchelf --print-needed "$file" 2>/dev/null | grep -Fxq libjson-c.so.5; then
+          old_rpath="$(patchelf --print-rpath "$file")"
+          patchelf --set-rpath "${swayJsonC}/lib:$old_rpath" "$file"
+          patched=$((patched + 1))
+        fi
+      done < <(find "$out" -type f)
 
-    patched=0
-    while IFS= read -r -d '' file; do
-      if patchelf --print-needed "$file" 2>/dev/null | grep -Fxq 'libjson-c.so.5'; then
-        old_rpath="$(patchelf --print-rpath "$file")"
-        patchelf --set-rpath "${swayJsonC}/lib''${old_rpath:+:$old_rpath}" "$file"
-        patched=$((patched + 1))
-      fi
-    done < <(find "$out" -type f -print0)
-
-    if [ "$patched" -eq 0 ]; then
-      echo "No Sway ELF file linked to libjson-c.so.5 was found" >&2
-      exit 1
-    fi
-  '';
+      test "$patched" -gt 0 || {
+        echo "No Sway ELF file linked to libjson-c.so.5 was found" >&2
+        exit 1
+      }
+    '';
+  });
 in
 {
   programs.appimage = {
