@@ -2,17 +2,19 @@
 let
   swayLaunch = pkgs.writeShellApplication {
     name = "sway-launch";
-    runtimeInputs = with pkgs; [ coreutils sway systemd ];
+    runtimeInputs = [
+      pkgs.coreutils
+      config.programs.sway.package
+      pkgs.systemd
+    ];
     text = ''
       set -Eeuo pipefail
       current_tty="$(tty 2>/dev/null || true)"
-
       # A physical TTY login already owns seat0, so preserve the original,
       # direct launch path.
       if [[ -z "''${SSH_CONNECTION:-}" && "$current_tty" == /dev/tty* ]]; then
         exec sway > >(${pkgs.systemd}/bin/systemd-cat --identifier=sway-local) 2>&1
       fi
-
       # SSH/iSH sessions do not own seat0. Ask systemd to create a real
       # PAM/login session on tty7; that session then execs Sway below.
       exec /run/wrappers/bin/sudo -n \
@@ -22,8 +24,6 @@ let
 in
 {
   environment.systemPackages = [ swayLaunch ];
-
-
   fonts = {
     enableDefaultPackages = true;
     fontconfig = {
@@ -32,11 +32,9 @@ in
     };
     packages = with pkgs; [ nerd-fonts.jetbrains-mono ];
   };
-
   services.dbus.enable = true;
   services.seatd.enable = true;
   services.libinput.enable = true;
-
   xdg.portal = {
     enable = true;
     wlr = {
@@ -53,7 +51,6 @@ in
       "org.freedesktop.impl.portal.Screenshot" = [ "wlr" ];
     };
   };
-
   security.polkit = {
     enable = true;
     enablePkexecWrapper = true;
@@ -65,15 +62,12 @@ in
       });
     '';
   };
-
   programs.solaar = {
     userService.enable = true;
     userService.window = "show";
     enable = true;
   };
-
   services.fprintd.enable = true;
-
   security.pam.services = {
     system-local-login.fprintAuth = true;
     su.fprintAuth = true;
@@ -87,7 +81,6 @@ in
       unixAuth = true;
     };
   };
-
   environment.loginShellInit = ''
     if [ "$(tty 2>/dev/null || true)" = /dev/tty7 ] \
       && [ -O /run/sway-tty-session-joel ]; then
@@ -95,7 +88,6 @@ in
       exec sway
     fi
   '';
-
   environment.shellAliases = {
     s = "sway-launch";
     S = "/home/joel/.config/sway/scripts/servers/start-servers.sh";
@@ -104,7 +96,6 @@ in
     rt4817 = "ssh joel@rt4817";
     lt4817 = "ssh joel@lt4817";
   };
-
   users.users.joel = {
     linger = true;
     home = lib.mkForce "/home/joel";
@@ -112,7 +103,6 @@ in
     isSystemUser = lib.mkForce false;
     extraGroups = [ "wheel" "seat" "networkmanager" "audio" "video" "input" "cdrom" ];
   };
-
   # SSH/iSH launch path: open a genuine local login session on tty7.
   # login(1) runs the normal PAM stack, so logind assigns seat0 and applies
   # local-session ACLs used by backlight, fingerprint, polkit and input access.
@@ -120,9 +110,7 @@ in
     description = "Local Sway login session requested over SSH";
     conflicts = [ "getty@tty7.service" ];
     after = [ "systemd-user-sessions.service" "seatd.service" ];
-
     path = with pkgs; [ coreutils kbd shadow systemd util-linux ];
-
     serviceConfig = {
       Type = "simple";
       ExecStartPre = "+${pkgs.writeShellScript "prepare-sway-tty-session" ''
@@ -146,7 +134,6 @@ in
       Restart = "no";
     };
   };
-
   security.sudo.extraRules = [
     {
       users = [ "joel" ];
